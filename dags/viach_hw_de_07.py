@@ -22,15 +22,7 @@ with DAG(
     catchup=False,
     tags=["viacheslav"]
 ) as dag:
-    # Create schema task
-    create_schema = MySqlOperator(
-        task_id="create_schema",
-        mysql_conn_id=connection_name,
-        sql="""
-        CREATE DATABASE IF NOT EXISTS viacheslav;
-        """
-    )
-
+    
     # Create table task
     create_table = MySqlOperator(
         task_id="create_table",
@@ -116,6 +108,6 @@ with DAG(
     )
 
     # Set up task dependencies
-    create_schema >> create_table >> pick_medal >> pick_medal_task
+    create_table >> pick_medal >> pick_medal_task
     pick_medal_task >> [calc_Gold, calc_Silver, calc_Bronze]
     [calc_Gold, calc_Silver, calc_Bronze] >> generate_delay >> check_for_correctness
