@@ -94,7 +94,7 @@ with DAG(
  
     # Delay task
     def delay():
-        time.sleep(35)
+        time.sleep(3)
  
     generate_delay = PythonOperator(
         task_id="generate_delay",
@@ -112,7 +112,7 @@ with DAG(
         """,
         mode="poke",
         poke_interval=5,
-        timeout=40
+        timeout=20
     )
  
     # Set up task dependencies
