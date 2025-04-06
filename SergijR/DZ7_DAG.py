@@ -54,7 +54,7 @@ def create_medal_counter(medal_type):
 # Функція для створення затримки
 def create_delay(**context):
     print("Починаємо затримку на 35 секунд...")
-    time.sleep(35)  # Затримка на 35 секунд
+    time.sleep(10)  # Затримка на 10 секунд
     print("Затримка завершена")
 
 
