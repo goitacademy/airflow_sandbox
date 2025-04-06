@@ -1,90 +1,142 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.mysql_operator import MySqlOperator
+from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule as tr
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
+import time
 
-# Функція для генерації випадкового числа
-def generate_number(ti):
-    number = random.randint(1, 100)
-    print(f"Generated number: {number}")
+# Назва з'єднання з базою даних MySQL
+connection_name = "goit_mysql_db"
 
-    return number
+# Функція для генерації випадкового типу медалі
+def choose_medal_type():
+    medal_types = ['Bronze', 'Silver', 'Gold']
+    medal = random.choice(medal_types)
+    print(f"Обрано тип медалі: {medal}")
+    return medal
 
-# Функція для перевірки парності числа
-def check_even_odd(ti):
-    number = ti.xcom_pull(task_ids='generate_number')
-
-    if number % 2 == 0:
-        return 'square_task'
+# Функція для визначення наступного завдання на основі типу медалі
+def pick_medal_branch(**context):
+    medal_type = context['task_instance'].xcom_pull(task_ids='pick_medal')
+    if medal_type == 'Bronze':
+        return 'calc_Bronze'
+    elif medal_type == 'Silver':
+        return 'calc_Silver'
     else:
-        return 'cube_task'
+        return 'calc_Gold'
 
-# Функція для піднесення числа до квадрата
-def square_number(ti):
-    number = ti.xcom_pull(task_ids='generate_number')
-    result = number ** 2
+# Функція для створення затримки
+def create_delay(**context):
+    print("Починаємо затримку на 35 секунд...")
+    time.sleep(35)  # Затримка на 35 секунд
+    print("Затримка завершена")
 
-    ti.xcom_push(key='math_result', value=result)
-    print(f"{number} squared is {result}")
-
-# Функція для піднесення числа до куба
-def cube_number(ti):
-    number = ti.xcom_pull(task_ids='generate_number')
-    result = number ** 3
-
-    ti.xcom_push(key='math_result', value=result)
-    print(f"{number} cubed is {result}")
-
-# Функція для витягування даних з xcom та prints
-def final_function(ti):
-    original_number = ti.xcom_pull(task_ids='generate_number')
-    math_result = ti.xcom_pull(key='math_result')
-
-    print(f"Original value {original_number}, math_result {math_result}")
-
-# Визначення DAG
+# Аргументи за замовчуванням для DAG
 default_args = {
     'owner': 'airflow',
     'start_date': datetime(2024, 8, 4, 0, 0),
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
 }
 
+# Визначення DAG
 with DAG(
-        'even_or_odd_square_or_cube_RSMNYS',
+        'medals_data_processing_RSMNYS',
         default_args=default_args,
-        schedule_interval='*/10 * * * *',
+        description='A DAG to process medal data',
+        schedule_interval=None,
         catchup=False,
-        tags=["RSMNYS"]
+        tags=["medals", "homework", "RSMNYS"]
 ) as dag:
-    generate_number_task = PythonOperator(
-        task_id='generate_number',
-        python_callable=generate_number,
+
+    # 1. Створення таблиці
+    create_table = MySqlOperator(
+        task_id='create_table',
+        mysql_conn_id=connection_name,
+        sql="""
+        CREATE TABLE IF NOT EXISTS medals_data (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            medal_type VARCHAR(10),
+            count INT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        """
     )
 
-    check_even_odd_task = BranchPythonOperator(
-        task_id='check_even_odd',
-        python_callable=check_even_odd,
+    # 2. Випадковий вибір типу медалі
+    pick_medal = PythonOperator(
+        task_id='pick_medal',
+        python_callable=choose_medal_type,
     )
 
-    square_task = PythonOperator(
-        task_id='square_task',
-        python_callable=square_number,
+    # 3. Розгалуження залежно від типу медалі
+    pick_medal_task = BranchPythonOperator(
+        task_id='pick_medal_task',
+        python_callable=pick_medal_branch,
+        provide_context=True,
     )
 
-    cube_task = PythonOperator(
-        task_id='cube_task',
-        python_callable=cube_number,
+    # 4.1 Підрахунок записів з Bronze медалями
+    calc_bronze = MySqlOperator(
+        task_id='calc_Bronze',
+        mysql_conn_id=connection_name,
+        sql="""
+        INSERT INTO medals_data (medal_type, count)
+        SELECT 'Bronze', COUNT(*) 
+        FROM olympic_dataset.athlete_event_results 
+        WHERE medal = 'Bronze';
+        """
     )
 
-    end_task = PythonOperator(
-        task_id='end_task',
-        python_callable=final_function,
-        trigger_rule=tr.ONE_SUCCESS
+    # 4.2 Підрахунок записів з Silver медалями
+    calc_silver = MySqlOperator(
+        task_id='calc_Silver',
+        mysql_conn_id=connection_name,
+        sql="""
+        INSERT INTO medals_data (medal_type, count)
+        SELECT 'Silver', COUNT(*) 
+        FROM olympic_dataset.athlete_event_results 
+        WHERE medal = 'Silver';
+        """
     )
 
-    # Встановлення залежностей
-    generate_number_task >> check_even_odd_task
-    check_even_odd_task >> [square_task, cube_task]
-    square_task >> end_task
-    cube_task >> end_task
+    # 4.3 Підрахунок записів з Gold медалями
+    calc_gold = MySqlOperator(
+        task_id='calc_Gold',
+        mysql_conn_id=connection_name,
+        sql="""
+        INSERT INTO medals_data (medal_type, count)
+        SELECT 'Gold', COUNT(*) 
+        FROM olympic_dataset.athlete_event_results 
+        WHERE medal = 'Gold';
+        """
+    )
 
+    # 5. Затримка виконання
+    generate_delay = PythonOperator(
+        task_id='generate_delay',
+        python_callable=create_delay,
+        trigger_rule=tr.ONE_SUCCESS,  # Виконується, якщо одне з попередніх завдань успішне
+    )
+
+    # 6. Перевірка свіжості запису
+    check_record_freshness = SqlSensor(
+        task_id='check_record_freshness',
+        conn_id=connection_name,
+        sql="""
+        SELECT COUNT(*) 
+        FROM medals_data 
+        WHERE created_at > DATE_SUB(NOW(), INTERVAL 30 SECOND);
+        """,
+        mode='poke',  # Режим перевірки: періодична перевірка умови
+        poke_interval=5,  # Перевірка кожні 5 секунд
+        timeout=60,  # Тайм-аут після 60 секунд
+        soft_fail=True  # Дозволяє DAG продовжувати виконання навіть у разі помилки сенсора
+    )
+
+    # Визначення залежностей між завданнями
+    create_table >> pick_medal >> pick_medal_task
+    pick_medal_task >> [calc_bronze, calc_silver, calc_gold]
+    [calc_bronze, calc_silver, calc_gold] >> generate_delay >> check_record_freshness
