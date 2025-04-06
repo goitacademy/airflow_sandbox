@@ -18,7 +18,6 @@ your_schema = "sergijr"
 # Схема з даними про медалі
 data_schema = "olympic_dataset"
 
-
 # Функція для генерації випадкового типу медалі
 def choose_medal_type():
     medal_types = ['Bronze', 'Silver', 'Gold']
@@ -135,7 +134,6 @@ with DAG(
         mode='poke',  # Режим перевірки: періодична перевірка умови
         poke_interval=5,  # Перевірка кожні 5 секунд
         timeout=60,  # Тайм-аут після 60 секунд
-        soft_fail=True  # Дозволяє DAG продовжувати виконання навіть у разі помилки сенсора
     )
 
     # 7. Фінальний оператор для завершення DAG
