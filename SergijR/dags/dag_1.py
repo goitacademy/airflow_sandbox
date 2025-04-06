@@ -50,11 +50,11 @@ default_args = {
 }
 
 with DAG(
-        'even_or_odd_square_or_cube',
+        'even_or_odd_square_or_cube_sergijr',
         default_args=default_args,
         schedule_interval='*/10 * * * *',
         catchup=False,
-        tags=["oleksiy"]
+        tags=["sergij"]
 ) as dag:
     generate_number_task = PythonOperator(
         task_id='generate_number',
