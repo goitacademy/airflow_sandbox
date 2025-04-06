@@ -1,14 +1,23 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.dummy import DummyOperator
 from airflow.operators.mysql_operator import MySqlOperator
 from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule as tr
+from airflow.utils.state import State
 from datetime import datetime, timedelta
 import random
 import time
 
 # Назва з'єднання з базою даних MySQL
-connection_name = "goit_mysql_db"
+connection_name = "goit_mysql_db_sergijr"
+
+# Ваша схема для створення таблиці
+your_schema = "sergijr"
+
+# Схема з даними про медалі
+data_schema = "olympic_dataset"
+
 
 # Функція для генерації випадкового типу медалі
 def choose_medal_type():
@@ -16,6 +25,7 @@ def choose_medal_type():
     medal = random.choice(medal_types)
     print(f"Обрано тип медалі: {medal}")
     return medal
+
 
 # Функція для визначення наступного завдання на основі типу медалі
 def pick_medal_branch(**context):
@@ -27,11 +37,33 @@ def pick_medal_branch(**context):
     else:
         return 'calc_Gold'
 
+
+# Функція для створення оператора підрахунку медалей
+def create_medal_counter(medal_type):
+    return MySqlOperator(
+        task_id=f'calc_{medal_type}',
+        mysql_conn_id=connection_name,
+        sql=f"""
+        INSERT INTO {your_schema}.hw_dag_results (medal_type, count)
+        SELECT '{medal_type}', COUNT(*) 
+        FROM {data_schema}.athlete_event_results 
+        WHERE medal = '{medal_type}';
+        """
+    )
+
+
 # Функція для створення затримки
 def create_delay(**context):
     print("Починаємо затримку на 35 секунд...")
     time.sleep(35)  # Затримка на 35 секунд
     print("Затримка завершена")
+
+
+# Функція для фіналізації DAG
+def finalize_dag(**kwargs):
+    print("Фіналізація DAG виконання")
+    return "DAG completed successfully"
+
 
 # Аргументи за замовчуванням для DAG
 default_args = {
@@ -43,20 +75,21 @@ default_args = {
 
 # Визначення DAG
 with DAG(
-        'medals_data_processing_RSMNYS',
+        f'{your_schema}_medals_data_processing',
         default_args=default_args,
         description='A DAG to process medal data',
         schedule_interval=None,
         catchup=False,
-        tags=["medals", "homework", "RSMNYS"]
+        tags=[your_schema, "medals", "homework"]
 ) as dag:
-
     # 1. Створення таблиці
     create_table = MySqlOperator(
         task_id='create_table',
         mysql_conn_id=connection_name,
-        sql="""
-        CREATE TABLE IF NOT EXISTS medals_data (
+        sql=f"""
+        CREATE DATABASE IF NOT EXISTS {your_schema};
+
+        CREATE TABLE IF NOT EXISTS {your_schema}.hw_dag_results (
             id INT AUTO_INCREMENT PRIMARY KEY,
             medal_type VARCHAR(10),
             count INT,
@@ -78,41 +111,10 @@ with DAG(
         provide_context=True,
     )
 
-    # 4.1 Підрахунок записів з Bronze медалями
-    calc_bronze = MySqlOperator(
-        task_id='calc_Bronze',
-        mysql_conn_id=connection_name,
-        sql="""
-        INSERT INTO medals_data (medal_type, count)
-        SELECT 'Bronze', COUNT(*) 
-        FROM olympic_dataset.athlete_event_results 
-        WHERE medal = 'Bronze';
-        """
-    )
-
-    # 4.2 Підрахунок записів з Silver медалями
-    calc_silver = MySqlOperator(
-        task_id='calc_Silver',
-        mysql_conn_id=connection_name,
-        sql="""
-        INSERT INTO medals_data (medal_type, count)
-        SELECT 'Silver', COUNT(*) 
-        FROM olympic_dataset.athlete_event_results 
-        WHERE medal = 'Silver';
-        """
-    )
-
-    # 4.3 Підрахунок записів з Gold медалями
-    calc_gold = MySqlOperator(
-        task_id='calc_Gold',
-        mysql_conn_id=connection_name,
-        sql="""
-        INSERT INTO medals_data (medal_type, count)
-        SELECT 'Gold', COUNT(*) 
-        FROM olympic_dataset.athlete_event_results 
-        WHERE medal = 'Gold';
-        """
-    )
+    # 4. Створення операторів підрахунку для кожного типу медалі
+    calc_bronze = create_medal_counter('Bronze')
+    calc_silver = create_medal_counter('Silver')
+    calc_gold = create_medal_counter('Gold')
 
     # 5. Затримка виконання
     generate_delay = PythonOperator(
@@ -125,9 +127,9 @@ with DAG(
     check_record_freshness = SqlSensor(
         task_id='check_record_freshness',
         conn_id=connection_name,
-        sql="""
+        sql=f"""
         SELECT COUNT(*) 
-        FROM medals_data 
+        FROM {your_schema}.hw_dag_results 
         WHERE created_at > DATE_SUB(NOW(), INTERVAL 30 SECOND);
         """,
         mode='poke',  # Режим перевірки: періодична перевірка умови
@@ -136,7 +138,14 @@ with DAG(
         soft_fail=True  # Дозволяє DAG продовжувати виконання навіть у разі помилки сенсора
     )
 
+    # 7. Фінальний оператор для завершення DAG
+    end_task = PythonOperator(
+        task_id='end_task',
+        python_callable=finalize_dag,
+        trigger_rule=tr.ALL_DONE,  # Виконується після всіх завдань, незалежно від їх статусу
+    )
+
     # Визначення залежностей між завданнями
     create_table >> pick_medal >> pick_medal_task
     pick_medal_task >> [calc_bronze, calc_silver, calc_gold]
-    [calc_bronze, calc_silver, calc_gold] >> generate_delay >> check_record_freshness
+    [calc_bronze, calc_silver, calc_gold] >> generate_delay >> check_record_freshness >> end_task
