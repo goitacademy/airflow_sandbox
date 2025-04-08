@@ -21,32 +21,30 @@ with DAG(
         tags=["Sergii_S"]
 ) as dag:
 
-    # Define SparkSubmitOperator tasks with relative paths
+    # Define SparkSubmitOperator tasks with correct paths
     landing_to_bronze = SparkSubmitOperator(
         task_id='landing_to_bronze',
-        application='Sergii_S/landing_to_bronze.py',  # relative path
+        application='landing_to_bronze.py',  # file path directly in the 'Sergii_S' folder
         conn_id=connection_id,
         verbose=1,
-        dag=dag,  # Associate the task with the current DAG
     )
 
     bronze_to_silver = SparkSubmitOperator(
         task_id='bronze_to_silver',
-        application='Sergii_S/bronze_to_silver.py',  # relative path
+        application='bronze_to_silver.py',  # file path directly in the 'Sergii_S' folder
         conn_id=connection_id,
         verbose=1,
-        dag=dag,  # Associate the task with the current DAG
     )
 
     silver_to_gold = SparkSubmitOperator(
         task_id='silver_to_gold',
-        application='Sergii_S/silver_to_gold.py',  # relative path
+        application='silver_to_gold.py',  # file path directly in the 'Sergii_S' folder
         conn_id=connection_id,
         verbose=1,
-        dag=dag,  # Associate the task with the current DAG
     )
 
     # Define task dependencies
     landing_to_bronze >> bronze_to_silver >> silver_to_gold
+
 
 
