@@ -1,7 +1,7 @@
+import os
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from datetime import datetime
-import os
 
 # Default arguments for the DAG
 default_args = {
@@ -21,24 +21,27 @@ with DAG(
         tags=["Sergii_S"]
 ) as dag:
 
+    # Define the root directory of the project (where the DAG file is located)
+    dags_directory = os.path.dirname(os.path.abspath(__file__))
+
     # Define SparkSubmitOperator tasks with dynamically resolved paths
     landing_to_bronze = SparkSubmitOperator(
         task_id='landing_to_bronze',
-        application=os.path.join(os.path.dirname(__file__), 'Sergii_S', 'landing_to_bronze.py'),  # relative path
+        application=os.path.join(dags_directory, 'landing_to_bronze.py'),  # Absolute path from the root of `dags/`
         conn_id=connection_id,
         verbose=1,
     )
 
     bronze_to_silver = SparkSubmitOperator(
         task_id='bronze_to_silver',
-        application=os.path.join(os.path.dirname(__file__), 'Sergii_S', 'bronze_to_silver.py'),  # relative path
+        application=os.path.join(dags_directory, 'bronze_to_silver.py'),  # Absolute path from the root of `dags/`
         conn_id=connection_id,
         verbose=1,
     )
 
     silver_to_gold = SparkSubmitOperator(
         task_id='silver_to_gold',
-        application=os.path.join(os.path.dirname(__file__), 'Sergii_S', 'silver_to_gold.py'),  # relative path
+        application=os.path.join(dags_directory, 'silver_to_gold.py'),  # Absolute path from the root of `dags/`
         conn_id=connection_id,
         verbose=1,
     )
