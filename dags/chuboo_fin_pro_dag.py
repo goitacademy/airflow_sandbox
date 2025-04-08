@@ -20,7 +20,7 @@ dag = DAG(
 # Task 1: Landing to Bronze
 landing_to_bronze = SparkSubmitOperator(
     task_id='landing_to_bronze',
-    application='dags/oleksiy/landing_to_bronze.py',
+    application='dags/landing_to_bronze.py',
     conn_id='spark-default',
     verbose=True,
     dag=dag
@@ -29,7 +29,7 @@ landing_to_bronze = SparkSubmitOperator(
 # Task 2: Bronze to Silver
 bronze_to_silver = SparkSubmitOperator(
     task_id='bronze_to_silver',
-    application='dags/oleksiy/bronze_to_silver.py',
+    application='dags/bronze_to_silver.py',
     conn_id='spark-default',
     verbose=True,
     dag=dag
@@ -38,7 +38,7 @@ bronze_to_silver = SparkSubmitOperator(
 # Task 3: Silver to Gold
 silver_to_gold = SparkSubmitOperator(
     task_id='silver_to_gold',
-    application='dags/oleksiy/silver_to_gold.py',
+    application='dags/silver_to_gold.py',
     conn_id='spark-default',
     verbose=True,
     dag=dag
