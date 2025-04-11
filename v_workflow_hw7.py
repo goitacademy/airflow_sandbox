@@ -41,13 +41,13 @@ def calc_medal_count(medal_type):
     cursor.execute(query)
     conn.commit()
 
-def calc_gold(ti):
+def calc_gold_func(ti):
     calc_medal_count('Gold')
 
-def calc_silver(ti):
+def calc_silver_func(ti):
     calc_medal_count('Silver')
 
-def calc_bronze(ti):
+def calc_bronze_func(ti):
     calc_medal_count('Bronze')
 
 # Функція для генерації затримки
@@ -106,17 +106,17 @@ with DAG(
 
     calc_Gold = PythonOperator(
         task_id='calc_Gold',
-        python_callable=calc_gold,
+        python_callable=calc_gold_func,
     )
 
     calc_Silver = PythonOperator(
         task_id='calc_Silver',
-        python_callable=calc_silver,
+        python_callable=calc_silver_func,
     )
 
     calc_Bronze = PythonOperator(
         task_id='calc_Bronze',
-        python_callable=calc_bronze,
+        python_callable=calc_bronze_func,
     )
 
     generate_dalay = PythonOperator(
