@@ -72,7 +72,7 @@ my_tag = 'v_vasyliev'
 
 # Визначення DAG
 with DAG(
-        'working_with_mysql_db',
+        'VVV_workflow_hw7',
         default_args=default_args,
         schedule_interval='*/10 * * * *',  # every 10 minutes
         catchup=False,  # Вимкнути запуск пропущених задач
