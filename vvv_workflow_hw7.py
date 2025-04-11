@@ -86,10 +86,10 @@ with DAG(
         mysql_conn_id=connection_name,
         sql=f"""
         CREATE TABLE IF NOT EXISTS olympic_dataset.{my_tag}_medals (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `medal_type` text NOT NULL,
-        `count` int NOT NULL,
-        `created_at` DATETIME NOT NULL
+        id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        medal_type text,
+        count int,
+        created_at DATETIME
         );
         """
     )
