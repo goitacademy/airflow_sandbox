@@ -52,7 +52,7 @@ def calc_bronze_func(ti):
 
 # Функція для генерації затримки
 def generate_dalay_func(ti):
-    delay = random.randint(10, 50)
+    delay = random.randint(25, 35)
     time.sleep(delay)
     print(f"{delay}-secs delay generated")
     # return delay
@@ -77,13 +77,14 @@ with DAG(
         schedule_interval='*/10 * * * *',  # every 10 minutes
         catchup=False,  # Вимкнути запуск пропущених задач
         tags=[f"{my_tag}"]  # Теги для класифікації DAG
-) as dag:
+) as my_dag:
 
 
     # Завдання для створення таблиці (якщо не існує)
     create_table = MySqlOperator(
         task_id='create_table',
         mysql_conn_id=connection_name,
+        dag=my_dag,
         sql=f"""
         CREATE TABLE IF NOT EXISTS olympic_dataset.{my_tag}_medals (
         id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -97,31 +98,37 @@ with DAG(
     pick_medal = PythonOperator(
         task_id='pick_medal',
         python_callable=pick_medal_func,
+        dag=my_dag,
     )
 
     pick_medal_task = BranchPythonOperator(
         task_id='pick_medal_task',
         python_callable=pick_medal_task_func,
+        dag=my_dag,
     )
 
     calc_Gold = PythonOperator(
         task_id='calc_Gold',
         python_callable=calc_gold_func,
+        dag=my_dag,
     )
 
     calc_Silver = PythonOperator(
         task_id='calc_Silver',
         python_callable=calc_silver_func,
+        dag=my_dag,
     )
 
     calc_Bronze = PythonOperator(
         task_id='calc_Bronze',
         python_callable=calc_bronze_func,
+        dag=my_dag,
     )
 
     generate_dalay = PythonOperator(
         task_id='generate_dalay',
         python_callable=generate_dalay_func,
+        dag=my_dag,
     )
 
     # Сенсор для отримання факту внесення запису в таблицю
@@ -136,6 +143,7 @@ with DAG(
         mode='poke',  # Режим перевірки: періодична перевірка умови
         poke_interval=5,  # Перевірка кожні 5 секунд
         timeout=6,  # Тайм-аут після 6 секунд (повторних перевірок = 1)
+        dag=my_dag,
     )
 
     # Встановлення залежностей між завданнями
