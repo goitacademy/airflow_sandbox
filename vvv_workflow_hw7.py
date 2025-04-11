@@ -128,6 +128,7 @@ with DAG(
     generate_dalay = PythonOperator(
         task_id='generate_dalay',
         python_callable=generate_dalay_func,
+        trigger_rule='all_done',
         dag=my_dag,
     )
 
