@@ -139,7 +139,7 @@ with DAG(
     )
 
     # Встановлення залежностей між завданнями
-    create_table >> pick_medal >> pick_medal_task >> ['calc_Gold', 'calc_Silver', 'calc_Bronze']
+    create_table >> pick_medal >> pick_medal_task >> [calc_Gold, calc_Silver, calc_Bronze]
     calc_Gold >> generate_dalay
     calc_Silver >> generate_dalay
     calc_Bronze >> generate_dalay
