@@ -29,7 +29,7 @@ def pick_medal_task_func(ti):
 # Використовує MySqlHook для підключення до бази даних
 # Підраховує кількість медалей певного типу та зберігає результат у таблиці
 def calc_medal_count(medal_type):
-    mysql_hook = MySqlHook(mysql_conn_id="goit_mysql_db")
+    mysql_hook = MySqlHook(mysql_conn_id=connection_name)
     conn = mysql_hook.get_conn()
     cursor = conn.cursor()
     
