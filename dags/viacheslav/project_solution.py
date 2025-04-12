@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
-from airflow.models import Variable
 from datetime import datetime
+import os  # <--- импорт os
 
 default_args = {
     'owner': 'airflow',
@@ -17,8 +17,8 @@ dag = DAG(
     catchup=False,
 )
 
-# Базовый путь до скриптов (можно задать в UI: Admin → Variables → Key: 'pipeline_script_path')
-base_script_path = Variable.get("pipeline_script_path", default_var="{{ dag.folder }}/viacheslav")
+# Абсолютный путь к текущей директории DAG-файла
+base_script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "viacheslav")
 
 common_spark_config = {
     "spark.executor.memory": "2g",
@@ -29,7 +29,7 @@ common_spark_config = {
 def create_spark_task(task_id, script_name):
     return SparkSubmitOperator(
         task_id=task_id,
-        application=f"{base_script_path}/{script_name}",
+        application=os.path.join(base_script_path, script_name),
         conn_id='spark-default',
         verbose=True,
         conf=common_spark_config,

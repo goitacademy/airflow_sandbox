@@ -16,7 +16,7 @@ default_args = {
 with DAG(
     dag_id='debug_working_directory',
     default_args=default_args,
-    schedule_interval=None,  # run on demand
+    schedule=None,  # ✅ новое имя параметра
     catchup=False,
     tags=['debug', 'utility']
 ) as dag:
