@@ -1,6 +1,6 @@
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
-from datetime import datetime, timedelta
+from datetime import datetime
 
 default_args = {
     'owner': 'airflow',
@@ -33,7 +33,7 @@ bronze_to_silver_task = SparkSubmitOperator(
 )
 
 silver_to_gold_task = SparkSubmitOperator(
-    application='viacheslav/silver_to_gold.py',
+    application='dags/viacheslav/silver_to_gold.py',
     task_id='silver_to_gold',
     conn_id='spark-default',
     verbose=1,
