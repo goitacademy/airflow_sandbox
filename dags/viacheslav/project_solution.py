@@ -5,9 +5,6 @@ from datetime import datetime, timedelta
 # Define default arguments
 default_args = {
     'owner': 'airflow',
-    'depends_on_past': False,
-    'email_on_failure': False,
-    'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
 }
@@ -17,7 +14,7 @@ dag = DAG(
     'athlete_data_pipeline_viach',
     default_args=default_args,
     description='Data pipeline for athlete data processing',
-    schedule_interval=timedelta(days=1),
+    schedule=timedelta(days=1),
     start_date=datetime(2023, 1, 1),
     catchup=False,
 )
