@@ -10,7 +10,7 @@ default_args = {
 
 # Create DAG
 dag = DAG(
-    'athlete_data_pipeline_viach',
+    'athlete_data_pipeline_viach_1',
     default_args=default_args,
     description='Data pipeline for athlete data processing',
     schedule=timedelta(days=1),
@@ -20,7 +20,7 @@ dag = DAG(
 
 # Define tasks using SparkSubmitOperator
 landing_to_bronze_task = SparkSubmitOperator(
-    application='landing_to_bronze_viach.py',
+    application='/home/samatwa77/goit-de-fp/airflow_sandbox/dags/landing_to_bronze_viach.py',
     task_id='landing_to_bronze',
     conn_id='spark-default',  # Using the default Spark connection
     verbose=1,
@@ -28,7 +28,7 @@ landing_to_bronze_task = SparkSubmitOperator(
 )
 
 bronze_to_silver_task = SparkSubmitOperator(
-    application='bronze_to_silver_viach.py',
+    application='/home/samatwa77/goit-de-fp/airflow_sandbox/dags/bronze_to_silver_viach.py',
     task_id='bronze_to_silver',
     conn_id='spark-default',
     verbose=1,
@@ -36,7 +36,7 @@ bronze_to_silver_task = SparkSubmitOperator(
 )
 
 silver_to_gold_task = SparkSubmitOperator(
-    application='silver_to_gold_viach.py', 
+    application='/home/samatwa77/goit-de-fp/airflow_sandbox/dags/silver_to_gold_viach.py', 
     task_id='silver_to_gold',
     conn_id='spark-default',
     verbose=1,
