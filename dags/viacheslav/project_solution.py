@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from airflow.models import Variable
 from datetime import datetime
 
 default_args = {
@@ -16,28 +17,33 @@ dag = DAG(
     catchup=False,
 )
 
-landing_to_bronze_task = SparkSubmitOperator(
-    application='{{ dag.folder }}/viacheslav/landing_to_bronze.py',
-    task_id='landing_to_bronze',
-    conn_id='spark-default',
-    verbose=1,
-    dag=dag,
-)
+# Базовый путь до скриптов (можно задать в UI: Admin → Variables → Key: 'pipeline_script_path')
+base_script_path = Variable.get("pipeline_script_path", default_var="{{ dag.folder }}/viacheslav")
 
-bronze_to_silver_task = SparkSubmitOperator(
-    application='{{ dag.folder }}/viacheslav/bronze_to_silver.py',
-    task_id='bronze_to_silver',
-    conn_id='spark-default',
-    verbose=1,
-    dag=dag,
-)
+common_spark_config = {
+    "spark.executor.memory": "2g",
+    "spark.driver.memory": "1g",
+    "spark.sql.shuffle.partitions": "4",
+}
 
-silver_to_gold_task = SparkSubmitOperator(
-    application='{{ dag.folder }}/viacheslav/silver_to_gold.py',
-    task_id='silver_to_gold',
-    conn_id='spark-default',
-    verbose=1,
-    dag=dag,
-)
+def create_spark_task(task_id, script_name):
+    return SparkSubmitOperator(
+        task_id=task_id,
+        application=f"{base_script_path}/{script_name}",
+        conn_id='spark-default',
+        verbose=True,
+        conf=common_spark_config,
+        env_vars={
+            "PYSPARK_PYTHON": "python3",
+            "LOG_LEVEL": "INFO"
+        },
+        dag=dag,
+    )
 
+# Define tasks
+landing_to_bronze_task = create_spark_task('landing_to_bronze', 'landing_to_bronze.py')
+bronze_to_silver_task = create_spark_task('bronze_to_silver', 'bronze_to_silver.py')
+silver_to_gold_task = create_spark_task('silver_to_gold', 'silver_to_gold.py')
+
+# Set dependencies
 landing_to_bronze_task >> bronze_to_silver_task >> silver_to_gold_task
