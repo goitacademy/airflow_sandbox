@@ -14,9 +14,9 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
- def show_current_directory():
-        cwd = os.path.join(os.path.dirname(os.path.abspath(__file__)))
-        print(f"Current Working Directory: {cwd}")
+def show_current_directory():
+     cwd = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+     print(f"Current Working Directory: {cwd}")
 
 # Function that will call our external Python script
 def run_external_script(**kwargs):
