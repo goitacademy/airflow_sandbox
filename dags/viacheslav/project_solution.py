@@ -18,7 +18,7 @@ dag = DAG(
 )
 
 # Абсолютный путь к текущей директории DAG-файла
-base_script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "viacheslav")
+base_script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 
 common_spark_config = {
     "spark.executor.memory": "2g",
