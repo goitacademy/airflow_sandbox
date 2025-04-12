@@ -36,19 +36,23 @@ def main():
         bio_df.height
     )
 
+    print("Joined DF count:", joined_df.count())
+    joined_df.show()
+
+
     # Group by required columns and calculate averages
     gold_df = joined_df.groupBy("sport", "medal", "sex", "country_noc") \
-        .agg(
-            round(avg("weight").alias("avg_weight")),
-            round(avg("height").alias("avg_height"))
-        )
+    .agg(
+        round(avg("weight"), 2).alias("avg_weight"),
+        round(avg("height"), 2).alias("avg_height")
+    )
 
     # Add timestamp column
     gold_df = gold_df.withColumn("timestamp", current_timestamp())
 
     # Create gold directory if it doesn't exist
     gold_path = "gold/avg_stats"
-    os.makedirs(os.path.dirname(gold_path), exist_ok=True)
+    os.makedirs(gold_path, exist_ok=True)
 
     # Save to gold
     gold_df.write.mode("overwrite").parquet(gold_path)
@@ -59,3 +63,6 @@ def main():
 
     # Stop Spark session
     spark.stop()
+
+if __name__ == "__main__":
+    main()
