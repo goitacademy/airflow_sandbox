@@ -7,3 +7,4 @@ scripts/athlete_bio.csv
 scripts/athlete_event_results.csv
 scripts/checkpoint/
 __pycache__/
+streaming_pipeline/
