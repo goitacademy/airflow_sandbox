@@ -13,7 +13,7 @@ dag = DAG(
     'athlete_data_pipeline_viach',
     default_args=default_args,
     description='Data pipeline for athlete data processing',
-    schedule=timedelta(days=1),
+    schedule_interval=timedelta(days=1),
     start_date=datetime(2023, 1, 1),
     catchup=False,
 )
