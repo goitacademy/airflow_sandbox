@@ -6,3 +6,4 @@ scripts/mysql-connector-j-8.3.0.jar
 scripts/athlete_bio.csv
 scripts/athlete_event_results.csv
 scripts/checkpoint/
+__pycache__/
