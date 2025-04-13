@@ -1,5 +1,7 @@
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+import os
+from datetime import datetime
 
 # Аргументи за замовчуванням для DAG
 default_args = {
@@ -11,12 +13,13 @@ default_args = {
 connection_name = "goit_mysql_db_v_vasyliev"
 
 my_tag = 'v_vasyliev'
+dags_dir = 'v_dags'
 
 # Визначення DAG
 with DAG(
         'VVV_FP_2',
         default_args=default_args,
-        schedule_interval=None # '*/10 * * * *',  # every 10 minutes
+        schedule_interval=None, # '*/10 * * * *',  # every 10 minutes
         catchup=False,  # Вимкнути запуск пропущених задач
         tags=[f"{my_tag}"]  # Теги для класифікації DAG
 ) as my_dag:
