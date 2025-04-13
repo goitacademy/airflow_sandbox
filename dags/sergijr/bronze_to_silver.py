@@ -1,64 +1,45 @@
-from prefect import flow, task
+
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, trim, lower
+from pyspark.sql.functions import col, trim, lower, udf
 from pyspark.sql.types import StringType
 import os
+import re
 
-def create_spark_session():
-    """Створює та повертає SparkSession."""
-    return SparkSession.builder \
-        .appName("BronzeToSilver") \
-        .getOrCreate()
+def clean_text(text):
+    return re.sub(r'[^a-zA-Z0-9,.\"\']', '', str(text))
 
-@task(cache_policy="NO_CACHE")
-def clean_text(table: str):
-    """Очищає текстові колонки у таблиці."""
-    spark = create_spark_session()
-    input_path = f"/tmp/bronze/{table}"
-    
-    # Читаємо таблицю
-    df = spark.read.parquet(input_path)
+clean_text_udf = udf(clean_text, StringType())
 
-    # Очистка текстових колонок
+def clean_text_columns(df):
     for column in df.columns:
         if df.schema[column].dataType == StringType():
-            df = df.withColumn(column, trim(lower(col(column))))
-
+            df = df.withColumn(column, clean_text_udf(trim(lower(col(column)))))
     return df
 
-@task(cache_policy="NO_CACHE")
-def process_table(table: str):
-    """Обробляє таблицю: очищає текст, видаляє дублі та зберігає у silver."""
-    spark = create_spark_session()
+def process_table(table):
+    spark = SparkSession.builder.appName("BronzeToSilver").getOrCreate()
 
-    # Читаємо таблицю
     input_path = f"/tmp/bronze/{table}"
     df = spark.read.parquet(input_path)
 
-    # Викликаємо очищення
-    df = clean_text(table)
-
-    # Видаляємо дублі
+    df = clean_text_columns(df)
     df = df.dropDuplicates()
 
-    # Зберігаємо у Silver
     output_path = f"/tmp/silver/{table}"
     os.makedirs(output_path, exist_ok=True)
     df.write.mode("overwrite").parquet(output_path)
 
     print(f"✅ Дані збережено у {output_path}")
 
-    # Перевіряємо результат
     df = spark.read.parquet(output_path)
     df.show(truncate=False)
 
-@flow
-def bronze_to_silver():
-    """Обробляє всі таблиці з bronze до silver."""
-    tables = ["athlete_bio", "athlete_event_results"]
+    spark.stop()
 
+def main():
+    tables = ["athlete_bio", "athlete_event_results"]
     for table in tables:
         process_table(table)
 
 if __name__ == "__main__":
-    bronze_to_silver()
+    main()
