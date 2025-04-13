@@ -13,7 +13,8 @@ default_args = {
 connection_name = "goit_mysql_db_v_vasyliev"
 
 my_tag = 'v_vasyliev'
-dags_dir = 'v_dags'
+dags_dir = os.path.dirname(os.path.abspath(__file__))
+
 
 # Визначення DAG
 with DAG(
