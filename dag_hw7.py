@@ -1,29 +1,31 @@
 from airflow import DAG
+from airflow.providers.mysql.operators.mysql import MySqlOperator
 from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.operators.mysql_operator import MySqlOperator
 from airflow.sensors.sql import SqlSensor
 from airflow.utils.dates import days_ago
+from airflow.utils.task_group import TaskGroup
+from airflow.utils.trigger_rule import TriggerRule
 import random
 import time
+from datetime import datetime
 
 default_args = {
-    'owner': 'olesia',
+    'owner': 'airflow',
     'start_date': days_ago(1),
-    'retries': 1,
-    'retry_delay': 60  # секунд
 }
 
 with DAG(
     dag_id='hw7_olesia_medal_dag',
     default_args=default_args,
     schedule_interval=None,
-    catchup=False
+    catchup=False,
+    tags=['hw7', 'medals'],
 ) as dag:
 
-    # Створення таблиці
+    # 1. Створення таблиці
     create_table = MySqlOperator(
         task_id='create_table',
-        mysql_conn_id='DBneodata',  # <- моє з'єднання
+        mysql_conn_id='DBneodata',
         sql="""
             CREATE TABLE IF NOT EXISTS medal_summary (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,73 +33,104 @@ with DAG(
                 count INT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-        """
+        """,
     )
 
-    # Випадковий вибір медалі
-    def choose():
-        return random.choice(['bronze_task', 'silver_task', 'gold_task'])
+    # 2. Випадковий вибір медалі
+    def choose_medal():
+        return random.choice(['bronze', 'silver', 'gold'])
 
-    choose_medal = BranchPythonOperator(
+    choose_medal_task = PythonOperator(
         task_id='choose_medal',
-        python_callable=choose
+        python_callable=choose_medal,
     )
 
-    # Запис для Bronze
-    bronze_task = MySqlOperator(
+    # 3. Розгалуження залежно від вибору
+    def branch_medal_type(**kwargs):
+        ti = kwargs['ti']
+        medal = ti.xcom_pull(task_ids='choose_medal')
+        return f"{medal}_task"
+
+    branch_task = BranchPythonOperator(
+        task_id='branch_medal',
+        python_callable=branch_medal_type,
+        provide_context=True,
+    )
+
+    # 4. Завдання для кожного типу медалі
+    def count_medals(medal_type, **kwargs):
+        from airflow.hooks.base import BaseHook
+        import mysql.connector
+
+        conn = BaseHook.get_connection('DBneodata')
+        connection = mysql.connector.connect(
+            host=conn.host,
+            user=conn.login,
+            password=conn.password,
+            database=conn.schema,
+            port=conn.port
+        )
+
+        cursor = connection.cursor()
+        query = f"""
+            SELECT COUNT(*) FROM olympic_dataset.athlete_event_results
+            WHERE medal = '{medal_type.capitalize()}';
+        """
+        cursor.execute(query)
+        count = cursor.fetchone()[0]
+
+        insert_query = f"""
+            INSERT INTO medal_summary (medal_type, count)
+            VALUES ('{medal_type.capitalize()}', {count});
+        """
+        cursor.execute(insert_query)
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+    bronze_task = PythonOperator(
         task_id='bronze_task',
-        mysql_conn_id='DBneodata',
-        sql="""
-            INSERT INTO medal_summary (medal_type, count)
-            SELECT 'Bronze', COUNT(*) FROM athlete_event_results WHERE medal = 'Bronze';
-        """
+        python_callable=count_medals,
+        op_kwargs={'medal_type': 'bronze'},
     )
 
-    # Запис для Silver
-    silver_task = MySqlOperator(
+    silver_task = PythonOperator(
         task_id='silver_task',
-        mysql_conn_id='DBneodata',
-        sql="""
-            INSERT INTO medal_summary (medal_type, count)
-            SELECT 'Silver', COUNT(*) FROM athlete_event_results WHERE medal = 'Silver';
-        """
+        python_callable=count_medals,
+        op_kwargs={'medal_type': 'silver'},
     )
 
-    # Запис для Gold
-    gold_task = MySqlOperator(
+    gold_task = PythonOperator(
         task_id='gold_task',
-        mysql_conn_id='DBneodata',
-        sql="""
-            INSERT INTO medal_summary (medal_type, count)
-            SELECT 'Gold', COUNT(*) FROM athlete_event_results WHERE medal = 'Gold';
-        """
+        python_callable=count_medals,
+        op_kwargs={'medal_type': 'gold'},
     )
 
-    # Затримка виконання
+    # 5. Затримка виконання
     def delay():
-        time.sleep(35)  # спробуй пізніше змінити на 25, щоб сенсор не "падав"
+        time.sleep(35)
 
     delay_task = PythonOperator(
         task_id='delay_task',
-        python_callable=delay
+        python_callable=delay,
+        trigger_rule=TriggerRule.ONE_SUCCESS,
     )
 
-    # Сенсор: перевірка часу останнього запису
-    sensor = SqlSensor(
+    # 6. Перевірка останнього запису
+    check_recent = SqlSensor(
         task_id='check_recent',
         conn_id='DBneodata',
         sql="""
-            SELECT CASE
-                WHEN TIMESTAMPDIFF(SECOND, MAX(created_at), NOW()) <= 30 THEN 1
-                ELSE 0
-            END
-            FROM medal_summary;
+            SELECT 1 FROM medal_summary
+            WHERE created_at >= NOW() - INTERVAL 30 SECOND
+            ORDER BY created_at DESC
+            LIMIT 1;
         """,
         mode='poke',
         timeout=60,
-        poke_interval=10
+        poke_interval=10,
     )
 
-    # Зв'язки між завданнями
-    create_table >> choose_medal
-    choose_medal >> [bronze_task, silver_task, gold_task] >> delay_task >> sensor
+    # Визначення послідовності задач
+    create_table >> choose_medal_task >> branch_task
+    branch_task >> [bronze_task, silver_task, gold_task] >> delay_task >> check_recent
