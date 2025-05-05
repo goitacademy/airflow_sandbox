@@ -27,7 +27,7 @@ with DAG(
         task_id='create_table',
         mysql_conn_id='DBneodata',
         sql="""
-            CREATE TABLE IF NOT EXISTS medal_summary (
+            CREATE TABLE IF NOT EXISTS olesia_hw_dag_results (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 medal_type VARCHAR(10),
                 count INT,
@@ -36,79 +36,47 @@ with DAG(
         """,
     )
 
-    # 2. Випадковий вибір медалі
+    # 2. Вибір типу медалі
     def choose_medal():
-        return random.choice(['bronze', 'silver', 'gold'])
+        medals = ['gold', 'silver', 'bronze']
+        return f'{random.choice(medals)}_task'
 
-    choose_medal_task = PythonOperator(
+    choose_medal = BranchPythonOperator(
         task_id='choose_medal',
         python_callable=choose_medal,
     )
 
-    # 3. Розгалуження залежно від вибору
-    def branch_medal_type(**kwargs):
-        ti = kwargs['ti']
-        medal = ti.xcom_pull(task_ids='choose_medal')
-        return f"{medal}_task"
-
-    branch_task = BranchPythonOperator(
-        task_id='branch_medal',
-        python_callable=branch_medal_type,
-        provide_context=True,
-    )
-
-    # 4. Завдання для кожного типу медалі
-    def count_medals(medal_type, **kwargs):
-        from airflow.hooks.base import BaseHook
-        import mysql.connector
-
-        conn = BaseHook.get_connection('DBneodata')
-        connection = mysql.connector.connect(
-            host=conn.host,
-            user=conn.login,
-            password=conn.password,
-            database=conn.schema,
-            port=conn.port
-        )
-
-        cursor = connection.cursor()
-        query = f"""
-            SELECT COUNT(*) FROM olympic_dataset.athlete_event_results
-            WHERE medal = '{medal_type.capitalize()}';
-        """
-        cursor.execute(query)
-        count = cursor.fetchone()[0]
-
-        insert_query = f"""
-            INSERT INTO medal_summary (medal_type, count)
-            VALUES ('{medal_type.capitalize()}', {count});
-        """
-        cursor.execute(insert_query)
-        connection.commit()
-        cursor.close()
-        connection.close()
-
-    bronze_task = PythonOperator(
-        task_id='bronze_task',
-        python_callable=count_medals,
-        op_kwargs={'medal_type': 'bronze'},
-    )
-
-    silver_task = PythonOperator(
-        task_id='silver_task',
-        python_callable=count_medals,
-        op_kwargs={'medal_type': 'silver'},
-    )
-
-    gold_task = PythonOperator(
+    # 3. Оператори медалей
+    insert_gold = MySqlOperator(
         task_id='gold_task',
-        python_callable=count_medals,
-        op_kwargs={'medal_type': 'gold'},
+        mysql_conn_id='DBneodata',
+        sql="""
+            INSERT INTO olesia_hw_dag_results (medal_type, count)
+            VALUES ('gold', FLOOR(1 + RAND() * 10));
+        """,
     )
 
-    # 5. Затримка виконання
+    insert_silver = MySqlOperator(
+        task_id='silver_task',
+        mysql_conn_id='DBneodata',
+        sql="""
+            INSERT INTO olesia_hw_dag_results (medal_type, count)
+            VALUES ('silver', FLOOR(1 + RAND() * 10));
+        """,
+    )
+
+    insert_bronze = MySqlOperator(
+        task_id='bronze_task',
+        mysql_conn_id='DBneodata',
+        sql="""
+            INSERT INTO olesia_hw_dag_results (medal_type, count)
+            VALUES ('bronze', FLOOR(1 + RAND() * 10));
+        """,
+    )
+
+    # 4. Очікування (штучна затримка)
     def delay():
-        time.sleep(35)
+        time.sleep(10)
 
     delay_task = PythonOperator(
         task_id='delay_task',
@@ -116,21 +84,19 @@ with DAG(
         trigger_rule=TriggerRule.ONE_SUCCESS,
     )
 
-    # 6. Перевірка останнього запису
+    # 5. Перевірка останнього запису
     check_recent = SqlSensor(
         task_id='check_recent',
         conn_id='DBneodata',
         sql="""
-            SELECT 1 FROM medal_summary
-            WHERE created_at >= NOW() - INTERVAL 30 SECOND
-            ORDER BY created_at DESC
-            LIMIT 1;
+            SELECT COUNT(*) FROM olesia_hw_dag_results
+            WHERE created_at > NOW() - INTERVAL 1 MINUTE;
         """,
         mode='poke',
-        timeout=60,
-        poke_interval=10,
+        timeout=30,
+        poke_interval=5,
+        trigger_rule=TriggerRule.ONE_SUCCESS,
     )
 
-    # Визначення послідовності задач
-    create_table >> choose_medal_task >> branch_task
-    branch_task >> [bronze_task, silver_task, gold_task] >> delay_task >> check_recent
+    create_table >> choose_medal >> [insert_gold, insert_silver, insert_bronze]
+    [insert_gold, insert_silver, insert_bronze] >> delay_task >> check_recent
