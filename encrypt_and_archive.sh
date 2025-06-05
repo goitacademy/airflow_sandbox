@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # Перевірка параметрів
 if [ $# -ne 2 ]; then
