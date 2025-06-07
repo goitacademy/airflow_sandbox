@@ -79,7 +79,7 @@ with DAG(
     )
 
     def sleep_func():
-        time.sleep(15) 
+        time.sleep(35) 
 
     generate_delay = PythonOperator(
         task_id='generate_delay',
