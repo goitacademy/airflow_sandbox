@@ -13,7 +13,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id='medal_pipeline_hw7',
+    dag_id='ailin_medals_mds4_hw7',
     default_args=default_args,
     schedule_interval=None,
     catchup=False
@@ -79,7 +79,7 @@ with DAG(
     )
 
     def sleep_func():
-        time.sleep(35) 
+        time.sleep(15) 
     generate_delay = PythonOperator(
         task_id='generate_delay',
         python_callable=sleep_func
