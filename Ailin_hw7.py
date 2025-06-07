@@ -79,24 +79,27 @@ with DAG(
     )
 
     def sleep_func():
-        time.sleep(35) 
+        time.sleep(15) 
+
     generate_delay = PythonOperator(
         task_id='generate_delay',
-        python_callable=sleep_func
+        python_callable=sleep_func,
+        trigger_rule='none_failed_min_one_success'
     )
+
 
     check_for_correctness = SqlSensor(
         task_id='check_for_correctness',
         conn_id='mysql_ilin',
-        sql="""
-        SELECT 1 FROM hw_dag_results 
-        WHERE created_at > NOW() - INTERVAL 30 SECOND 
-        ORDER BY created_at DESC LIMIT 1;
-        """,
+        sql="""SELECT 1 FROM hw_dag_results 
+               WHERE created_at > NOW() - INTERVAL 30 SECOND 
+               ORDER BY created_at DESC LIMIT 1;""",
         mode='reschedule',
         timeout=60,
-        poke_interval=10
+        poke_interval=10,
+        trigger_rule='none_failed_min_one_success'
     )
+
 
     create_table >> pick_medal >> pick_medal_task
     pick_medal_task >> [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay >> check_for_correctness
