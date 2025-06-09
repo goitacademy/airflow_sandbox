@@ -47,7 +47,7 @@ with DAG(
         task_id="create_table",
         mysql_conn_id=conn_id,
         sql="""
-            CREATE TABLE IF NOT EXISTS tlkktl.games (
+            CREATE TABLE IF NOT EXISTS mvvv.games (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 medal_type VARCHAR(50),
                 count INT,
@@ -70,7 +70,7 @@ with DAG(
         task_id="calc_Bronze",
         mysql_conn_id=conn_id,
         sql="""
-            INSERT INTO tlkktl.games (medal_type, count, created_at)
+            INSERT INTO mvvv.games (medal_type, count, created_at)
             SELECT 'Bronze', COUNT(*), NOW()
             FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Bronze';
@@ -81,7 +81,7 @@ with DAG(
         task_id="calc_Silver",
         mysql_conn_id=conn_id,
         sql="""
-            INSERT INTO tlkktl.games (medal_type, count, created_at)
+            INSERT INTO mvvv.games (medal_type, count, created_at)
             SELECT 'Silver', COUNT(*), NOW()
             FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Silver';
@@ -92,7 +92,7 @@ with DAG(
         task_id="calc_Gold",
         mysql_conn_id=conn_id,
         sql="""
-            INSERT INTO tlkktl.games (medal_type, count, created_at)
+            INSERT INTO mvvv.games (medal_type, count, created_at)
             SELECT 'Gold', COUNT(*), NOW()
             FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Gold';
@@ -110,7 +110,7 @@ with DAG(
         conn_id=conn_id,
         sql="""
             SELECT 1
-            FROM tlkktl.games
+            FROM mvvv.games
             WHERE created_at >= NOW() - INTERVAL 30 SECOND
             ORDER BY created_at DESC
             LIMIT 1;
