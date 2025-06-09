@@ -40,7 +40,7 @@ with DAG(
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
-    tags=["tl_hw_07"],
+    tags=["mv_hw_07"],
 ) as dag:
 
     create_table = MySqlOperator(
