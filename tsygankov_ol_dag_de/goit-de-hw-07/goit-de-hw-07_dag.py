@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.mysql_operator import MySqlOperator
-from airflow.providers.mysql.sensors.mysql import MySqlSensor
+from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule
 from datetime import datetime
 import random
@@ -17,7 +17,7 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
-    tags=['tsygankov_olympic'],
+    tags=['ttsygankov_hw-07_tag'],
 )
 
 # 1. Створення таблиці
@@ -100,7 +100,7 @@ generate_delay = PythonOperator(
 )
 
 # 6. Сенсор на перевірку свіжості запису
-check_for_correctness = MySqlSensor(
+check_for_correctness = SqlSensor(
     task_id='check_for_correctness',
     mysql_conn_id='mysql_default',
     sql="""
