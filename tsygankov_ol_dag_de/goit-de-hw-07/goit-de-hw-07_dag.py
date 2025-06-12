@@ -102,7 +102,7 @@ generate_delay = PythonOperator(
 # 6. Сенсор на перевірку свіжості запису
 check_for_correctness = SqlSensor(
     task_id='check_for_correctness',
-    mysql_conn_id='mysql_default',
+    conn_id='mysql_default',  # ✅ виправлено тут
     sql="""
         SELECT 1 FROM medals_summary
         WHERE created_at >= NOW() - INTERVAL 30 SECOND
