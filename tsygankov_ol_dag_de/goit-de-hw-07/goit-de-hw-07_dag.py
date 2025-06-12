@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.mysql_operator import MySqlOperator
-from airflow.sensors.sql import SqlSensor
+from airflow.providers.mysql.sensors.mysql import MySqlSensor
 from airflow.utils.trigger_rule import TriggerRule
 from datetime import datetime
 import random
@@ -100,9 +100,9 @@ generate_delay = PythonOperator(
 )
 
 # 6. Сенсор на перевірку свіжості запису
-check_for_correctness = SqlSensor(
+check_for_correctness = MySqlSensor(
     task_id='check_for_correctness',
-    conn_id='mysql_default',
+    mysql_conn_id='mysql_default',
     sql="""
         SELECT 1 FROM medals_summary
         WHERE created_at >= NOW() - INTERVAL 30 SECOND
