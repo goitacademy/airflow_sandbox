@@ -1,13 +1,13 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.operators.mysql_operator import MySqlOperator
-from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule
+from airflow.sensors.sql import SqlSensor
+from airflow.hooks.mysql_hook import MySqlHook
 from datetime import datetime
 import random
 import time
 
-default_args = { 
+default_args = {
     'owner': 'airflow',
     'start_date': datetime(2024, 8, 1),
 }
@@ -17,28 +17,43 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
-    tags=['ttsygankov_hw-07_tag'],
+    tags=['tsygankov_hw-07'],
 )
 
 # 1. Створення таблиці
-create_table = MySqlOperator(
-    task_id='create_table',
-    mysql_conn_id='mysql_default',
-    sql="""
+def create_table_fn():
+    hook = MySqlHook(mysql_conn_id='mysql_default')
+    hook.run("""
         CREATE TABLE IF NOT EXISTS medals_summary (
             id INT AUTO_INCREMENT PRIMARY KEY,
             medal_type VARCHAR(10),
             count INT,
             created_at DATETIME
         );
-    """,
+    """)
+
+create_table = PythonOperator(
+    task_id='create_table',
+    python_callable=create_table_fn,
     dag=dag,
 )
 
-# 2. Випадковий вибір медалі
+# 2. Збереження поточного часу
+def generate_now(ti):
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[store_now] {now_str}")
+    ti.xcom_push(key='now_str', value=now_str)
+
+store_now = PythonOperator(
+    task_id='store_now',
+    python_callable=generate_now,
+    dag=dag,
+)
+
+# 3. Випадковий вибір медалі
 def choose_medal(ti):
     choice = random.choice(['Bronze', 'Silver', 'Gold'])
-    print(f"Chosen medal: {choice}")
+    print(f"[pick_medal] Chosen medal: {choice}")
     ti.xcom_push(key='medal', value=choice)
 
 pick_medal = PythonOperator(
@@ -47,7 +62,7 @@ pick_medal = PythonOperator(
     dag=dag,
 )
 
-# 3. Розгалуження
+# 4. Розгалуження
 def branch_task(ti):
     medal = ti.xcom_pull(task_ids='pick_medal', key='medal')
     return f'calc_{medal}'
@@ -58,39 +73,49 @@ pick_medal_task = BranchPythonOperator(
     dag=dag,
 )
 
-# 4. Функції для підрахунку кількості медалей
-def build_insert_sql(medal_type):
+# 5. Побудова SQL запиту
+def build_insert_sql(medal_type, now_str):
     return f"""
         INSERT INTO medals_summary (medal_type, count, created_at)
-        SELECT '{medal_type}', COUNT(*), NOW()
+        SELECT '{medal_type}', COUNT(*), '{now_str}'
         FROM olympic_dataset.athlete_event_results
         WHERE medal = '{medal_type}';
     """
 
-calc_Bronze = MySqlOperator(
+# 6. Вставка медалі
+def insert_medal(medal_type, **context):
+    now_str = context['ti'].xcom_pull(task_ids='store_now', key='now_str')
+    sql = build_insert_sql(medal_type, now_str)
+    hook = MySqlHook(mysql_conn_id='mysql_default')
+    hook.run(sql)
+    print(f"[insert_medal] Inserted {medal_type} at {now_str}")
+
+calc_Bronze = PythonOperator(
     task_id='calc_Bronze',
-    mysql_conn_id='mysql_default',
-    sql=build_insert_sql('Bronze'),
+    python_callable=insert_medal,
+    op_kwargs={'medal_type': 'Bronze'},
     dag=dag,
 )
 
-calc_Silver = MySqlOperator(
+calc_Silver = PythonOperator(
     task_id='calc_Silver',
-    mysql_conn_id='mysql_default',
-    sql=build_insert_sql('Silver'),
+    python_callable=insert_medal,
+    op_kwargs={'medal_type': 'Silver'},
     dag=dag,
 )
 
-calc_Gold = MySqlOperator(
+calc_Gold = PythonOperator(
     task_id='calc_Gold',
-    mysql_conn_id='mysql_default',
-    sql=build_insert_sql('Gold'),
+    python_callable=insert_medal,
+    op_kwargs={'medal_type': 'Gold'},
     dag=dag,
 )
 
-# 5. Затримка
+# 7. Затримка
 def delay_function():
-    time.sleep(5)  # або 35, щоб перевірити падіння сенсора
+    seconds = random.randint(5, 40)
+    print(f"[delay_function] Sleeping for {seconds} seconds")
+    time.sleep(seconds)
 
 generate_delay = PythonOperator(
     task_id='generate_delay',
@@ -99,22 +124,21 @@ generate_delay = PythonOperator(
     dag=dag,
 )
 
-# 6. Сенсор на перевірку свіжості запису
+# 8. Сенсор на свіжість запису
 check_for_correctness = SqlSensor(
     task_id='check_for_correctness',
-    conn_id='mysql_default',  # ✅ виправлено тут
+    conn_id='mysql_default',
     sql="""
         SELECT 1 FROM medals_summary
-        WHERE created_at >= NOW() - INTERVAL 30 SECOND
-        ORDER BY created_at DESC LIMIT 1;
+        WHERE created_at = '{{ ti.xcom_pull(task_ids="store_now", key="now_str") }}'
     """,
-    timeout=60,
-    poke_interval=10,
+    timeout=20,
+    poke_interval=5,
     mode='poke',
     dag=dag,
 )
 
-# Встановлення залежностей
-create_table >> pick_medal >> pick_medal_task
+# Залежності
+create_table >> store_now >> pick_medal >> pick_medal_task
 pick_medal_task >> [calc_Bronze, calc_Silver, calc_Gold]
 [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay >> check_for_correctness
