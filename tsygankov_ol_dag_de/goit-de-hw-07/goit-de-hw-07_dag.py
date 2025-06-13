@@ -90,8 +90,7 @@ calc_Gold = MySqlOperator(
 
 # 5. Затримка 5–40 сек
 def delay_function():
-    delay = random.randint(5, 40)
-    print(f"Sleeping for {delay} seconds...")
+    delay = random.randint(5, 50)
     time.sleep(delay)
 
 generate_delay = PythonOperator(
@@ -104,14 +103,14 @@ generate_delay = PythonOperator(
 # 6. Сенсор перевіряє, чи запис свіжий
 check_for_correctness = SqlSensor(
     task_id='check_for_correctness',
-    mysql_conn_id='mysql_default',
+    conn_id='mysql_default',
     sql="""
         SELECT 1 FROM medals_summary
         WHERE created_at >= NOW() - INTERVAL 30 SECOND
         ORDER BY created_at DESC LIMIT 1;
     """,
-    timeout=60,
-    poke_interval=10,
+    timeout=20,
+    poke_interval=5,
     mode='poke',
     dag=dag,
 )
