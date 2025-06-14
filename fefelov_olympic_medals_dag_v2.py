@@ -81,7 +81,7 @@ default_args = {
 }
 
 dag = DAG(
-    'olympic_medals_processing_v2',
+    'fefelov_olympic_medals_processing_v2',
     default_args=default_args,
     description='Process Olympic medals data with branching logic (Airflow 2.x)',
     schedule_interval=timedelta(hours=1),
@@ -241,17 +241,18 @@ check_recent_record = PythonOperator(
     dag=dag
 )
 
-# Альтернативний сенсор з кастомною логікою
+# Improved sensor with proper failure logic
 def check_recent_record_custom(**context):
-    """Перевіряє, чи є свіжі записи в таблиці"""
+    """Check if the newest record in olympic_medal_counts is within 30 seconds - FAILS if not!"""
     try:
         connection = get_mysql_connection()
         cursor = connection.cursor()
         
+        # Get the NEWEST record (highest ID or latest timestamp)
         sql = """
-        SELECT created_at
+        SELECT created_at, id
         FROM IllyaF_medal_counts
-        ORDER BY created_at DESC
+        ORDER BY created_at DESC, id DESC
         LIMIT 1;
         """
         
@@ -262,25 +263,32 @@ def check_recent_record_custom(**context):
         
         if result and result[0]:
             latest_time = result[0]
+            record_id = result[1]
             current_time = datetime.now()
             time_diff = (current_time - latest_time).total_seconds()
             
-            print(f"Latest record time: {latest_time}")
-            print(f"Current time: {current_time}")
-            print(f"Time difference: {time_diff} seconds")
+            print(f"🔍 Checking newest record:")
+            print(f"   📊 Record ID: {record_id}")
+            print(f"   ⏰ Latest record time: {latest_time}")
+            print(f"   ⏰ Current time: {current_time}")
+            print(f"   ⏰ Time difference: {time_diff:.1f} seconds")
+            print(f"   🎯 Required: ≤ 30 seconds")
             
             if time_diff <= 30:
-                print("✅ Record is fresh (within 30 seconds)")
+                print("✅ SUCCESS: Record is fresh (within 30 seconds)")
                 return True
             else:
-                print("❌ Record is too old (more than 30 seconds)")
-                return False
+                print(f"❌ FAILURE: Record is too old ({time_diff:.1f} > 30 seconds)")
+                # This will cause the sensor to FAIL and the DAG to FAIL
+                raise Exception(f"Sensor failed: Record is {time_diff:.1f} seconds old (> 30 seconds)")
         else:
-            print("❌ No records found")
-            return False
+            print("❌ FAILURE: No records found in table")
+            raise Exception("Sensor failed: No records found in IllyaF_medal_counts table")
+            
     except Exception as e:
-        print(f"Error in custom sensor: {e}")
-        return False
+        print(f"❌ SENSOR FAILURE: {e}")
+        # Re-raise the exception to ensure the task fails
+        raise
 
 check_recent_record_python = PythonOperator(
     task_id='check_record_freshness_python',
