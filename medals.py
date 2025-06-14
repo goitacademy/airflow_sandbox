@@ -6,7 +6,7 @@ from airflow.providers.mysql.operators.mysql import MySqlOperator
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 import random
 
-connection_name = "AlexSh_mysqldb"
+connection_name = "goit_mysql_db"
 
 default_args = {
     "owner": "airflow",
