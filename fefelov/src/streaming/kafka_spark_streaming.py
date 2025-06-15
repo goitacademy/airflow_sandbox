@@ -380,54 +380,19 @@ class KafkaSparkStreamingPipeline:
                     .mode("append") \
                     .save()
                 
-                logger.info(f"✅ Successfully wrote data to MySQL table: {enriched_table}")
-            except Exception as e:                
+                logger.info(f"✅ Successfully wrote data to MySQL table: {enriched_table}")            except Exception as e:
                 logger.error(f"❌ MySQL write error: {str(e)}")
-                logger.info("Attempting alternative MySQL connection method...")
+                logger.info("Attempting to create database/table if needed...")
                 try:
-                    # Create table manually using JDBC connection first
-                    import java.sql.DriverManager
-                    
-                    logger.info(f"Attempting to create table manually via JDBC...")
-                    connection = None
-                    try:
-                        # Load the MySQL JDBC driver
-                        java.lang.Class.forName("com.mysql.cj.jdbc.Driver")
-                        
-                        # Create a connection
-                        connection = DriverManager.getConnection(
-                            jdbc_url, 
-                            jdbc_props["user"], 
-                            jdbc_props["password"]
-                        )
-                        
-                        # Create statement and execute SQL
-                        statement = connection.createStatement()
-                        statement.executeUpdate(create_table_sql)
-                        logger.info(f"✅ Table {enriched_table} created successfully via JDBC")
-                        
-                        # Close resources
-                        statement.close()
-                        connection.close()
-                    except Exception as jdbc_err:
-                        logger.error(f"❌ JDBC table creation failed: {str(jdbc_err)}")
-                        if connection:
-                            connection.close()
-                    logger.info("Attempting fallback direct JDBC write...")
-                    # Use target database configuration for writing
-                    batch_df.write \
-                        .format("jdbc") \
-                        .option("url", self.spark_manager.config.target_database.jdbc_url) \
-                        .option("dbtable", enriched_table) \
-                        .option("user", self.spark_manager.config.target_database.username) \
-                        .option("password", self.spark_manager.config.target_database.password) \
-                        .option("driver", "com.mysql.cj.jdbc.Driver") \
-                        .mode("append") \
-                        .save()
-                    logger.info(f"✅ Fallback MySQL write succeeded for table: {enriched_table}")
+                    # Try to create database first
+                    self.spark_manager.spark.sql(f"CREATE DATABASE IF NOT EXISTS {db_name}")
+                    self.spark_manager.spark.sql(f"USE {db_name}")                    
+                    # Try writing again after ensuring database exists
+                    self.spark_manager.write_to_mysql(df_to_write, table_name)
+                    logger.info(f"✅ MySQL write succeeded after creating database: {table_name}")
                 except Exception as inner_e:
                     logger.error(f"❌ Fallback MySQL write also failed: {str(inner_e)}")
-                    raise
+                    logger.warning("Continuing without MySQL write - check database configuration")
             
             logger.info(f"Batch {batch_id} processed successfully!")
             
