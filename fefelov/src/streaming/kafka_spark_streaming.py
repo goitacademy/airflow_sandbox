@@ -381,7 +381,8 @@ class KafkaSparkStreamingPipeline:
                     .save()
                 
                 logger.info(f"✅ Successfully wrote data to MySQL table: {enriched_table}")
-            except Exception as e:                logger.error(f"❌ MySQL write error: {str(e)}")
+            except Exception as e:                
+                logger.error(f"❌ MySQL write error: {str(e)}")
                 logger.info("Attempting alternative MySQL connection method...")
                 try:
                     # Create table manually using JDBC connection first
