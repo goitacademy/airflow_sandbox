@@ -90,16 +90,16 @@ class SparkManager:
 
     def read_mysql_table(self, table_name: str) -> "DataFrame":
         """Read table from MySQL database"""
-        logger.info(f"Reading MySQL table: {table_name}")
-
-        return self.spark.read \
+        logger.info(f"Reading MySQL table: {table_name}")        return self.spark.read \
             .format("jdbc") \
             .option("url", self.config.database.jdbc_url) \
             .option("dbtable", table_name) \
             .option("user", self.config.database.username) \
             .option("password", self.config.database.password) \
             .option("driver", "com.mysql.cj.jdbc.Driver") \
-            .load()    def write_to_mysql(self, df: "DataFrame", table_name: str, mode: str = "append", target_db: bool = True) -> None:
+            .load()
+            
+    def write_to_mysql(self, df: "DataFrame", table_name: str, mode: str = "append", target_db: bool = True) -> None:
         """
         Write DataFrame to MySQL table
         
