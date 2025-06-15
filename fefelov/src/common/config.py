@@ -126,13 +126,13 @@ class Config:
             password=os.getenv("MYSQL_PASSWORD", "Proyahaxuqithab9oplp")
         )
         
-        # Target database for writing streaming results        # This should be updated to point to the local MySQL instance where we write
+        # Target database for writing streaming results        # Target database configuration - Real MySQL database
         self.target_database = DatabaseConfig(
-            host=os.getenv("MYSQL_TARGET_HOST", "localhost"),
+            host=os.getenv("MYSQL_TARGET_HOST", "217.61.57.46"),
             port=int(os.getenv("MYSQL_TARGET_PORT", "3306")),
-            database=os.getenv("MYSQL_TARGET_DATABASE", "olympic_dataset"),
-            username=os.getenv("MYSQL_TARGET_USERNAME", "neo4j"),
-            password=os.getenv("MYSQL_TARGET_PASSWORD", "admin")
+            database=os.getenv("MYSQL_TARGET_DATABASE", "neo_data"),
+            username=os.getenv("MYSQL_TARGET_USERNAME", "neo_data_admin"),
+            password=os.getenv("MYSQL_TARGET_PASSWORD", "Proyahaxuqithab9oplp")
         )
         
         # Kafka configuration with authentication
@@ -143,7 +143,7 @@ class Config:
             sasl_username=os.getenv("KAFKA_SASL_USERNAME", "admin"),
             sasl_password=os.getenv("KAFKA_SASL_PASSWORD", "VawEzo1ikLtrA8Ug8THa")
         )
-          # Topics configuration (use actual prefixed values from env vars)
+        # Topics configuration (use actual prefixed values from env vars)
         self.topics = TopicsConfig(
             prefix=self.student_prefix,
             athlete_events=os.getenv("KAFKA_TOPIC_ATHLETE_EVENTS", f"{self.student_prefix}_athlete_event_results"),

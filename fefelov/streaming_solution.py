@@ -56,23 +56,23 @@ fefelov_streaming_task = SparkSubmitOperator(
         'spark.jars.packages': 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,com.mysql:mysql-connector-j:8.0.33',
         'spark.jars.repositories': 'https://repo1.maven.org/maven2/',
         'spark.driver.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',
-        'spark.executor.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',
-        'spark.sql.streaming.forceDeleteTempCheckpointLocation': 'true',
+        'spark.executor.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',        'spark.sql.streaming.forceDeleteTempCheckpointLocation': 'true',
         # Add explicit MySQL database properties  
-        'spark.hadoop.javax.jdo.option.ConnectionURL': 'jdbc:mysql://localhost:3306/olympic_dataset',
+        'spark.hadoop.javax.jdo.option.ConnectionURL': 'jdbc:mysql://217.61.57.46:3306/neo_data',
         'spark.hadoop.javax.jdo.option.ConnectionDriverName': 'com.mysql.cj.jdbc.Driver',
-        'spark.hadoop.javax.jdo.option.ConnectionUserName': 'neo4j',
-        'spark.hadoop.javax.jdo.option.ConnectionPassword': 'admin'
-    },    env_vars={
+        'spark.hadoop.javax.jdo.option.ConnectionUserName': 'neo_data_admin',
+        'spark.hadoop.javax.jdo.option.ConnectionPassword': 'Proyahaxuqithab9oplp'
+    },
+    env_vars={
         'STUDENT_PREFIX': 'fefelov',
         'DATA_PATH': './data',
         'PYTHONPATH': '/opt/spark/jobs/fefelov',
         # Configure the target MySQL database for writing streaming results
-        'MYSQL_TARGET_HOST': 'localhost', 
+        'MYSQL_TARGET_HOST': '217.61.57.46', 
         'MYSQL_TARGET_PORT': '3306',
-        'MYSQL_TARGET_DATABASE': 'olympic_dataset',
-        'MYSQL_TARGET_USERNAME': 'neo4j',
-        'MYSQL_TARGET_PASSWORD': 'admin',
+        'MYSQL_TARGET_DATABASE': 'neo_data',
+        'MYSQL_TARGET_USERNAME': 'neo_data_admin',
+        'MYSQL_TARGET_PASSWORD': 'Proyahaxuqithab9oplp',
     },
     executor_memory='2g',
     driver_memory='1g',
