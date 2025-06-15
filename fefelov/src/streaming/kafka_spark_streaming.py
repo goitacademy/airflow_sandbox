@@ -115,7 +115,8 @@ class KafkaSparkStreamingPipeline:
                     cast(regexp_replace(trim(col("weight")), "[^0-9.]", ""), "double"))
             
             # Step 2: Filter out records with invalid height/weight data
-            logger.info("Step 2: Filtering out invalid height/weight data...")            filtered_bio_df = cleaned_bio_df.filter(
+            logger.info("Step 2: Filtering out invalid height/weight data...")            
+            filtered_bio_df = cleaned_bio_df.filter(
                 # Filter out null, NaN, or non-numeric height/weight
                 col("height_numeric").isNotNull() & 
                 col("weight_numeric").isNotNull() &
