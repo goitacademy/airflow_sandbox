@@ -33,9 +33,9 @@ default_args = {
 
 # Create the DAG
 dag = DAG(
-    'fefelov_streaming_pipeline_v5',
+    'fefelov_streaming_pipeline_v6',
     default_args=default_args,
-    description='Fefelov Real-time Kafka-Spark Streaming Pipeline - Fixed PYTHONPATH v5',
+    description='Fefelov Real-time Kafka-Spark Streaming Pipeline - Production Ready v6',
     schedule_interval=None,  # Manual trigger only for streaming
     catchup=False,
     tags=['fefelov', 'streaming', 'kafka', 'spark', 'real-time'],
