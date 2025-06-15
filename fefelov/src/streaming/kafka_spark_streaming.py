@@ -376,11 +376,11 @@ class KafkaSparkStreamingPipeline:
                     .option("dbtable", enriched_table) \
                     .option("user", jdbc_props["user"]) \
                     .option("password", jdbc_props["password"]) \
-                    .option("driver", jdbc_props["driver"]) \
-                    .mode("append") \
+                    .option("driver", jdbc_props["driver"]) \                    .mode("append") \
                     .save()
                 
-                logger.info(f"✅ Successfully wrote data to MySQL table: {enriched_table}")            except Exception as e:
+                logger.info(f"✅ Successfully wrote data to MySQL table: {enriched_table}")
+            except Exception as e:
                 logger.error(f"❌ MySQL write error: {str(e)}")
                 logger.info("Attempting to create database/table if needed...")
                 try:
