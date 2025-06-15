@@ -11,8 +11,17 @@ This pipeline implements the requirements:
 7. Stream results using forEachBatch to both Kafka topic and MySQL database
 """
 import logging
+import sys
+import os
 from datetime import datetime
 from typing import Optional
+
+# Add parent directories to Python path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)  # fefelov/src
+grandparent_dir = os.path.dirname(parent_dir)  # fefelov
+sys.path.append(parent_dir)
+sys.path.append(grandparent_dir)
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
@@ -26,9 +35,17 @@ from pyspark.sql.types import (
     IntegerType, DoubleType, TimestampType
 )
 
-from common.config import Config
-from common.spark_manager import SparkManager
-from common.utils import validate_required_columns
+# Import common modules with error handling
+try:
+    from common.config import Config
+    from common.spark_manager import SparkManager
+    from common.utils import validate_required_columns
+except ImportError as e:
+    print(f"Import error: {e}")
+    print("Current sys.path:", sys.path)
+    print("Current working directory:", os.getcwd())
+    print("Script location:", __file__)
+    raise
 
 logger = logging.getLogger(__name__)
 
@@ -382,12 +399,16 @@ class KafkaSparkStreamingPipeline:
 
 
 if __name__ == "__main__":
-    # For standalone execution
+    # For standalone execution - set up paths
     import sys
     import os
     
-    # Add parent directory to path
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # Add parent directories to path
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)  # fefelov/src
+    grandparent_dir = os.path.dirname(parent_dir)  # fefelov
+    sys.path.append(parent_dir)
+    sys.path.append(grandparent_dir)
     
     from common.config import Config
     from common.spark_manager import SparkManager

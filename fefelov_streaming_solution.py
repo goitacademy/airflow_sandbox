@@ -33,9 +33,9 @@ default_args = {
 
 # Create the DAG
 dag = DAG(
-    'fefelov_streaming_pipeline_v3',
+    'fefelov_streaming_pipeline_v5',
     default_args=default_args,
-    description='Fefelov Real-time Kafka-Spark Streaming Pipeline - Force Redeploy',
+    description='Fefelov Real-time Kafka-Spark Streaming Pipeline - Fixed PYTHONPATH v5',
     schedule_interval=None,  # Manual trigger only for streaming
     catchup=False,
     tags=['fefelov', 'streaming', 'kafka', 'spark', 'real-time'],
@@ -55,6 +55,11 @@ fefelov_streaming_task = SparkSubmitOperator(
         'spark.serializer': 'org.apache.spark.serializer.KryoSerializer',
         'spark.sql.streaming.checkpointLocation': '/tmp/fefelov_checkpoint',
         'spark.jars.packages': 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0,mysql:mysql-connector-java:8.0.33'
+    },
+    env_vars={
+        'STUDENT_PREFIX': 'fefelov',
+        'DATA_PATH': './data',
+        'PYTHONPATH': '/opt/spark/jobs/fefelov',
     },
     executor_memory='2g',
     driver_memory='1g',
