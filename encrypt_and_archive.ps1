@@ -24,10 +24,15 @@ Write-Output "Розбиваємо архів на частини по $PartSize
 
 $fs = [System.IO.File]::OpenRead($ArchiveName)
 $buffer = New-Object byte[] $PartSize
-$index = 0
 
+# Алфавітне найменування (aa, ab, ac, ...)
+$alphabet = 'abcdefghijklmnopqrstuvwxyz'
+$index = 0
 while (($bytesRead = $fs.Read($buffer, 0, $PartSize)) -gt 0) {
-    $partFile = Join-Path $TempDir ("part_$index")
+    $first = $alphabet[[Math]::Floor($index / 26) % 26]
+    $second = $alphabet[$index % 26]
+    $alphaIndex = "$first$second"
+    $partFile = Join-Path $TempDir ("part_$alphaIndex")
     [System.IO.File]::WriteAllBytes($partFile, $buffer[0..($bytesRead-1)])
     $index++
 }

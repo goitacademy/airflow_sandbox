@@ -94,23 +94,44 @@ def join_and_aggregate(bio_df: DataFrame, results_df: DataFrame) -> DataFrame:
     """
     logger.info("Joining tables on athlete_id...")
     
-    # Join on athlete_id
-    joined_df = results_df.join(bio_df, "athlete_id", "inner")
+    # Create table aliases to avoid column ambiguity
+    bio_alias = bio_df.alias("bio")
+    results_alias = results_df.alias("results")
+    
+    # Join on athlete_id using explicit table aliases
+    joined_df = results_alias.join(bio_alias, col("results.athlete_id") == col("bio.athlete_id"), "inner")
     logger.info(f"Joined dataset contains {joined_df.count()} records")
     
     # Group by sport, medal, sex, country_noc and calculate averages
+    # Use results table's country_noc since it's the main fact table
     logger.info("Calculating average weight and height by grouping...")
     
-    agg_df = joined_df.groupBy("sport", "medal", "sex", "country_noc") \
+    agg_df = joined_df.groupBy(
+                          col("results.sport"), 
+                          col("results.medal"), 
+                          col("bio.sex"), 
+                          col("results.country_noc")
+                      ) \
                       .agg(
-                          avg("weight").alias("avg_weight"),
-                          avg("height").alias("avg_height")
+                          avg(col("bio.weight")).alias("avg_weight"),
+                          avg(col("bio.height")).alias("avg_height")
                       ) \
                       .withColumn("timestamp", current_timestamp())
     
     # Round averages to 2 decimal places for better readability
     agg_df = agg_df.withColumn("avg_weight", col("avg_weight").cast("decimal(10,2)")) \
                    .withColumn("avg_height", col("avg_height").cast("decimal(10,2)"))
+    
+    # Rename columns to remove table prefixes for cleaner output
+    agg_df = agg_df.select(
+        col("sport").alias("sport"),
+        col("medal").alias("medal"), 
+        col("sex").alias("sex"),
+        col("country_noc").alias("country_noc"),
+        col("avg_weight").alias("avg_weight"),
+        col("avg_height").alias("avg_height"),
+        col("timestamp").alias("timestamp")
+    )
     
     logger.info(f"Calculated aggregated statistics for {agg_df.count()} groups")
     
