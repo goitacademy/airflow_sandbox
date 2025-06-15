@@ -96,42 +96,40 @@ class KafkaSparkStreamingPipeline:
             if initial_count > 0:
                 logger.info("Sample bio data:")
                 bio_df.show(3, truncate=False)
-            
-            # Convert string height/weight to numeric and clean data
+              # Convert string height/weight to numeric and clean data
             logger.info("Converting height/weight from string to numeric...")
-            # Clean and convert height/weight to numeric values
-            cleaned_bio_df = bio_df \
-                .withColumn("height_numeric", cast(regexp_replace(trim(col("height")), "[^0-9.]", ""), "double")) \
-                .withColumn("weight_numeric", 
-                    cast(regexp_replace(trim(col("weight")), "[^0-9.]", ""), "double"))
-            
-            # Step 2: Filter out records with invalid height/weight data
-            logger.info("Step 2: Filtering out invalid height/weight data...")
-            filtered_bio_df = cleaned_bio_df.filter(
-                col("height_numeric").isNotNull() & 
-                col("weight_numeric").isNotNull() &
-                ~isnan(col("height_numeric")) & 
-                ~isnan(col("weight_numeric")) &
-                (col("height_numeric") > 0) & 
-                (col("weight_numeric") > 0)
-            ).select(
-                col("athlete_id"),
-                col("name"),
-                col("sex"),
-                col("country_noc"),
-                col("height_numeric").alias("height"),
-                col("weight_numeric").alias("weight")
-            )
-            
-            filtered_count = filtered_bio_df.count()
-            logger.info(f"After filtering: {filtered_count} valid athlete bio records")
-            logger.info(f"Filtered out {initial_count - filtered_count} invalid records")
-            
-            if filtered_count > 0:
-                logger.info("Sample filtered bio data:")
-                filtered_bio_df.show(3, truncate=False)
-            
-            return filtered_bio_df
+            try:
+                # Clean and convert height/weight to numeric values
+                cleaned_bio_df = bio_df \
+                    .withColumn("height_numeric", cast(regexp_replace(trim(col("height")), "[^0-9.]", ""), "double")) \
+                    .withColumn("weight_numeric", 
+                        cast(regexp_replace(trim(col("weight")), "[^0-9.]", ""), "double"))
+                
+                # Step 2: Filter out records with invalid height/weight data
+                logger.info("Step 2: Filtering out invalid height/weight data...")
+                filtered_bio_df = cleaned_bio_df.filter(
+                    col("height_numeric").isNotNull() & 
+                    col("weight_numeric").isNotNull() &
+                    ~isnan(col("height_numeric")) & 
+                    ~isnan(col("weight_numeric")) &
+                    (col("height_numeric") > 0) & 
+                    (col("weight_numeric") > 0)
+                ).select(
+                    col("athlete_id"),
+                    col("name"),
+                    col("sex"),
+                    col("country_noc"),
+                    col("height_numeric").alias("height"),
+                    col("weight_numeric").alias("weight")                )
+                
+                final_count = filtered_bio_df.count()
+                logger.info(f"Filtered bio data: {final_count} valid records")
+                return filtered_bio_df
+                
+            except Exception as data_error:
+                logger.error(f"Error processing bio data columns: {str(data_error)}")
+                logger.warning("Data format may be incompatible, falling back to mock data...")
+                raise data_error  # Re-raise to trigger mock data creation
             
         except Exception as e:
             logger.error(f"Error loading athlete bio data: {e}")
