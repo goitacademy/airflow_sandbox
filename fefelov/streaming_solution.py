@@ -52,9 +52,8 @@ fefelov_streaming_task = SparkSubmitOperator(
         'spark.sql.adaptive.enabled': 'true',
         'spark.sql.adaptive.coalescePartitions.enabled': 'true',
         'spark.serializer': 'org.apache.spark.serializer.KryoSerializer',
-        'spark.sql.streaming.checkpointLocation': '/tmp/fefelov_checkpoint',
-        # Updated MySQL connector to explicitly use the correct version
-        'spark.jars.packages': 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,mysql:mysql-connector-j:8.0.32',
+        'spark.sql.streaming.checkpointLocation': '/tmp/fefelov_checkpoint',        # Using com.mysql:mysql-connector-j instead of mysql:mysql-connector-j
+        'spark.jars.packages': 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,com.mysql:mysql-connector-j:8.0.33',
         'spark.jars.repositories': 'https://repo1.maven.org/maven2/',
         'spark.driver.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',
         'spark.executor.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',
