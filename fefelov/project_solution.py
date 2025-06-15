@@ -32,7 +32,7 @@ dag = DAG(
 # Task 1: Landing to Bronze
 landing_to_bronze_task = SparkSubmitOperator(
     task_id='fefelov_landing_to_bronze',
-    application='src/batch/landing_to_bronze.py',
+    application='fefelov/src/batch/landing_to_bronze.py',  # Added fefelov prefix
     conn_id='spark-default',
     verbose=True,
     application_args=[],
@@ -52,7 +52,7 @@ landing_to_bronze_task = SparkSubmitOperator(
 # Task 2: Bronze to Silver
 bronze_to_silver_task = SparkSubmitOperator(
     task_id='fefelov_bronze_to_silver',
-    application='src/batch/bronze_to_silver.py',
+    application='fefelov/src/batch/bronze_to_silver.py',  # Added fefelov prefix
     conn_id='spark-default',
     verbose=True,
     application_args=[],
@@ -72,7 +72,7 @@ bronze_to_silver_task = SparkSubmitOperator(
 # Task 3: Silver to Gold
 silver_to_gold_task = SparkSubmitOperator(
     task_id='fefelov_silver_to_gold',
-    application='src/batch/silver_to_gold.py',
+    application='fefelov/src/batch/silver_to_gold.py',  # Added fefelov prefix
     conn_id='spark-default',
     verbose=True,
     application_args=[],
