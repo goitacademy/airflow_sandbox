@@ -35,17 +35,10 @@ from pyspark.sql.types import (
     IntegerType, DoubleType, TimestampType
 )
 
-# Import common modules with error handling
-try:
-    from ..common.config import Config
-    from ..common.spark_manager import SparkManager
-    from ..common.utils import validate_required_columns
-except ImportError as e:
-    print(f"Import error: {e}")
-    print("Current sys.path:", sys.path)
-    print("Current working directory:", os.getcwd())
-    print("Script location:", __file__)
-    raise
+# Import common modules
+from common.config import Config
+from common.spark_manager import SparkManager
+from common.utils import validate_required_columns
 
 logger = logging.getLogger(__name__)
 

@@ -2,12 +2,20 @@
 Spark session manager
 """
 import logging
+import sys
+import os
 from typing import Optional
 
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType
 
-from .config import Config
+# Add the common directory to sys.path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
+# Import config using absolute path
+from config import Config
 
 logger = logging.getLogger(__name__)
 
