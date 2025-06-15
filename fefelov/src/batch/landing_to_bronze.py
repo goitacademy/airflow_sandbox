@@ -56,7 +56,8 @@ def download_data(local_file_path: str, ftp_url: str = "https://ftp.goit.study/n
         raise
 
 
-def process_landing_to_bronze(table_name: str, config: Config) -> None:    """
+def process_landing_to_bronze(table_name: str, config: Config) -> None:
+    """
     Process a single table from landing (CSV) to bronze (Parquet)
     
     Args:

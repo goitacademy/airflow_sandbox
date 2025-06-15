@@ -24,7 +24,7 @@ default_args = {
 
 # Create the DAG with prefixed name
 dag = DAG(
-    'fefelov_batch_pipeline-3',
+    'fefelov_batch_pipeline-4',
     default_args=default_args,
     description='GoIT DE Final Project - Batch Data Lake Pipeline (fefelov)',
     schedule_interval='@daily',  # Run daily
