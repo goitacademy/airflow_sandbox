@@ -386,8 +386,8 @@ class KafkaSparkStreamingPipeline:
                 try:
                     # Try to create database first
                     self.spark_manager.spark.sql(f"CREATE DATABASE IF NOT EXISTS {db_name}")
-                    self.spark_manager.spark.sql(f"USE {db_name}")                      # Try writing again after ensuring database exists
-                    self.spark_manager.write_to_mysql(enriched_df, table_name)
+                    self.spark_manager.spark.sql(f"USE {db_name}")                    # Try writing again after ensuring database exists
+                    self.spark_manager.write_to_mysql(batch_df, table_name)
                     logger.info(f"✅ MySQL write succeeded after creating database: {table_name}")
                 except Exception as inner_e:
                     logger.error(f"❌ Fallback MySQL write also failed: {str(inner_e)}")
