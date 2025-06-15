@@ -95,47 +95,48 @@ class KafkaSparkStreamingPipeline:
             
             if initial_count > 0:
                 logger.info("Sample bio data:")
-                bio_df.show(3, truncate=False)            # Convert string height/weight to numeric and clean data
+                bio_df.show(3, truncate=False)
+            
+            # Convert string height/weight to numeric and clean data
             logger.info("Converting height/weight from string to numeric...")
-            try:
-                # Clean and convert height/weight to numeric values using proper Column objects
-                cleaned_bio_df = bio_df \
-                    .withColumn("height_numeric", 
-                        when(col("height").rlike("^[0-9]+\\.?[0-9]*$"), 
-                             col("height").cast("double")).otherwise(None)) \
-                    .withColumn("weight_numeric", 
-                        when(col("weight").rlike("^[0-9]+\\.?[0-9]*$"), 
-                             col("weight").cast("double")).otherwise(None))
-                
-                # Step 2: Filter out records with invalid height/weight data
-                logger.info("Step 2: Filtering out invalid height/weight data...")
-                filtered_bio_df = cleaned_bio_df.filter(
-                    col("height_numeric").isNotNull() & 
-                    col("weight_numeric").isNotNull() &
-                    ~isnan(col("height_numeric")) & 
-                    ~isnan(col("weight_numeric")) &
-                    (col("height_numeric") > 0) & 
-                    (col("weight_numeric") > 0)
-                ).select(
-                    col("athlete_id"),
-                    col("name"),
-                    col("sex"),
-                    col("country_noc"),
-                    col("height_numeric").alias("height"),
-                    col("weight_numeric").alias("weight")                )
-                
-                final_count = filtered_bio_df.count()
-                logger.info(f"Filtered bio data: {final_count} valid records")
-                return filtered_bio_df
-                
-            except Exception as data_error:
-                logger.error(f"Error processing bio data columns: {str(data_error)}")
-                logger.warning("Data format may be incompatible, falling back to mock data...")
-                raise data_error  # Re-raise to trigger mock data creation
-              except Exception as e:
-            logger.warning(f"Bio data processing issue: {e}")
+            # Clean and convert height/weight to numeric values
+            cleaned_bio_df = bio_df \
+                .withColumn("height_numeric", cast(regexp_replace(trim(col("height")), "[^0-9.]", ""), "double")) \
+                .withColumn("weight_numeric", 
+                    cast(regexp_replace(trim(col("weight")), "[^0-9.]", ""), "double"))
+            
+            # Step 2: Filter out records with invalid height/weight data
+            logger.info("Step 2: Filtering out invalid height/weight data...")
+            filtered_bio_df = cleaned_bio_df.filter(
+                col("height_numeric").isNotNull() & 
+                col("weight_numeric").isNotNull() &
+                ~isnan(col("height_numeric")) & 
+                ~isnan(col("weight_numeric")) &
+                (col("height_numeric") > 0) & 
+                (col("weight_numeric") > 0)
+            ).select(
+                col("athlete_id"),
+                col("name"),
+                col("sex"),
+                col("country_noc"),
+                col("height_numeric").alias("height"),
+                col("weight_numeric").alias("weight")
+            )
+            
+            filtered_count = filtered_bio_df.count()
+            logger.info(f"After filtering: {filtered_count} valid athlete bio records")
+            logger.info(f"Filtered out {initial_count - filtered_count} invalid records")
+            
+            if filtered_count > 0:
+                logger.info("Sample filtered bio data:")
+                filtered_bio_df.show(3, truncate=False)
+            
+            return filtered_bio_df
+            
+        except Exception as e:
+            logger.error(f"Error loading athlete bio data: {e}")
             # Create a mock bio dataframe for testing if table doesn't exist
-            logger.info("Using mock bio data for testing...")
+            logger.warning("Creating mock bio data for testing...")
             return self._create_mock_bio_data()
     
     def _create_mock_bio_data(self) -> DataFrame:
@@ -306,92 +307,23 @@ class KafkaSparkStreamingPipeline:
 
         try:
             # Log batch sample data
-            self._log_batch_data(batch_df, batch_id)            # Requirement 7a: Write to output Kafka topic with prefix
+            self._log_batch_data(batch_df, batch_id)
+
+            # Requirement 7a: Write to output Kafka topic with prefix
             enriched_topic = self.config.topics.enriched_avg
             logger.info(
                 f"Writing aggregated results to Kafka topic: {enriched_topic}")
-            self.spark_manager.write_to_kafka(batch_df, enriched_topic)            # Requirement 7b: Write to MySQL database with prefixed table name
+            self.spark_manager.write_to_kafka(batch_df, enriched_topic)
+
+            # Requirement 7b: Write to MySQL database with prefixed table name
             enriched_table = self.config.tables.enriched_avg
-            logger.info(f"Writing aggregated results to MySQL table: {enriched_table}")
-            
-            # Print the actual DataFrame schema before writing
-            logger.info(f"DataFrame schema for MySQL write: {batch_df.schema}")
-            
-            # Create table if it doesn't exist
-            # This ensures the table exists with the correct schema
-            create_table_sql = f"""
-            CREATE TABLE IF NOT EXISTS {enriched_table} (
-                sport VARCHAR(255),
-                medal VARCHAR(255),
-                sex VARCHAR(10),
-                country_noc VARCHAR(10),
-                avg_height DOUBLE,
-                avg_weight DOUBLE,
-                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (sport, medal, sex, country_noc, timestamp)            )
-            """
-            # Get database connection properties for target (writing) database
-            try:
-                # Try to access target_database
-                if hasattr(self.spark_manager.config, 'target_database'):
-                    db_config = self.spark_manager.config.target_database
-                else:
-                    logger.warning("Target database not found, falling back to source database")
-                    db_config = self.spark_manager.config.database
-                
-                jdbc_url = db_config.jdbc_url
-                jdbc_props = {
-                    "user": db_config.username,
-                    "password": db_config.password,
-                    "driver": "com.mysql.cj.jdbc.Driver"
-                }
-            except AttributeError as e:
-                # Fall back to source database if target_database doesn't exist
-                logger.warning(f"Target database access error: {e}, falling back to source database")
-                jdbc_url = self.spark_manager.config.database.jdbc_url
-                jdbc_props = {
-                    "user": self.spark_manager.config.database.username,
-                    "password": self.spark_manager.config.database.password,
-                    "driver": "com.mysql.cj.jdbc.Driver"
-                }
-            
-            # Try the direct JDBC write using DataFrame API
-            try:                # Try to create table first using SparkSession
-                try:
-                    # Try to get database name from target_database if available 
-                    db_name = self.spark_manager.config.target_database.database if hasattr(self.spark_manager.config, 'target_database') else self.spark_manager.config.database.database
-                except AttributeError:
-                    # Fall back to source database
-                    db_name = self.spark_manager.config.database.database
-                    
-                self.spark_manager.spark.sql(f"USE {db_name}")
-                self.spark_manager.spark.sql(create_table_sql)
-                logger.info(f"✅ Table {enriched_table} created or already exists")
-                # Then write data - use the target database explicitly
-                batch_df.write \
-                    .format("jdbc") \
-                    .option("url", jdbc_url) \
-                    .option("dbtable", enriched_table) \
-                    .option("user", jdbc_props["user"]) \
-                    .option("password", jdbc_props["password"]) \
-                    .option("driver", jdbc_props["driver"]) \
-                    .mode("append") \
-                    .save()
-                
-                logger.info(f"✅ Successfully wrote data to MySQL table: {enriched_table}")
-            except Exception as e:
-                logger.error(f"❌ MySQL write error: {str(e)}")
-                logger.info("Attempting to create database/table if needed...")
-                try:
-                    # Try to create database first
-                    self.spark_manager.spark.sql(f"CREATE DATABASE IF NOT EXISTS {db_name}")
-                    self.spark_manager.spark.sql(f"USE {db_name}")
-                    # Try writing again after ensuring database exists
-                    self.spark_manager.write_to_mysql(batch_df, enriched_table)
-                    logger.info(f"✅ MySQL write succeeded after creating database: {enriched_table}")
-                except Exception as inner_e:
-                    logger.error(f"❌ Fallback MySQL write also failed: {str(inner_e)}")
-                    logger.warning("Continuing without MySQL write - check database configuration")
+            logger.info(
+                f"Writing aggregated results to MySQL table: {enriched_table}")
+            self.spark_manager.write_to_mysql(
+                batch_df,
+                enriched_table,
+                mode="append"
+            )
             
             logger.info(f"Batch {batch_id} processed successfully!")
             
