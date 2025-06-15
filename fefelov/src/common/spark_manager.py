@@ -7,7 +7,7 @@ from typing import Optional
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType
 
-from common.config import Config
+from .config import Config
 
 logger = logging.getLogger(__name__)
 

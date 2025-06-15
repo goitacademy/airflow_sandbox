@@ -37,9 +37,9 @@ from pyspark.sql.types import (
 
 # Import common modules with error handling
 try:
-    from common.config import Config
-    from common.spark_manager import SparkManager
-    from common.utils import validate_required_columns
+    from ..common.config import Config
+    from ..common.spark_manager import SparkManager
+    from ..common.utils import validate_required_columns
 except ImportError as e:
     print(f"Import error: {e}")
     print("Current sys.path:", sys.path)
@@ -236,10 +236,10 @@ class KafkaSparkStreamingPipeline:
             kafka_topic, 
             self.athlete_event_schema
         )
-        
-        logger.info("Successfully set up Kafka stream reader")
+          logger.info("Successfully set up Kafka stream reader")
         return kafka_df
-      def join_streams(self, bio_df: DataFrame, kafka_df: DataFrame) -> DataFrame:
+    
+    def join_streams(self, bio_df: DataFrame, kafka_df: DataFrame) -> DataFrame:
         """
         Requirement 5: Join Kafka stream with MySQL bio data using athlete_id
         """
