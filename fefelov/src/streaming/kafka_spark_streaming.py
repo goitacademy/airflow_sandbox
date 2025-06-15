@@ -368,7 +368,6 @@ class KafkaSparkStreamingPipeline:
                 self.spark_manager.spark.sql(f"USE {db_name}")
                 self.spark_manager.spark.sql(create_table_sql)
                 logger.info(f"✅ Table {enriched_table} created or already exists")
-                
                 # Then write data - use the target database explicitly
                 batch_df.write \
                     .format("jdbc") \
@@ -387,9 +386,8 @@ class KafkaSparkStreamingPipeline:
                 try:
                     # Try to create database first
                     self.spark_manager.spark.sql(f"CREATE DATABASE IF NOT EXISTS {db_name}")
-                    self.spark_manager.spark.sql(f"USE {db_name}")                    
-                    # Try writing again after ensuring database exists
-                    self.spark_manager.write_to_mysql(df_to_write, table_name)
+                    self.spark_manager.spark.sql(f"USE {db_name}")                      # Try writing again after ensuring database exists
+                    self.spark_manager.write_to_mysql(enriched_df, table_name)
                     logger.info(f"✅ MySQL write succeeded after creating database: {table_name}")
                 except Exception as inner_e:
                     logger.error(f"❌ Fallback MySQL write also failed: {str(inner_e)}")

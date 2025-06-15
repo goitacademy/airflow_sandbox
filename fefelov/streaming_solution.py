@@ -58,8 +58,8 @@ fefelov_streaming_task = SparkSubmitOperator(
         'spark.driver.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',
         'spark.executor.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',
         'spark.sql.streaming.forceDeleteTempCheckpointLocation': 'true',
-        # Add explicit MySQL database properties
-        'spark.hadoop.javax.jdo.option.ConnectionURL': 'jdbc:mysql://localhost:3306/neo4j',
+        # Add explicit MySQL database properties  
+        'spark.hadoop.javax.jdo.option.ConnectionURL': 'jdbc:mysql://localhost:3306/olympic_dataset',
         'spark.hadoop.javax.jdo.option.ConnectionDriverName': 'com.mysql.cj.jdbc.Driver',
         'spark.hadoop.javax.jdo.option.ConnectionUserName': 'neo4j',
         'spark.hadoop.javax.jdo.option.ConnectionPassword': 'admin'
@@ -70,7 +70,7 @@ fefelov_streaming_task = SparkSubmitOperator(
         # Configure the target MySQL database for writing streaming results
         'MYSQL_TARGET_HOST': 'localhost', 
         'MYSQL_TARGET_PORT': '3306',
-        'MYSQL_TARGET_DATABASE': 'neo4j',
+        'MYSQL_TARGET_DATABASE': 'olympic_dataset',
         'MYSQL_TARGET_USERNAME': 'neo4j',
         'MYSQL_TARGET_PASSWORD': 'admin',
     },
