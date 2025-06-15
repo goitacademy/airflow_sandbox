@@ -53,16 +53,27 @@ fefelov_streaming_task = SparkSubmitOperator(
         'spark.sql.adaptive.coalescePartitions.enabled': 'true',
         'spark.serializer': 'org.apache.spark.serializer.KryoSerializer',
         'spark.sql.streaming.checkpointLocation': '/tmp/fefelov_checkpoint',
-        'spark.jars.packages': 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,mysql:mysql-connector-java:8.0.33',
+        # Updated MySQL connector to explicitly use the correct version
+        'spark.jars.packages': 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,mysql:mysql-connector-j:8.0.32',
         'spark.jars.repositories': 'https://repo1.maven.org/maven2/',
-        'spark.driver.extraClassPath': '/opt/spark/jars/*',
-        'spark.executor.extraClassPath': '/opt/spark/jars/*',
-        'spark.sql.streaming.forceDeleteTempCheckpointLocation': 'true'
-    },
-    env_vars={
+        'spark.driver.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',
+        'spark.executor.extraClassPath': '/opt/spark/jars/*:/opt/spark/jobs/jars/*',
+        'spark.sql.streaming.forceDeleteTempCheckpointLocation': 'true',
+        # Add explicit MySQL database properties
+        'spark.hadoop.javax.jdo.option.ConnectionURL': 'jdbc:mysql://localhost:3306/neo4j',
+        'spark.hadoop.javax.jdo.option.ConnectionDriverName': 'com.mysql.cj.jdbc.Driver',
+        'spark.hadoop.javax.jdo.option.ConnectionUserName': 'neo4j',
+        'spark.hadoop.javax.jdo.option.ConnectionPassword': 'admin'
+    },    env_vars={
         'STUDENT_PREFIX': 'fefelov',
         'DATA_PATH': './data',
         'PYTHONPATH': '/opt/spark/jobs/fefelov',
+        # Configure the target MySQL database for writing streaming results
+        'MYSQL_TARGET_HOST': 'localhost', 
+        'MYSQL_TARGET_PORT': '3306',
+        'MYSQL_TARGET_DATABASE': 'neo4j',
+        'MYSQL_TARGET_USERNAME': 'neo4j',
+        'MYSQL_TARGET_PASSWORD': 'admin',
     },
     executor_memory='2g',
     driver_memory='1g',

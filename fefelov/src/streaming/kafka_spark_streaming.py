@@ -307,23 +307,103 @@ class KafkaSparkStreamingPipeline:
 
         try:
             # Log batch sample data
-            self._log_batch_data(batch_df, batch_id)
-
-            # Requirement 7a: Write to output Kafka topic with prefix
+            self._log_batch_data(batch_df, batch_id)            # Requirement 7a: Write to output Kafka topic with prefix
             enriched_topic = self.config.topics.enriched_avg
             logger.info(
                 f"Writing aggregated results to Kafka topic: {enriched_topic}")
-            self.spark_manager.write_to_kafka(batch_df, enriched_topic)
-
-            # Requirement 7b: Write to MySQL database with prefixed table name
+            self.spark_manager.write_to_kafka(batch_df, enriched_topic)            # Requirement 7b: Write to MySQL database with prefixed table name
             enriched_table = self.config.tables.enriched_avg
-            logger.info(
-                f"Writing aggregated results to MySQL table: {enriched_table}")
-            self.spark_manager.write_to_mysql(
-                batch_df,
-                enriched_table,
-                mode="append"
+            logger.info(f"Writing aggregated results to MySQL table: {enriched_table}")
+            
+            # Print the actual DataFrame schema before writing
+            logger.info(f"DataFrame schema for MySQL write: {batch_df.schema}")
+            
+            # Create table if it doesn't exist
+            # This ensures the table exists with the correct schema
+            create_table_sql = f"""
+            CREATE TABLE IF NOT EXISTS {enriched_table} (
+                sport VARCHAR(255),
+                medal VARCHAR(255),
+                sex VARCHAR(10),
+                country_noc VARCHAR(10),
+                avg_height DOUBLE,
+                avg_weight DOUBLE,
+                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (sport, medal, sex, country_noc, timestamp)
             )
+            """
+              # Get database connection properties for target (writing) database
+            jdbc_url = self.spark_manager.config.target_database.jdbc_url
+            jdbc_props = {
+                "user": self.spark_manager.config.target_database.username,
+                "password": self.spark_manager.config.target_database.password,
+                "driver": "com.mysql.cj.jdbc.Driver"
+            }
+            
+            # Try the direct JDBC write using DataFrame API
+            try:                # Try to create table first using SparkSession
+                self.spark_manager.spark.sql(f"USE {self.spark_manager.config.target_database.database}")
+                self.spark_manager.spark.sql(create_table_sql)
+                logger.info(f"✅ Table {enriched_table} created or already exists")
+                
+                # Then write data - use the target database explicitly
+                batch_df.write \
+                    .format("jdbc") \
+                    .option("url", jdbc_url) \
+                    .option("dbtable", enriched_table) \
+                    .option("user", jdbc_props["user"]) \
+                    .option("password", jdbc_props["password"]) \
+                    .option("driver", jdbc_props["driver"]) \
+                    .mode("append") \
+                    .save()
+                
+                logger.info(f"✅ Successfully wrote data to MySQL table: {enriched_table}")
+            except Exception as e:                logger.error(f"❌ MySQL write error: {str(e)}")
+                logger.info("Attempting alternative MySQL connection method...")
+                try:
+                    # Create table manually using JDBC connection first
+                    import java.sql.DriverManager
+                    
+                    logger.info(f"Attempting to create table manually via JDBC...")
+                    connection = None
+                    try:
+                        # Load the MySQL JDBC driver
+                        java.lang.Class.forName("com.mysql.cj.jdbc.Driver")
+                        
+                        # Create a connection
+                        connection = DriverManager.getConnection(
+                            jdbc_url, 
+                            jdbc_props["user"], 
+                            jdbc_props["password"]
+                        )
+                        
+                        # Create statement and execute SQL
+                        statement = connection.createStatement()
+                        statement.executeUpdate(create_table_sql)
+                        logger.info(f"✅ Table {enriched_table} created successfully via JDBC")
+                        
+                        # Close resources
+                        statement.close()
+                        connection.close()
+                    except Exception as jdbc_err:
+                        logger.error(f"❌ JDBC table creation failed: {str(jdbc_err)}")
+                        if connection:
+                            connection.close()
+                      logger.info("Attempting fallback direct JDBC write...")
+                    # Use target database configuration for writing
+                    batch_df.write \
+                        .format("jdbc") \
+                        .option("url", self.spark_manager.config.target_database.jdbc_url) \
+                        .option("dbtable", enriched_table) \
+                        .option("user", self.spark_manager.config.target_database.username) \
+                        .option("password", self.spark_manager.config.target_database.password) \
+                        .option("driver", "com.mysql.cj.jdbc.Driver") \
+                        .mode("append") \
+                        .save()
+                    logger.info(f"✅ Fallback MySQL write succeeded for table: {enriched_table}")
+                except Exception as inner_e:
+                    logger.error(f"❌ Fallback MySQL write also failed: {str(inner_e)}")
+                    raise
             
             logger.info(f"Batch {batch_id} processed successfully!")
             

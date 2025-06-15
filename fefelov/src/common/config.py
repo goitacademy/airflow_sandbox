@@ -116,14 +116,24 @@ class Config:
     def __init__(self):
         # Student prefix for resource naming
         self.student_prefix = os.getenv("STUDENT_PREFIX", "fefelov")
-        
-        # Database configuration
+          # Database configurations
+        # Source database for reading Olympic data
         self.database = DatabaseConfig(
             host=os.getenv("MYSQL_HOST", "217.61.57.46"),
             port=int(os.getenv("MYSQL_PORT", "3306")),
             database=os.getenv("MYSQL_DATABASE", "olympic_dataset"),
             username=os.getenv("MYSQL_USERNAME", "neo_data_admin"),
             password=os.getenv("MYSQL_PASSWORD", "Proyahaxuqithab9oplp")
+        )
+        
+        # Target database for writing streaming results
+        # This should be updated to point to the local MySQL instance where we write
+        self.target_database = DatabaseConfig(
+            host=os.getenv("MYSQL_TARGET_HOST", "localhost"),
+            port=int(os.getenv("MYSQL_TARGET_PORT", "3306")),
+            database=os.getenv("MYSQL_TARGET_DATABASE", "neo4j"),
+            username=os.getenv("MYSQL_TARGET_USERNAME", "neo4j"),
+            password=os.getenv("MYSQL_TARGET_PASSWORD", "admin")
         )
         
         # Kafka configuration with authentication
