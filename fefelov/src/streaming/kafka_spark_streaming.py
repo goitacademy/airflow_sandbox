@@ -96,24 +96,19 @@ class KafkaSparkStreamingPipeline:
             if initial_count > 0:
                 logger.info("Sample bio data:")
                 bio_df.show(3, truncate=False)
-            
-            # Convert string height/weight to numeric and clean data  
+              # Convert string height/weight to numeric and clean data  
             logger.info("Converting height/weight from string to numeric...")
             
             # Simple cast without regex - should work with real data
-            from pyspark.sql.types import DoubleType
-            
             cleaned_bio_df = bio_df \
-                .withColumn("height_numeric", col("height").cast(DoubleType())) \
-                .withColumn("weight_numeric", col("weight").cast(DoubleType()))
+                .withColumn("height_numeric", col("height").cast("double")) \
+                .withColumn("weight_numeric", col("weight").cast("double"))
             
             # Step 2: Filter out records with invalid height/weight data
             logger.info("Step 2: Filtering out invalid height/weight data...")
             filtered_bio_df = cleaned_bio_df.filter(
                 col("height_numeric").isNotNull() & 
                 col("weight_numeric").isNotNull() &
-                ~isnan(col("height_numeric")) & 
-                ~isnan(col("weight_numeric")) &
                 (col("height_numeric") > 0) & 
                 (col("weight_numeric") > 0)
             ).select(
