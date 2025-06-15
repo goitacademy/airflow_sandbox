@@ -27,6 +27,11 @@ class SparkManager:
         self.config = config
         self._spark: Optional[SparkSession] = None
 
+        # Ensure target_database exists in config
+        if not hasattr(self.config, 'target_database'):
+            logger.warning("Target database configuration not found, using source database for writing")
+            self.config.target_database = self.config.database
+
     @property
     def spark(self) -> SparkSession:
         """Get or create Spark session"""
@@ -80,17 +85,18 @@ class SparkManager:
         if not running_in_airflow:
             # Only add packages when running locally (Airflow handles this via SparkSubmitOperator)
             builder = builder.config("spark.jars.packages",
-                                     "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,mysql:mysql-connector-java:8.0.33")
+                                    "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,mysql:mysql-connector-java:8.0.33")
 
         spark = builder.getOrCreate()
         spark.sparkContext.setLogLevel("WARN")
 
         logger.info(f"Spark session created: {spark.version}")
-        return spark
-
+        return spark    
     def read_mysql_table(self, table_name: str) -> "DataFrame":
         """Read table from MySQL database"""
-        logger.info(f"Reading MySQL table: {table_name}")        return self.spark.read \
+        logger.info(f"Reading MySQL table: {table_name}")
+        
+        return self.spark.read \
             .format("jdbc") \
             .option("url", self.config.database.jdbc_url) \
             .option("dbtable", table_name) \
@@ -108,9 +114,13 @@ class SparkManager:
             table_name: Name of the table to write to
             mode: Write mode (append, overwrite, etc.)
             target_db: Whether to write to the target database (True) or source database (False)
-        """
-        # Select the appropriate database config
-        db_config = self.config.target_database if target_db else self.config.database
+        """        # Select the appropriate database config
+        try:
+            db_config = self.config.target_database if target_db and hasattr(self.config, 'target_database') else self.config.database
+        except AttributeError:
+            # Fallback to source database if target_database not found
+            logger.warning("Target database configuration not found, using source database")
+            db_config = self.config.database
         
         logger.info(f"Writing to MySQL table: {table_name} (mode: {mode})")
         logger.info(f"Using database: {db_config.database} at {db_config.host}:{db_config.port}")

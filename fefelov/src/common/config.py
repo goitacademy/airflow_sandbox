@@ -113,10 +113,10 @@ class SparkConfig:
 class Config:
     """Main application configuration"""
     
-    def __init__(self):
-        # Student prefix for resource naming
+    def __init__(self):        # Student prefix for resource naming
         self.student_prefix = os.getenv("STUDENT_PREFIX", "fefelov")
-          # Database configurations
+        
+        # Database configurations
         # Source database for reading Olympic data
         self.database = DatabaseConfig(
             host=os.getenv("MYSQL_HOST", "217.61.57.46"),

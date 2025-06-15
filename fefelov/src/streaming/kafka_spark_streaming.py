@@ -329,20 +329,43 @@ class KafkaSparkStreamingPipeline:
                 avg_height DOUBLE,
                 avg_weight DOUBLE,
                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (sport, medal, sex, country_noc, timestamp)
-            )
+                PRIMARY KEY (sport, medal, sex, country_noc, timestamp)            )
             """
-              # Get database connection properties for target (writing) database
-            jdbc_url = self.spark_manager.config.target_database.jdbc_url
-            jdbc_props = {
-                "user": self.spark_manager.config.target_database.username,
-                "password": self.spark_manager.config.target_database.password,
-                "driver": "com.mysql.cj.jdbc.Driver"
-            }
+            # Get database connection properties for target (writing) database
+            try:
+                # Try to access target_database
+                if hasattr(self.spark_manager.config, 'target_database'):
+                    db_config = self.spark_manager.config.target_database
+                else:
+                    logger.warning("Target database not found, falling back to source database")
+                    db_config = self.spark_manager.config.database
+                
+                jdbc_url = db_config.jdbc_url
+                jdbc_props = {
+                    "user": db_config.username,
+                    "password": db_config.password,
+                    "driver": "com.mysql.cj.jdbc.Driver"
+                }
+            except AttributeError as e:
+                # Fall back to source database if target_database doesn't exist
+                logger.warning(f"Target database access error: {e}, falling back to source database")
+                jdbc_url = self.spark_manager.config.database.jdbc_url
+                jdbc_props = {
+                    "user": self.spark_manager.config.database.username,
+                    "password": self.spark_manager.config.database.password,
+                    "driver": "com.mysql.cj.jdbc.Driver"
+                }
             
             # Try the direct JDBC write using DataFrame API
             try:                # Try to create table first using SparkSession
-                self.spark_manager.spark.sql(f"USE {self.spark_manager.config.target_database.database}")
+                try:
+                    # Try to get database name from target_database if available 
+                    db_name = self.spark_manager.config.target_database.database if hasattr(self.spark_manager.config, 'target_database') else self.spark_manager.config.database.database
+                except AttributeError:
+                    # Fall back to source database
+                    db_name = self.spark_manager.config.database.database
+                    
+                self.spark_manager.spark.sql(f"USE {db_name}")
                 self.spark_manager.spark.sql(create_table_sql)
                 logger.info(f"✅ Table {enriched_table} created or already exists")
                 
@@ -389,7 +412,7 @@ class KafkaSparkStreamingPipeline:
                         logger.error(f"❌ JDBC table creation failed: {str(jdbc_err)}")
                         if connection:
                             connection.close()
-                      logger.info("Attempting fallback direct JDBC write...")
+                    logger.info("Attempting fallback direct JDBC write...")
                     # Use target database configuration for writing
                     batch_df.write \
                         .format("jdbc") \
