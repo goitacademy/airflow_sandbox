@@ -239,8 +239,7 @@ class KafkaSparkStreamingPipeline:
         
         logger.info("Successfully set up Kafka stream reader")
         return kafka_df
-    
-    def join_streams(self, bio_df: DataFrame, kafka_df: DataFrame) -> DataFrame:
+      def join_streams(self, bio_df: DataFrame, kafka_df: DataFrame) -> DataFrame:
         """
         Requirement 5: Join Kafka stream with MySQL bio data using athlete_id
         """
@@ -253,8 +252,22 @@ class KafkaSparkStreamingPipeline:
         if "athlete_id" not in kafka_df.columns:
             raise ValueError("Kafka DataFrame missing athlete_id column")
         
+        # Alias the DataFrames to avoid column ambiguity
+        bio_aliased = bio_df.alias("bio")
+        kafka_aliased = kafka_df.alias("events")
+        
         # Join on athlete_id (inner join to only include matching records)
-        joined_df = kafka_df.join(bio_df, "athlete_id", "inner")
+        # Select specific columns to avoid ambiguity, preferring country_noc from events table
+        joined_df = kafka_aliased.join(bio_aliased, "athlete_id", "inner").select(
+            col("events.athlete_id"),
+            col("events.sport"),
+            col("events.medal"),
+            col("events.country_noc"),  # Use country_noc from events table
+            col("bio.name"),
+            col("bio.sex"),
+            col("bio.height"),
+            col("bio.weight")
+        )
         
         logger.info("Successfully joined streams on athlete_id")
         return joined_df
