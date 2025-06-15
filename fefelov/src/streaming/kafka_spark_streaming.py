@@ -109,15 +109,23 @@ class KafkaSparkStreamingPipeline:
             if missing_cols:
                 logger.error(f"Missing required columns in athlete_bio table: {missing_cols}")
                 logger.error(f"Available columns: {actual_columns}")
-                raise ValueError(f"Required columns missing: {missing_cols}")
-
-            # Convert string height/weight to numeric and clean data  
+                raise ValueError(f"Required columns missing: {missing_cols}")            # Convert string height/weight to numeric and clean data  
             logger.info("Converting height/weight from string to numeric...")
             
-            # Simple cast without regex - should work with real data
-            cleaned_bio_df = bio_df \
-                .withColumn("height_numeric", col("height").cast("double")) \
-                .withColumn("weight_numeric", col("weight").cast("double"))
+            # Try using alternative column access methods to avoid [NOT_COLUMN] error
+            try:
+                # Method 1: Using col() function (standard approach)
+                logger.info("Attempting height/weight conversion using col() function...")
+                cleaned_bio_df = bio_df \
+                    .withColumn("height_numeric", col("height").cast("double")) \
+                    .withColumn("weight_numeric", col("weight").cast("double"))
+            except Exception as col_error:
+                logger.warning(f"col() function failed: {col_error}")
+                logger.info("Trying alternative column access method...")
+                # Method 2: Using direct DataFrame column access
+                cleaned_bio_df = bio_df \
+                    .withColumn("height_numeric", bio_df["height"].cast("double")) \
+                    .withColumn("weight_numeric", bio_df["weight"].cast("double"))
             
             # Step 2: Filter out records with invalid height/weight data
             logger.info("Step 2: Filtering out invalid height/weight data...")
