@@ -104,7 +104,7 @@ class SparkManager:
             .option("password", self.config.database.password) \
             .option("driver", "com.mysql.cj.jdbc.Driver") \
             .load()
-            
+
     def write_to_mysql(self, df: "DataFrame", table_name: str, mode: str = "append", target_db: bool = True) -> None:
         """
         Write DataFrame to MySQL table
@@ -114,7 +114,11 @@ class SparkManager:
             table_name: Name of the table to write to
             mode: Write mode (append, overwrite, etc.)
             target_db: Whether to write to the target database (True) or source database (False)
-        """        # Select the appropriate database config
+        """
+        # Ensure table_name is a string to avoid Java object concatenation errors
+        table_name = str(table_name)
+        
+        # Select the appropriate database config
         try:
             db_config = self.config.target_database if target_db and hasattr(self.config, 'target_database') else self.config.database
         except AttributeError:
@@ -150,11 +154,11 @@ class SparkManager:
                 java_import(gateway.jvm, "java.util.Properties")
                 
                 props = gateway.jvm.java.util.Properties()
-                props.setProperty("user", db_config.username)
-                props.setProperty("password", db_config.password)
+                props.setProperty("user", str(db_config.username))
+                props.setProperty("password", str(db_config.password))
                 props.setProperty("driver", "com.mysql.cj.jdbc.Driver")
                 
-                conn = gateway.jvm.java.sql.DriverManager.getConnection(db_config.jdbc_url, props)
+                conn = gateway.jvm.java.sql.DriverManager.getConnection(str(db_config.jdbc_url), props)
                 stmt = conn.createStatement()
                 stmt.executeUpdate(create_table_sql)
                 stmt.close()
@@ -162,15 +166,13 @@ class SparkManager:
                 logger.info(f"✅ Table {table_name} created or verified in target database")
             except Exception as e:
                 logger.error(f"❌ Error creating table: {e}")
-                logger.info("Will attempt write anyway...")
-
-        # Write the DataFrame
+                logger.info("Will attempt write anyway...")        # Write the DataFrame
         df.write \
             .format("jdbc") \
-            .option("url", db_config.jdbc_url) \
-            .option("dbtable", table_name) \
-            .option("user", db_config.username) \
-            .option("password", db_config.password) \
+            .option("url", str(db_config.jdbc_url)) \
+            .option("dbtable", str(table_name)) \
+            .option("user", str(db_config.username)) \
+            .option("password", str(db_config.password)) \
             .option("driver", "com.mysql.cj.jdbc.Driver") \
             .mode(mode) \
             .save()
