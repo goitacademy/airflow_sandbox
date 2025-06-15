@@ -68,11 +68,12 @@ class KafkaSparkStreamingPipeline:
             StructField("medal", StringType(), True),
             StructField("country_noc", StringType(), True),
             StructField("edition", StringType(), True),
-            StructField("edition_id", IntegerType(), True),
-            StructField("event", StringType(), True),
+            StructField("edition_id", IntegerType(), True),            StructField("event", StringType(), True),
             StructField("result_id", IntegerType(), True),
-            StructField("games_year", IntegerType(), True),            StructField("season", StringType(), True),
-            StructField("city", StringType(), True)        ])
+            StructField("games_year", IntegerType(), True),
+            StructField("season", StringType(), True),
+            StructField("city", StringType(), True)
+        ])
 
     def load_athlete_bio_data(self) -> DataFrame:
         """
@@ -90,13 +91,27 @@ class KafkaSparkStreamingPipeline:
             logger.info("Bio data schema:")
             bio_df.printSchema()
             
+            # Debug: Print actual column names from MySQL table
+            actual_columns = bio_df.columns
+            logger.info(f"Actual column names in athlete_bio table: {actual_columns}")
+            
             initial_count = bio_df.count()
             logger.info(f"Loaded {initial_count} athlete bio records")
             
             if initial_count > 0:
                 logger.info("Sample bio data:")
                 bio_df.show(3, truncate=False)
-              # Convert string height/weight to numeric and clean data  
+            
+            # Check if expected columns exist
+            required_cols = ["height", "weight", "athlete_id", "name", "sex", "country_noc"]
+            missing_cols = [col_name for col_name in required_cols if col_name not in actual_columns]
+            
+            if missing_cols:
+                logger.error(f"Missing required columns in athlete_bio table: {missing_cols}")
+                logger.error(f"Available columns: {actual_columns}")
+                raise ValueError(f"Required columns missing: {missing_cols}")
+
+            # Convert string height/weight to numeric and clean data  
             logger.info("Converting height/weight from string to numeric...")
             
             # Simple cast without regex - should work with real data
