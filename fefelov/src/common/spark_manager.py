@@ -39,16 +39,21 @@ class SparkManager:
             hadoop_home = os.path.join(tempfile.gettempdir(), "hadoop")
             os.makedirs(hadoop_home, exist_ok=True)
             os.environ["HADOOP_HOME"] = hadoop_home
-            logger.info(f"Set HADOOP_HOME to: {hadoop_home}")
-
-        # Handle both local and Docker environments for JAR path
-        jar_path = self.config.spark.mysql_jar_path
-
-        builder = SparkSession.builder \
-            .appName(self.config.spark.app_name) \
-            .config("spark.jars", jar_path) \
-            .config("spark.driver.extraClassPath", jar_path) \
-            .config("spark.executor.extraClassPath", jar_path) \
+            logger.info(f"Set HADOOP_HOME to: {hadoop_home}")        # Handle both local and Docker environments for JAR path
+        # Skip JAR configuration if running in Airflow (packages are handled by SparkSubmitOperator)
+        running_in_airflow = os.getenv("AIRFLOW_CTX_DAG_ID") is not None
+        
+        builder = SparkSession.builder.appName(self.config.spark.app_name)
+        
+        if not running_in_airflow:
+            # Only add JAR configs when running locally
+            jar_path = self.config.spark.mysql_jar_path
+            builder = builder \
+                .config("spark.jars", jar_path) \
+                .config("spark.driver.extraClassPath", jar_path) \
+                .config("spark.executor.extraClassPath", jar_path)
+        
+        builder = builder \
             .config("spark.sql.adaptive.enabled", "true") \
             .config("spark.sql.adaptive.coalescePartitions.enabled", "true") \
             .config("spark.sql.streaming.checkpointLocation", self.config.checkpoint_location)
@@ -63,11 +68,11 @@ class SparkManager:
 
         # Set master URL if not running in cluster mode
         if self.config.spark.master:
-            builder = builder.master(self.config.spark.master)
-
-        # Add Kafka packages for external Kafka with SASL
-        builder = builder.config("spark.jars.packages",
-                                 "org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0")
+            builder = builder.master(self.config.spark.master)        # Add Kafka packages for external Kafka with SASL
+        if not running_in_airflow:
+            # Only add packages when running locally (Airflow handles this via SparkSubmitOperator)
+            builder = builder.config("spark.jars.packages",
+                                     "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,mysql:mysql-connector-java:8.0.33")
 
         spark = builder.getOrCreate()
         spark.sparkContext.setLogLevel("WARN")

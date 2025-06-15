@@ -48,13 +48,16 @@ fefelov_streaming_task = SparkSubmitOperator(
     application=os.path.join(dags_dir, 'fefelov', 'src', 'streaming', 'kafka_spark_streaming.py'),
     conn_id='spark-default',
     verbose=True,
-    application_args=[],
-    conf={
+    application_args=[],    conf={
         'spark.sql.adaptive.enabled': 'true',
         'spark.sql.adaptive.coalescePartitions.enabled': 'true',
         'spark.serializer': 'org.apache.spark.serializer.KryoSerializer',
         'spark.sql.streaming.checkpointLocation': '/tmp/fefelov_checkpoint',
-        'spark.jars.packages': 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0,mysql:mysql-connector-java:8.0.33'
+        'spark.jars.packages': 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.2,mysql:mysql-connector-java:8.0.33',
+        'spark.jars.repositories': 'https://repo1.maven.org/maven2/',
+        'spark.driver.extraClassPath': '/opt/spark/jars/*',
+        'spark.executor.extraClassPath': '/opt/spark/jars/*',
+        'spark.sql.streaming.forceDeleteTempCheckpointLocation': 'true'
     },
     env_vars={
         'STUDENT_PREFIX': 'fefelov',
