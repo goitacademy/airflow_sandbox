@@ -72,11 +72,11 @@ class KafkaSparkStreamingPipeline:
             StructField("event", StringType(), True),
             StructField("result_id", IntegerType(), True),
             StructField("games_year", IntegerType(), True),            StructField("season", StringType(), True),
-            StructField("city", StringType(), True)
-        ])
-    
+            StructField("city", StringType(), True)        ])
+
     def load_athlete_bio_data(self) -> DataFrame:
-        """        Requirement 1 & 2: Load athlete bio data from MySQL and filter invalid records
+        """
+        Requirement 1 & 2: Load athlete bio data from MySQL and filter invalid records
         
         - Read from olympic_dataset.athlete_bio table
         - Filter out empty or non-numeric height/weight data
@@ -95,44 +95,41 @@ class KafkaSparkStreamingPipeline:
             
             if initial_count > 0:
                 logger.info("Sample bio data:")
-                bio_df.show(3, truncate=False)            # Convert string height/weight to numeric and clean data
+                bio_df.show(3, truncate=False)
+            
+            # Convert string height/weight to numeric and clean data  
             logger.info("Converting height/weight from string to numeric...")
-            try:
-                # Clean and convert height/weight to numeric values using proper Column objects
-                cleaned_bio_df = bio_df \
-                    .withColumn("height_numeric", 
-                        when(col("height").rlike("^[0-9]+\\.?[0-9]*$"), 
-                             col("height").cast("double")).otherwise(None)) \
-                    .withColumn("weight_numeric", 
-                        when(col("weight").rlike("^[0-9]+\\.?[0-9]*$"), 
-                             col("weight").cast("double")).otherwise(None))
+            
+            # Simple cast without regex - should work with real data
+            from pyspark.sql.types import DoubleType
+            
+            cleaned_bio_df = bio_df \
+                .withColumn("height_numeric", col("height").cast(DoubleType())) \
+                .withColumn("weight_numeric", col("weight").cast(DoubleType()))
+            
+            # Step 2: Filter out records with invalid height/weight data
+            logger.info("Step 2: Filtering out invalid height/weight data...")
+            filtered_bio_df = cleaned_bio_df.filter(
+                col("height_numeric").isNotNull() & 
+                col("weight_numeric").isNotNull() &
+                ~isnan(col("height_numeric")) & 
+                ~isnan(col("weight_numeric")) &
+                (col("height_numeric") > 0) & 
+                (col("weight_numeric") > 0)
+            ).select(
+                col("athlete_id"),
+                col("name"),
+                col("sex"),
+                col("country_noc"),
+                col("height_numeric").alias("height"),
+                col("weight_numeric").alias("weight")
+            )
+            
+            final_count = filtered_bio_df.count()
+            logger.info(f"✅ Using REAL bio data: {final_count} valid records from MySQL!")
+            return filtered_bio_df
                 
-                # Step 2: Filter out records with invalid height/weight data
-                logger.info("Step 2: Filtering out invalid height/weight data...")
-                filtered_bio_df = cleaned_bio_df.filter(
-                    col("height_numeric").isNotNull() & 
-                    col("weight_numeric").isNotNull() &
-                    ~isnan(col("height_numeric")) & 
-                    ~isnan(col("weight_numeric")) &
-                    (col("height_numeric") > 0) & 
-                    (col("weight_numeric") > 0)
-                ).select(
-                    col("athlete_id"),
-                    col("name"),
-                    col("sex"),
-                    col("country_noc"),
-                    col("height_numeric").alias("height"),
-                    col("weight_numeric").alias("weight")                )
-                
-                final_count = filtered_bio_df.count()
-                logger.info(f"Filtered bio data: {final_count} valid records")
-                return filtered_bio_df
-                
-            except Exception as data_error:
-                logger.error(f"Error processing bio data columns: {str(data_error)}")
-                logger.warning("Data format may be incompatible, falling back to mock data...")
-                raise data_error  # Re-raise to trigger mock data creation
-              except Exception as e:
+        except Exception as e:
             logger.warning(f"Bio data processing issue: {e}")
             # Create a mock bio dataframe for testing if table doesn't exist
             logger.info("Using mock bio data for testing...")
