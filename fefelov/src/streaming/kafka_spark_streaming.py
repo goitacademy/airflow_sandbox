@@ -76,11 +76,11 @@ class KafkaSparkStreamingPipeline:
         ])
     
     def load_athlete_bio_data(self) -> DataFrame:
-        """
-        Requirement 1 & 2: Load athlete bio data from MySQL and filter invalid records
+        """        Requirement 1 & 2: Load athlete bio data from MySQL and filter invalid records
         
         - Read from olympic_dataset.athlete_bio table
-        - Filter out empty or non-numeric height/weight data        """
+        - Filter out empty or non-numeric height/weight data
+        """
         logger.info("Step 1: Loading athlete bio data from olympic_dataset.athlete_bio...")
         
         try:
@@ -99,18 +99,15 @@ class KafkaSparkStreamingPipeline:
             
             # Convert string height/weight to numeric and clean data
             logger.info("Converting height/weight from string to numeric...")
-            
             # Clean and convert height/weight to numeric values
             cleaned_bio_df = bio_df \
-                .withColumn("height_numeric", 
-                    cast(regexp_replace(trim(col("height")), "[^0-9.]", ""), "double")) \
+                .withColumn("height_numeric", cast(regexp_replace(trim(col("height")), "[^0-9.]", ""), "double")) \
                 .withColumn("weight_numeric", 
                     cast(regexp_replace(trim(col("weight")), "[^0-9.]", ""), "double"))
             
             # Step 2: Filter out records with invalid height/weight data
-            logger.info("Step 2: Filtering out invalid height/weight data...")            
+            logger.info("Step 2: Filtering out invalid height/weight data...")
             filtered_bio_df = cleaned_bio_df.filter(
-                # Filter out null, NaN, or non-numeric height/weight
                 col("height_numeric").isNotNull() & 
                 col("weight_numeric").isNotNull() &
                 ~isnan(col("height_numeric")) & 
@@ -206,7 +203,7 @@ class KafkaSparkStreamingPipeline:
         mock_df = self.spark_manager.spark.createDataFrame(
             mock_events,
             ["athlete_id", "sport", "medal", "country_noc", "edition", 
-             "edition_id", "event", "result_id", "games_year", "season", "city"]
+            "edition_id", "event", "result_id", "games_year", "season", "city"]
         )
         
         kafka_topic = self.config.topics.athlete_events
@@ -224,12 +221,11 @@ class KafkaSparkStreamingPipeline:
         # Read from Kafka with prefixed topic name and parse JSON to DataFrame format
         kafka_topic = self.config.topics.athlete_events
         logger.info(f"Reading from Kafka topic: {kafka_topic}")
-        
         kafka_df = self.spark_manager.read_kafka_stream(
             kafka_topic, 
             self.athlete_event_schema
         )
-          logger.info("Successfully set up Kafka stream reader")
+        logger.info("Successfully set up Kafka stream reader")
         return kafka_df
     
     def join_streams(self, bio_df: DataFrame, kafka_df: DataFrame) -> DataFrame:
@@ -310,10 +306,8 @@ class KafkaSparkStreamingPipeline:
             return
 
         try:
-            # Show sample data for verification
-            logger.info(
-                f"Batch {batch_id} contains {batch_df.count()} records. Sample data:")
-            batch_df.show(5, truncate=False)
+            # Log batch sample data
+            self._log_batch_data(batch_df, batch_id)
 
             # Requirement 7a: Write to output Kafka topic with prefix
             enriched_topic = self.config.topics.enriched_avg
@@ -336,6 +330,10 @@ class KafkaSparkStreamingPipeline:
         except Exception as e:
             logger.error(f"Error processing batch {batch_id}: {str(e)}")
             raise
+    
+    def _log_batch_data(self, batch_df: DataFrame, batch_id: int) -> None:        # Show sample data for verification
+        logger.info(f"Batch {batch_id} contains {batch_df.count()} records. Sample data:")
+        batch_df.show(5, truncate=False)
     
     def run(self) -> None:
         """
