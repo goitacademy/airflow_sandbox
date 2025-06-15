@@ -1,1 +1,0 @@
-# fefelov common utilities package

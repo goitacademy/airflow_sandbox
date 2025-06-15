@@ -33,7 +33,7 @@ default_args = {
 
 # Create the DAG
 dag = DAG(
-    'fefelov_streaming_pipeline_v6',
+    'fefelov_streaming_pipeline_v7',
     default_args=default_args,
     description='Fefelov Real-time Kafka-Spark Streaming Pipeline - Production Ready v6',
     schedule_interval=None,  # Manual trigger only for streaming
@@ -45,7 +45,7 @@ dag = DAG(
 # Note: For streaming, we typically run this as a long-running process
 fefelov_streaming_task = SparkSubmitOperator(
     task_id='fefelov_kafka_spark_streaming',
-    application=os.path.join(dags_dir, 'fefelov', 'src', 'streaming', 'kafka_spark_streaming.py'),
+    application=os.path.join(dags_dir, 'src', 'streaming', 'kafka_spark_streaming.py'),
     conn_id='spark-default',
     verbose=True,
     application_args=[],    conf={
