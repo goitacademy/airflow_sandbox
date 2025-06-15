@@ -3,9 +3,13 @@ Airflow DAG for Batch Data Lake Pipeline
 Part 2, Step 4 of the Final Project
 Updated for GoIT External Services with fefelov prefix
 """
+import os
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+
+# Get the directory where this DAG file is located
+dags_dir = os.path.dirname(os.path.realpath(__file__))
 
 # Default arguments for the DAG
 default_args = {
@@ -20,7 +24,7 @@ default_args = {
 
 # Create the DAG with prefixed name
 dag = DAG(
-    'fefelov_batch_pipeline-2',
+    'fefelov_batch_pipeline-3',
     default_args=default_args,
     description='GoIT DE Final Project - Batch Data Lake Pipeline (fefelov)',
     schedule_interval='@daily',  # Run daily
@@ -32,7 +36,7 @@ dag = DAG(
 # Task 1: Landing to Bronze
 landing_to_bronze_task = SparkSubmitOperator(
     task_id='fefelov_landing_to_bronze',
-    application='fefelov/src/batch/landing_to_bronze.py',  # Added fefelov prefix
+    application=os.path.join(dags_dir, 'src', 'batch', 'landing_to_bronze.py'),
     conn_id='spark-default',
     verbose=True,
     application_args=[],
@@ -52,7 +56,7 @@ landing_to_bronze_task = SparkSubmitOperator(
 # Task 2: Bronze to Silver
 bronze_to_silver_task = SparkSubmitOperator(
     task_id='fefelov_bronze_to_silver',
-    application='fefelov/src/batch/bronze_to_silver.py',  # Added fefelov prefix
+    application=os.path.join(dags_dir, 'src', 'batch', 'bronze_to_silver.py'),
     conn_id='spark-default',
     verbose=True,
     application_args=[],
@@ -72,7 +76,7 @@ bronze_to_silver_task = SparkSubmitOperator(
 # Task 3: Silver to Gold
 silver_to_gold_task = SparkSubmitOperator(
     task_id='fefelov_silver_to_gold',
-    application='fefelov/src/batch/silver_to_gold.py',  # Added fefelov prefix
+    application=os.path.join(dags_dir, 'src', 'batch', 'silver_to_gold.py'),
     conn_id='spark-default',
     verbose=True,
     application_args=[],
