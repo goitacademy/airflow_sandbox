@@ -16,7 +16,7 @@ from pyspark.sql.types import StringType
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from common.config import Config
+from ..common.config import Config
 
 # Configure logging
 logging.basicConfig(
