@@ -21,13 +21,19 @@ def process_silver_to_gold():
     # Join dataframes on athlete_id
     joined_df = athlete_event_results_df.join(athlete_bio_df, "athlete_id")
 
-    # Aggregate and round average height and weight to 1 decimal place
+    # Aggregate without rounding
     aggregated_df = joined_df.groupBy("sport", "medal", "sex", "country_noc") \
         .agg(
-            spark_round(avg("height"), 1).alias("avg_height"),
-            spark_round(avg("weight"), 1).alias("avg_weight"),
+            avg("height").alias("avg_height_raw"),
+            avg("weight").alias("avg_weight_raw"),
             current_timestamp().alias("timestamp")
         )
+
+    # Round after aggregation
+    aggregated_df = aggregated_df \
+        .withColumn("avg_height", spark_round(col("avg_height_raw"), 1)) \
+        .withColumn("avg_weight", spark_round(col("avg_weight_raw"), 1)) \
+        .drop("avg_height_raw", "avg_weight_raw")
 
     # Write result to gold layer
     output_path = "/tmp/gold/avg_stats"
