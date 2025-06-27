@@ -1,4 +1,3 @@
-
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, trim, lower, udf
 from pyspark.sql.types import StringType
