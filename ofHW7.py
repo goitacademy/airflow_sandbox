@@ -20,7 +20,7 @@ with DAG(
     catchup=False
 ) as dag:
 
-    # Створення таблиці neo_data.zubko_medals_results
+    # Створення таблиці
     create_table = SQLExecuteQueryOperator(
         task_id='create_table',
         conn_id='mysql_default',
