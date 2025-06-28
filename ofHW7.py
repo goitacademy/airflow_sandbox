@@ -87,7 +87,7 @@ with DAG(
 
     generate_delay = PythonOperator(
         task_id='generate_delay',
-        python_callable=delay_task
+        python_callable=delay_task,
         trigger_rule = TriggerRule.ONE_SUCCESS
     )
 
