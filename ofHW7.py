@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.providers.mysql.operators.mysql import MySqlOperator
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.sensors.sql import SqlSensor
+from airflow.utils.trigger_rule import TriggerRule
 from datetime import datetime, timedelta
 import random
 import time
@@ -87,6 +88,7 @@ with DAG(
     generate_delay = PythonOperator(
         task_id='generate_delay',
         python_callable=delay_task
+        trigger_rule = TriggerRule.ONE_SUCCESS
     )
 
 
@@ -101,7 +103,4 @@ with DAG(
         poke_interval=10
     )
 
-
-    create_table >> pick_medal >> pick_medal_task
-    pick_medal_task >> [calc_Bronze, calc_Silver, calc_Gold]
-    [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay >> check_for_correctness
+    pick_medal_task >> [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay >> check_for_correctness
