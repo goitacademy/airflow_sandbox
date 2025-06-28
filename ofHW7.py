@@ -1,7 +1,7 @@
 from airflow import DAG
-from airflow.providers.standard.operators.python import PythonOperator, BranchPythonOperator
-from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
-from airflow.providers.common.sql.sensors.sql import SqlSensor
+from airflow.providers.mysql.operators.mysql import MySqlOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.sensors.sql import SqlSensor
 from datetime import datetime, timedelta
 import random
 import time
