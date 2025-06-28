@@ -5,6 +5,7 @@ from airflow.sensors.sql import SqlSensor
 from datetime import datetime, timedelta
 import random
 import time
+from airflow.utils.trigger_rule import TriggerRule
 
 default_args = {
     'owner': 'airflow',
@@ -84,11 +85,12 @@ with DAG(
     def delay_task():
         time.sleep(35)
 
+
     generate_delay = PythonOperator(
         task_id='generate_delay',
-        python_callable=delay_task
+        python_callable=delay_task,
+        trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS
     )
-
 
     check_for_correctness = SqlSensor(
         task_id='check_for_correctness',
@@ -98,7 +100,8 @@ with DAG(
             WHERE created_at >= NOW() - INTERVAL 30 SECOND;
         """,
         timeout=60,
-        poke_interval=10
+        poke_interval=10,
+        trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS
     )
 
 
