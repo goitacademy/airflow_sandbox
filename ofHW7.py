@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.providers.mysql.operators.mysql import MySqlOperator
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.sensors.sql import SqlSensor
+from airflow.providers.standard.operators.python import PythonOperator, BranchPythonOperator
+from airflow.providers.common.sql.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule
 from datetime import datetime, timedelta
 import random
@@ -17,7 +17,7 @@ with DAG(
     dag_id='of_medal_count_pipeline',
     default_args=default_args,
     start_date=datetime(2023, 1, 1),
-    schedule_interval=None,
+    schedule=None,
     catchup=False
 ) as dag:
 
@@ -34,7 +34,6 @@ with DAG(
         """
     )
 
-
     def choose_medal():
         return random.choice(['calc_Bronze', 'calc_Silver', 'calc_Gold'])
 
@@ -48,7 +47,6 @@ with DAG(
         python_callable=choose_medal
     )
 
-
     calc_Bronze = MySqlOperator(
         task_id='calc_Bronze',
         mysql_conn_id='mysql_default',
@@ -58,7 +56,6 @@ with DAG(
             WHERE medal = 'Bronze';
         """
     )
-
 
     calc_Silver = MySqlOperator(
         task_id='calc_Silver',
@@ -70,7 +67,6 @@ with DAG(
         """
     )
 
-
     calc_Gold = MySqlOperator(
         task_id='calc_Gold',
         mysql_conn_id='mysql_default',
@@ -81,16 +77,14 @@ with DAG(
         """
     )
 
-
     def delay_task():
-        time.sleep(35)
+        time.sleep(30)
 
     generate_delay = PythonOperator(
         task_id='generate_delay',
         python_callable=delay_task,
-        trigger_rule = TriggerRule.ONE_SUCCESS
+        trigger_rule=TriggerRule.ONE_SUCCESS
     )
-
 
     check_for_correctness = SqlSensor(
         task_id='check_for_correctness',
@@ -103,4 +97,6 @@ with DAG(
         poke_interval=10
     )
 
+    # Залежності тасок
+    create_table >> pick_medal >> pick_medal_task
     pick_medal_task >> [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay >> check_for_correctness
