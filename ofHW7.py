@@ -25,7 +25,7 @@ with DAG(
         task_id='create_table',
         conn_id='mysql_default',
         sql="""
-        CREATE TABLE IF NOT EXISTS neo_data.zubko_medals_results (
+        CREATE TABLE IF NOT EXISTS neo_data.of_medals_results (
             id INT AUTO_INCREMENT PRIMARY KEY,
             medal_type VARCHAR(10),
             count INT,
@@ -54,7 +54,7 @@ with DAG(
         task_id='calc_Bronze',
         conn_id='mysql_default',
         sql="""
-            INSERT INTO neo_data.zubko_medals_results (medal_type, count)
+            INSERT INTO neo_data.of_medals_results (medal_type, count)
             SELECT 'Bronze', COUNT(*) FROM olympic_dataset.athlete_event_results WHERE medal = 'Bronze';
         """,
         hook_params={'schema': 'neo_data'}
@@ -65,7 +65,7 @@ with DAG(
         task_id='calc_Silver',
         conn_id='mysql_default',
         sql="""
-            INSERT INTO neo_data.zubko_medals_results (medal_type, count)
+            INSERT INTO neo_data.of_medals_results (medal_type, count)
             SELECT 'Silver', COUNT(*) FROM olympic_dataset.athlete_event_results WHERE medal = 'Silver';
         """,
         hook_params={'schema': 'neo_data'}
@@ -76,7 +76,7 @@ with DAG(
         task_id='calc_Gold',
         conn_id='mysql_default',
         sql="""
-            INSERT INTO neo_data.zubko_medals_results (medal_type, count)
+            INSERT INTO neo_data.of_medals_results (medal_type, count)
             SELECT 'Gold', COUNT(*) FROM olympic_dataset.athlete_event_results WHERE medal = 'Gold';
         """,
         hook_params={'schema': 'neo_data'}
@@ -96,7 +96,7 @@ with DAG(
         task_id='check_for_correctness',
         conn_id='mysql_default',
         sql="""
-            SELECT COUNT(*) FROM neo_data.zubko_medals_results
+            SELECT COUNT(*) FROM neo_data.of_medals_results
             WHERE created_at >= NOW() - INTERVAL 30 SECOND;
         """,
         poke_interval=10,
