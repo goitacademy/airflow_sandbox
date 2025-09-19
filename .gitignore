@@ -8,3 +8,10 @@ scripts/athlete_event_results.csv
 scripts/checkpoint/
 __pycache__/
 streaming_pipeline/
+calc_bronze
+branch_task
+check_recent_insert
+delay_task
+pick_medal
+__pycache__/
+*.pyc
