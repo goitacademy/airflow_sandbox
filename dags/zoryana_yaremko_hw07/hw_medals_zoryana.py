@@ -99,8 +99,8 @@ with DAG(
 
     # Завдання 5: затримка
     def delay_func():
-        print("Sleeping for 35 seconds...")
-        time.sleep(35)
+        print("Sleeping for 10 seconds...")
+        time.sleep(10)
 
     delay_task = PythonOperator(
         task_id='delay_task',
