@@ -7,7 +7,6 @@ from datetime import datetime
 import random
 import time
 
-
 # Аргументи за замовчуванням
 default_args = {
     'owner': 'airflow',
@@ -119,15 +118,27 @@ with DAG(
             LIMIT 1;
         """,
         mode='poke',
-        poke_interval=10,
-        timeout=60,
+        poke_interval=5,
+        timeout=40,
         trigger_rule=TriggerRule.ONE_SUCCESS,
+    )
+
+    # 7) додатковий крок для перевірки даних
+    check_table = MySqlOperator(
+        task_id='check_table',
+        mysql_conn_id='goit_mysql_db',
+        sql="""
+            SELECT * 
+            FROM olympic_dataset.zoryana_hw07_results
+            ORDER BY created_at DESC
+            LIMIT 10;
+        """,
     )
 
     # залежності
     create_table >> pick_medal >> branch_task
     branch_task >> [calc_bronze, calc_silver, calc_gold]
-    [calc_bronze, calc_silver, calc_gold] >> delay_task >> check_recent_insert
+    [calc_bronze, calc_silver, calc_gold] >> delay_task >> check_recent_insert >> check_table
 
 
 
