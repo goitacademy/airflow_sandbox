@@ -103,8 +103,9 @@ with DAG(
         time.sleep(10)
 
     delay_task = PythonOperator(
-        task_id='delay_task',
-        python_callable=delay_func,
+    task_id='delay_task',
+    python_callable=delay_func,
+    trigger_rule=TriggerRule.ONE_SUCCESS,
     )
 
     # Завдання 6: сенсор для перевірки, що запис не старший за 30 секунд
