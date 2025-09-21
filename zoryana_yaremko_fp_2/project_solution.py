@@ -1,9 +1,9 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime
-from step1_read_mysql import read_mysql
-from step2_read_results import read_results
-from step3_join_bio_results import join_bio_results
+from zoryana_yaremko_fp_2.step1_read_mysql import read_mysql
+from zoryana_yaremko_fp_2.step2_read_results import read_results
+from zoryana_yaremko_fp_2.step3_join_bio_results import join_and_aggregate
 
 default_args = {
     'owner': 'airflow',
