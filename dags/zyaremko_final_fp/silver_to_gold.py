@@ -1,21 +1,37 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, count
+from pyspark.sql.functions import col, avg, current_timestamp
 
 def main():
     spark = SparkSession.builder.appName("SilverToGold").getOrCreate()
 
-    # читаємо parquet з silver
-    input_path = "dags/zyaremko_final_fp/datalake/silver/orders"
-    df = spark.read.parquet(input_path)
+    bio_path = "dags/zyaremko_final_fp/datalake/silver/athlete_bio"
+    results_path = "dags/zyaremko_final_fp/datalake/silver/athlete_event_results"
 
-    # приклад агрегації: кількість замовлень по кожному користувачу
-    df_gold = df.groupBy("user_id").agg(count("*").alias("total_orders"))
+    bio = spark.read.parquet(bio_path)
+    results = spark.read.parquet(results_path)
 
-    df_gold.show(5)
+    # джойн за athlete_id
+    df = results.join(bio, on="athlete_id", how="inner")
 
-    # пишемо у gold
-    output_path = "dags/zyaremko_final_fp/datalake/gold/orders_by_user"
-    df_gold.write.mode("overwrite").parquet(output_path)
+    # приведення числових колонок
+    df = df.withColumn("weight", col("weight").cast("double"))
+    df = df.withColumn("height", col("height").cast("double"))
+
+    # агрегація
+    agg = (
+        df.groupBy("sport", "medal", "sex", "country_noc")
+          .agg(
+              avg("weight").alias("avg_weight"),
+              avg("height").alias("avg_height")
+          )
+          .withColumn("ts", current_timestamp())
+    )
+
+    agg.show(10, truncate=False)
+
+    output_path = "dags/zyaremko_final_fp/datalake/gold/avg_stats"
+    agg.write.mode("overwrite").parquet(output_path)
+    print(f"Written gold table: {output_path}")
 
     spark.stop()
 
