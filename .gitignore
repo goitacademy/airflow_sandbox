@@ -15,3 +15,4 @@ delay_task
 pick_medal
 __pycache__/
 *.pyc
+dags/zyaremko_final_fp/
