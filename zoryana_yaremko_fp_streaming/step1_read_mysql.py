@@ -3,7 +3,6 @@ from pyspark.sql import SparkSession
 
 spark = SparkSession.builder \
     .appName("ReadMySQL") \
-    .config("spark.jars", "/opt/airflow/libs/mysql-connector-j-8.0.33.jar") \
     .getOrCreate()
 
 df = spark.read.format("jdbc").options(
