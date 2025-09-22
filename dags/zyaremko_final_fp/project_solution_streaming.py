@@ -22,7 +22,7 @@ with DAG(
     streaming_task = SparkSubmitOperator(
         task_id="streaming_pipeline",
         conn_id="spark-default",
-        application=f"dags/{FOLDER}/streaming_pipeline.py",
+        application="/opt/airflow/dags/zyaremko_final_fp/streaming_pipeline.py",
         verbose=True,
     )
 
