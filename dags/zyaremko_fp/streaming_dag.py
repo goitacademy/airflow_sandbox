@@ -2,14 +2,12 @@ from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from datetime import datetime
 
-# Аргументи DAG
 default_args = {
-    "owner": "zoryana",
-    "start_date": datetime(2025, 9, 22),
-    "retries": 1,
+    'owner': 'zoryana',
+    'start_date': datetime(2025, 9, 22),
+    'retries': 1,
 }
 
-# Визначення DAG
 with DAG(
     dag_id="zoryana_streaming_fp",
     default_args=default_args,
@@ -18,12 +16,12 @@ with DAG(
     tags=["zoryana", "final_project", "streaming"]
 ) as dag:
 
-    # Spark job для запуску стрімінгового пайплайну
-    run_streaming = SparkSubmitOperator(
+    run_streaming_pipeline = SparkSubmitOperator(
         task_id="run_streaming_pipeline",
-        application="dags/zyaremko_fp/spark_jobs/streaming_pipeline.py", 
+        application="dags/zyaremko_fp/spark_jobs/streaming_pipeline.py",  # 👈 ось тут головне!
         conn_id="spark-default",
-        verbose=1
+        verbose=True
     )
 
-    run_streaming
+    run_streaming_pipeline
+
