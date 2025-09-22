@@ -1,34 +1,28 @@
 from airflow import DAG
-from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from datetime import datetime
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 
+# Аргументи за замовчуванням для DAG
 default_args = {
-    "owner": "airflow",
-    "depends_on_past": False,
-    "start_date": datetime(2025, 9, 21),
-    "retries": 1,
+    'owner': 'airflow',
+    'start_date': datetime(2024, 8, 4, 0, 0),
 }
 
+# Визначення DAG
 with DAG(
-    dag_id="project_solution_streaming",
-    default_args=default_args,
-    description="Final Project — Streaming Pipeline",
-    schedule_interval=None,
-    catchup=False,
-    tags=["final_project", "streaming"],
+        'project_solution_streaming',   # ✅ унікальна назва DAG
+        default_args=default_args,
+        catchup=False,
+        schedule_interval=None,
+        tags=["zyaremko"]               # ✅ твій тег
 ) as dag:
-
     streaming_pipeline = SparkSubmitOperator(
-        task_id="streaming_pipeline",
-        conn_id="spark-default",
-        application="zyaremko_final_fp/streaming_pipeline.py",  # ✅ правильний шлях
-        verbose=True,
-        name="arrow-spark",
-        conf={
-            "spark.driver.memory": "1g",
-            "spark.executor.memory": "1g"
-        },
+        application='dags/zyaremko_final_fp/streaming_pipeline.py',  # ✅ правильний шлях
+        task_id='streaming_pipeline',
+        conn_id='spark-default',
+        verbose=1,
+        dag=dag,
     )
 
-    streaming_pipeline
+
 
