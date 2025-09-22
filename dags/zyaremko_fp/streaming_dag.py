@@ -21,7 +21,7 @@ with DAG(
     # Spark job для запуску стрімінгового пайплайну
     run_streaming = SparkSubmitOperator(
         task_id="run_streaming_pipeline",
-        application="spark_jobs/streaming_pipeline.py",  # шлях до spark-скрипта
+        application="dags/zyaremko_fp/spark_jobs/streaming_pipeline.py", 
         conn_id="spark-default",
         verbose=1
     )
