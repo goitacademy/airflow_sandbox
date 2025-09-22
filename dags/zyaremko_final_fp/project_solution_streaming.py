@@ -1,23 +1,34 @@
-# -*- coding: utf-8 -*-
-from datetime import datetime
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from datetime import datetime
 
-DAG_ID = "project_solution_streaming"
-FOLDER = "zyaremko_final_fp"  # твоя папка в dags/
+default_args = {
+    "owner": "airflow",
+    "depends_on_past": False,
+    "start_date": datetime(2025, 9, 21),
+    "retries": 1,
+}
 
 with DAG(
-    dag_id=DAG_ID,
+    dag_id="project_solution_streaming",
+    default_args=default_args,
     description="Final Project — Streaming Pipeline",
-    start_date=datetime(2024, 9, 1),
-    schedule_interval=None,   # запускається вручну
+    schedule_interval=None,
     catchup=False,
-    tags=["final", "streaming", "spark"],
+    tags=["final_project", "streaming"],
 ) as dag:
 
-    streaming_task = SparkSubmitOperator(
+    streaming_pipeline = SparkSubmitOperator(
         task_id="streaming_pipeline",
-        conn_id="spark-default",   # конектор до Spark уже є в Airflow
-        application=f"dags/{FOLDER}/streaming_pipeline.py",
+        conn_id="spark-default",
+        application="zyaremko_final_fp/streaming_pipeline.py",  # ✅ правильний шлях
         verbose=True,
+        name="arrow-spark",
+        conf={
+            "spark.driver.memory": "1g",
+            "spark.executor.memory": "1g"
+        },
     )
+
+    streaming_pipeline
+
