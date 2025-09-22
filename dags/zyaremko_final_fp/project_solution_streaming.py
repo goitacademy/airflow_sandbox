@@ -7,11 +7,8 @@ default_args = {
     'start_date': datetime(2024, 8, 4, 0, 0),
 }
 
-DAG_ID = "project_solution_streaming"
-FOLDER = "zyaremko_final_fp"
-
 with DAG(
-        dag_id=DAG_ID,
+        dag_id="project_solution_streaming",
         default_args=default_args,
         schedule_interval=None,
         catchup=False,
@@ -21,7 +18,8 @@ with DAG(
     streaming_task = SparkSubmitOperator(
         task_id="streaming_pipeline",
         conn_id="spark-default",
-        application=f"{FOLDER}/streaming_pipeline.py",
+        application="dags/zyaremko_final_fp/streaming_pipeline.py",
         verbose=True,
     )
+
 
