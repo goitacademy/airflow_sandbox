@@ -18,7 +18,7 @@ with DAG(
 
     run_streaming_pipeline = SparkSubmitOperator(
         task_id="run_streaming_pipeline",
-        application="dags/zyaremko_fp/streaming_pipeline.py",  
+        application="zyaremko_fp/streaming_pipeline.py",  
         conn_id="spark-default",
         verbose=True
     )
