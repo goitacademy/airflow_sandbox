@@ -38,7 +38,7 @@ bio_df = (
     .load()
 )
 
-# Filter out empty/non-numeric height/weight
+# Clean height/weight
 bio_df = (
     bio_df.filter(col("height").rlike("^[0-9]+$"))
           .filter(col("weight").rlike("^[0-9]+$"))
@@ -76,7 +76,7 @@ agg = (
 
 # ========== STEP 5: foreachBatch sink ==========
 def foreach_batch_function(batch_df, batch_id):
-    # Write back to Kafka
+    # Write to Kafka
     batch_df.selectExpr("to_json(struct(*)) as value") \
         .write.format("kafka") \
         .option("kafka.bootstrap.servers", KAFKA_SERVER) \
@@ -101,4 +101,6 @@ query = (
 )
 
 query.awaitTermination()
+
+
 
