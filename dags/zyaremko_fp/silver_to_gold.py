@@ -1,30 +1,34 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import avg, current_timestamp, col
+from pyspark.sql.functions import avg, current_timestamp
 
-if __name__ == "__main__":
-    spark = SparkSession.builder.appName("SilverToGold").getOrCreate()
+# Створюємо SparkSession
+spark = SparkSession.builder.appName("SilverToGold").getOrCreate()
 
-    # Читаємо silver-дані
-    bio = spark.read.parquet("silver/athlete_bio")
-    results = spark.read.parquet("silver/athlete_event_results")
+# Читаємо silver-таблиці
+athlete_bio = spark.read.parquet("silver/athlete_bio")
+athlete_event_results = spark.read.parquet("silver/athlete_event_results")
 
-    # Join по athlete_id
-    joined = results.join(bio, on="athlete_id", how="inner")
+# Перейменовуємо country_noc, щоб уникнути дубля
+athlete_bio = athlete_bio.withColumnRenamed("country_noc", "bio_country_noc")
 
-    # Перетворення типів
-    joined = joined.withColumn("height", col("height").cast("double")) \
-                   .withColumn("weight", col("weight").cast("double"))
+# Join по athlete_id
+joined = athlete_event_results.join(
+    athlete_bio,
+    on="athlete_id",
+    how="inner"
+)
 
-    # Агрегація
-    gold = joined.groupBy("sport", "medal", "sex", "country_noc").agg(
-        avg("height").alias("avg_height"),
-        avg("weight").alias("avg_weight")
-    ).withColumn("calculated_at", current_timestamp())
+# Агрегація: середня вага та зріст для sport, medal, sex, country
+gold = joined.groupBy("sport", "medal", "sex", "bio_country_noc").agg(
+    avg("weight").alias("avg_weight"),
+    avg("height").alias("avg_height")
+).withColumn("timestamp", current_timestamp())
 
-    print("=== Gold aggregated stats ===")
-    gold.show(10, truncate=False)
+# Запис у gold-layer
+gold.write.mode("overwrite").parquet("gold/avg_stats")
 
-    # Збереження
-    output_path = "gold/avg_stats"
-    gold.write.mode("overwrite").parquet(output_path)
-    print(f"✅ Збережено у {output_path}")
+# Виводимо результат у логи для Airflow
+gold.show(10, truncate=False)
+
+print("✅ Silver_to_Gold job виконано успішно!")
+
