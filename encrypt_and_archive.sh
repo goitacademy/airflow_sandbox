@@ -1,48 +1,30 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# Перевірка параметрів
 if [ $# -ne 2 ]; then
-  echo "Використання: $0 <файл_для_шифрування> <публічний_ключ>"
-  exit 1
+    echo "Використання: $0 <файл_для_шифрування> <публічний_ключ>"
+    exit 1
 fi
 
-INPUT_FILE=$1
-PUBLIC_KEY=$2
+INPUT_FILE="$1"
+PUBLIC_KEY="$2"
+BASE_NAME=$(basename "$INPUT_FILE")
+OUTPUT_ARCHIVE="${BASE_NAME}_encrypted_parts.tar.gz"
 
-# Витягуємо ім'я файлу без шляху
-BASENAME=$(basename "$INPUT_FILE")
-ARCHIVE_NAME="${BASENAME}.tar.gz"
-PART_SIZE=245
+echo "Архівування файлу $INPUT_FILE у $INPUT_FILE.tar.gz..."
+tar -czf "$INPUT_FILE.tar.gz" "$INPUT_FILE"
 
-# Створюємо тимчасову папку
-TEMP_DIR="temp_parts"
-mkdir -p "$TEMP_DIR"
+echo "Розбиваємо архів на частини по 2K байтів..."
+split -b 2K "$INPUT_FILE.tar.gz" "temp_parts/part_"
 
-# Крок 1: Архівування файлу з іменем архіву, що відповідає імені файлу
-echo "Архівування файлу $INPUT_FILE у $ARCHIVE_NAME..."
-tar -czf "$ARCHIVE_NAME" "$INPUT_FILE"
-
-# Крок 2: Розбиваємо архів на частини по $PART_SIZE байтів
-echo "Розбиваємо архів на частини по $PART_SIZE байтів..."
-split -b "$PART_SIZE" "$ARCHIVE_NAME" "$TEMP_DIR/part_"
-
-# Крок 3: Шифруємо кожну частину публічним ключем
 echo "Шифрування частин..."
-for part in "$TEMP_DIR"/part_*; do
-  openssl rsautl -encrypt -inkey "$PUBLIC_KEY" -pubin -in "$part" -out "${part}.enc"
-  rm "$part"  # Видаляємо нешифровану частину після шифрування
+for part in temp_parts/part_*; do
+    openssl rsautl -encrypt -inkey "$PUBLIC_KEY" -pubin -in "$part" -out "${part}.enc"
 done
 
-# Крок 4: Архівуємо всі зашифровані частини в один архів
 echo "Створення фінального архіву з зашифрованими частинами..."
-tar -czf "${BASENAME}_encrypted_parts.tar.gz" -C "$TEMP_DIR" .
+tar -czf "$OUTPUT_ARCHIVE" temp_parts/*.enc
 
-# Крок 5: Очищення тимчасових файлів
-echo "Очищення тимчасових файлів..."
-rm -r "$TEMP_DIR"
-rm "$ARCHIVE_NAME"
+echo "Очищення тимчасових файлів"
+rm -rf temp_parts/ "$INPUT_FILE.tar.gz"
 
-echo "Шифрування завершено. Фінальний архів: ${BASENAME}_encrypted_parts.tar.gz"
-
-cp ${BASENAME}_encrypted_parts.tar.gz ./encrypted_file/${BASENAME}_encrypted_parts.tar.gz
-
+echo "Шифрування завершено, фінальний архів: $OUTPUT_ARCHIVE"

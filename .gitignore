@@ -1,16 +1,12 @@
-scripts/checkpoint/
-*.crc
-*.tmp
-*.delta
-scripts/mysql-connector-j-8.3.0.jar
-scripts/athlete_bio.csv
-scripts/athlete_event_results.csv
-scripts/checkpoint/
-__pycache__/
-calc_bronze
-branch_task
-check_recent_insert
-delay_task
-pick_medal
-__pycache__/
-*.pyc
+# Приватні ключі
+private_key.pem
+*.pem
+
+# Незашифровані DAG файли
+*.py
+!encrypted_file/*
+
+# Тимчасові файли
+temp_*
+decrypted_*
+reconstructed_*
