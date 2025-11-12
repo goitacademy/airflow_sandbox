@@ -2,9 +2,9 @@
 private_key.pem
 *.pem
 
-# Незашифровані DAG файли
-*.py
-!encrypted_file/*
+# Паролі
+*.txt
+password*
 
 # Тимчасові файли
 temp_*
