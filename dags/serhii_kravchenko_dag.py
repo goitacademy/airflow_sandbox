@@ -36,11 +36,11 @@ mysql_connection_id = "goit_mysql_db_kravchenko_serhii"
 
 # Опис самого DAG
 with DAG(
-    "kravchenko_serhii_dag2",
+    "kravchenko_serhii_dag",
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
-    tags=["kravchenko_medal_counting2"],
+    tags=["kravchenko_medal_counting"],
 ) as dag:
 
     # Завдання 1: Створення таблиці для зберігання даних про медалі
@@ -179,3 +179,5 @@ with DAG(
         >> delay_task
     )
     delay_task >> check_last_record_task >> success_task
+
+print("✅ DAG 'kravchenko_serhii_dag' завантажено успішно!")
