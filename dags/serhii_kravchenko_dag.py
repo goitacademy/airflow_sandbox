@@ -6,6 +6,7 @@ from airflow.providers.common.sql.sensors.sql import SqlSensor
 from airflow.utils.state import State
 from airflow.providers.mysql.hooks.mysql import MySqlHook
 from airflow.exceptions import AirflowException
+from datetime import timedelta  # ← ДОДАЙТЕ ЦЕЙ ІМПОРТ
 import random
 import time
 from airflow.utils.dates import days_ago
@@ -111,7 +112,7 @@ default_args = {
     "owner": "airflow",
     "start_date": days_ago(1),
     "retries": 1,
-    "retry_delay": timedelta(minutes=1),
+    "retry_delay": timedelta(minutes=1),  # ← Тепер працюватиме
 }
 
 # Назва з'єднання для MySQL
