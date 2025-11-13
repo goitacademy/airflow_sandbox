@@ -31,12 +31,12 @@ default_args = {
     "start_date": days_ago(1),
 }
 
-# Назва з'єднання для MySQL (ваше підключення)
+# Назва з'єднання для MySQL
 mysql_connection_id = "goit_mysql_db_kravchenko_serhii"
 
 # Опис самого DAG
 with DAG(
-    "kravchenko_serhii_dag4",
+    "kravchenko_serhii_dag5",
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
@@ -57,7 +57,7 @@ with DAG(
         """,
     )
 
-    # Завдання 2: Створення тестової таблиці athlete_event_results якщо не існує
+    # Завдання 2: Створення тестової таблиці athlete_event_results
     create_test_data_task = MySqlOperator(
         task_id="create_test_data",
         mysql_conn_id=mysql_connection_id,
@@ -70,17 +70,14 @@ with DAG(
             year INT
         );
         
-        INSERT INTO athlete_event_results (athlete_name, medal, event, year)
-        SELECT 'John Doe', 'Gold', '100m Sprint', 2020 FROM DUAL
-        WHERE NOT EXISTS (SELECT 1 FROM athlete_event_results WHERE medal = 'Gold' LIMIT 1);
-        
-        INSERT INTO athlete_event_results (athlete_name, medal, event, year)
-        SELECT 'Jane Smith', 'Silver', 'Swimming', 2020 FROM DUAL
-        WHERE NOT EXISTS (SELECT 1 FROM athlete_event_results WHERE medal = 'Silver' LIMIT 1);
-        
-        INSERT INTO athlete_event_results (athlete_name, medal, event, year)
-        SELECT 'Mike Johnson', 'Bronze', 'Boxing', 2020 FROM DUAL
-        WHERE NOT EXISTS (SELECT 1 FROM athlete_event_results WHERE medal = 'Bronze' LIMIT 1);
+        -- Використовуємо INSERT IGNORE з явними ID для уникнення дублікатів
+        INSERT IGNORE INTO athlete_event_results (id, athlete_name, medal, event, year) VALUES
+        (1, 'John Doe', 'Gold', '100m Sprint', 2020),
+        (2, 'Jane Smith', 'Silver', 'Swimming', 2020),
+        (3, 'Mike Johnson', 'Bronze', 'Boxing', 2020),
+        (4, 'Sarah Williams', 'Gold', 'Gymnastics', 2020),
+        (5, 'Tom Brown', 'Silver', 'Tennis', 2020),
+        (6, 'Lisa Davis', 'Bronze', 'Athletics', 2020);
         """,
     )
 
