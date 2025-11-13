@@ -22,10 +22,10 @@ def random_medal_choice():
     return medal
 
 
-# Функція для імітації затримки обробки
+# Функція для імітації затримки обробки (ЗМЕНШЕНО до 5 секунд)
 def delay_execution():
-    print("Starting delay of 35 seconds...")
-    time.sleep(35)
+    print("Starting delay of 5 seconds...")
+    time.sleep(5)
     print("Delay completed")
 
 
@@ -41,12 +41,12 @@ mysql_connection_id = "goit_mysql_db_kravchenko_serhii"
 
 # Опис самого DAG
 with DAG(
-    "kravchenko_serhii_dag2",
+    "kravchenko_serhii_dag3",
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
     tags=["kravchenko_medal_counting2"],
-    description="DAG for counting Olympic medals by type",
+    description="Optimized DAG for counting Olympic medals by type",
 ) as dag:
 
     # Завдання 1: Створення таблиці для зберігання даних про медалі
@@ -58,7 +58,8 @@ with DAG(
             id INT AUTO_INCREMENT PRIMARY KEY,
             medal_type VARCHAR(10) NOT NULL,
             medal_count INT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_created_at (created_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """,
         autocommit=True,
@@ -74,27 +75,25 @@ with DAG(
             athlete_name VARCHAR(255) NOT NULL,
             medal VARCHAR(50) NOT NULL,
             event VARCHAR(255) NOT NULL,
-            year INT NOT NULL
+            year INT NOT NULL,
+            INDEX idx_medal (medal)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         
         -- Insert test data only if table is empty
         INSERT INTO athlete_event_results (athlete_name, medal, event, year)
         SELECT * FROM (
             SELECT 'John Doe' as athlete_name, 'Gold' as medal, '100m Sprint' as event, 2020 as year
-            UNION ALL
-            SELECT 'Jane Smith', 'Silver', 'Swimming', 2020
-            UNION ALL
-            SELECT 'Mike Johnson', 'Bronze', 'Boxing', 2020
-            UNION ALL
-            SELECT 'Sarah Williams', 'Gold', 'Gymnastics', 2020
-            UNION ALL
-            SELECT 'Tom Brown', 'Silver', 'Tennis', 2020
-            UNION ALL
-            SELECT 'Lisa Davis', 'Bronze', 'Athletics', 2020
+            UNION ALL SELECT 'Jane Smith', 'Silver', 'Swimming', 2020
+            UNION ALL SELECT 'Mike Johnson', 'Bronze', 'Boxing', 2020
+            UNION ALL SELECT 'Sarah Williams', 'Gold', 'Gymnastics', 2020
+            UNION ALL SELECT 'Tom Brown', 'Silver', 'Tennis', 2020
+            UNION ALL SELECT 'Lisa Davis', 'Bronze', 'Athletics', 2020
+            UNION ALL SELECT 'Alex Turner', 'Gold', 'Diving', 2020
+            UNION ALL SELECT 'Emma Wilson', 'Silver', 'Cycling', 2020
+            UNION ALL SELECT 'David Lee', 'Bronze', 'Wrestling', 2020
+            UNION ALL SELECT 'Maria Garcia', 'Gold', 'Rowing', 2020
         ) AS tmp
-        WHERE NOT EXISTS (
-            SELECT 1 FROM athlete_event_results LIMIT 1
-        );
+        WHERE NOT EXISTS (SELECT 1 FROM athlete_event_results LIMIT 1);
         """,
         autocommit=True,
     )
@@ -130,9 +129,7 @@ with DAG(
         mysql_conn_id=mysql_connection_id,
         sql="""
         INSERT INTO kravchenko_serhii_medal_counts (medal_type, medal_count)
-        SELECT 'Bronze', COUNT(*) as count
-        FROM athlete_event_results
-        WHERE medal = 'Bronze';
+        SELECT 'Bronze', COUNT(*) FROM athlete_event_results WHERE medal = 'Bronze';
         """,
         autocommit=True,
     )
@@ -143,9 +140,7 @@ with DAG(
         mysql_conn_id=mysql_connection_id,
         sql="""
         INSERT INTO kravchenko_serhii_medal_counts (medal_type, medal_count)
-        SELECT 'Silver', COUNT(*) as count
-        FROM athlete_event_results
-        WHERE medal = 'Silver';
+        SELECT 'Silver', COUNT(*) FROM athlete_event_results WHERE medal = 'Silver';
         """,
         autocommit=True,
     )
@@ -156,32 +151,30 @@ with DAG(
         mysql_conn_id=mysql_connection_id,
         sql="""
         INSERT INTO kravchenko_serhii_medal_counts (medal_type, medal_count)
-        SELECT 'Gold', COUNT(*) as count
-        FROM athlete_event_results
-        WHERE medal = 'Gold';
+        SELECT 'Gold', COUNT(*) FROM athlete_event_results WHERE medal = 'Gold';
         """,
         autocommit=True,
     )
 
-    # Завдання 8: Затримка обробки
+    # Завдання 8: Затримка обробки (ЗМЕНШЕНО до 5 секунд замість 35!)
     delay_task = PythonOperator(
         task_id="delay_task",
         python_callable=delay_execution,
         trigger_rule=TriggerRule.ONE_SUCCESS,
     )
 
-    # Завдання 9: Перевірка наявності записів у таблиці
+    # Завдання 9: Перевірка наявності записів у таблиці (ОПТИМІЗОВАНО)
     check_last_record_task = SqlSensor(
         task_id="verify_recent_record",
         conn_id=mysql_connection_id,
         sql="""
         SELECT COUNT(*) as cnt
         FROM kravchenko_serhii_medal_counts 
-        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 SECOND);
+        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 10 SECOND);
         """,
         mode="poke",
-        poke_interval=10,
-        timeout=60,
+        poke_interval=5,  # Зменшено з 10 до 5 секунд
+        timeout=30,        # Зменшено з 60 до 30 секунд
     )
 
     # Завдання 10: Фінальне завдання для успішного завершення
@@ -192,8 +185,11 @@ with DAG(
     )
 
     # Визначення послідовності виконання завдань у DAG
+    # Паралельне виконання create_table_task і create_test_data_task
     [create_table_task, create_test_data_task] >> select_medal_task >> branching_task
     
+    # Один з task'ів підрахунку виконається
     branching_task >> [count_bronze_task, count_silver_task, count_gold_task] >> delay_task
     
+    # Перевірка і завершення
     delay_task >> check_last_record_task >> success_task
