@@ -1,14 +1,15 @@
 from airflow import DAG
 from airflow.providers.mysql.operators.mysql import MySqlOperator
-from airflow.operators.python import PythonOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.utils.trigger_rule import TriggerRule
 from airflow.utils.state import State
 from airflow.providers.mysql.hooks.mysql import MySqlHook
+import random
 import time
 from airflow.utils.dates import days_ago
 
 
-# Функція для створення таблиць і вставки даних через Python
+# Функція для створення таблиць і вставки даних
 def create_tables_and_insert_data(**kwargs):
     """Створення таблиць і вставка даних з детальним логуванням"""
     print("=" * 50)
@@ -94,7 +95,7 @@ def create_tables_and_insert_data(**kwargs):
         conn.close()
         
         print("\n" + "=" * 50)
-        print("✅ Setup completed!")
+        print("✅ Setup completed successfully!")
         print("=" * 50)
         
     except Exception as e:
@@ -104,95 +105,138 @@ def create_tables_and_insert_data(**kwargs):
         raise
 
 
+# Функція для примусового встановлення статусу DAG на SUCCESS
 def force_success_status(ti, **kwargs):
     dag_run = kwargs["dag_run"]
     dag_run.set_state(State.SUCCESS)
+    print("✅ DAG completed successfully!")
 
 
+# Функція, яка випадково вибирає тип медалі
+def random_medal_choice():
+    medal = random.choice(["Gold", "Silver", "Bronze"])
+    print(f"🎯 Selected medal type: {medal}")
+    return medal
+
+
+# Функція для імітації затримки обробки
+def delay_execution():
+    print("⏳ Starting 35 second delay...")
+    time.sleep(35)
+    print("✅ Delay completed")
+
+
+# Базові параметри DAG
 default_args = {
     "owner": "airflow",
     "start_date": days_ago(1),
 }
 
+# Назва з'єднання для MySQL
 mysql_connection_id = "goit_mysql_db_kravchenko_serhii"
 
+# Опис самого DAG
 with DAG(
-    "kravchenko_serhii_dag6",
+    "kravchenko_serhii_dag7",
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
     tags=["kravchenko_medal_counting2"],
+    description="Medal counting DAG with branching logic",
 ) as dag:
 
-    # Task 1
+    # Завдання 1: Dummy task (для сумісності з оригінальною структурою)
     create_table_task = MySqlOperator(
         task_id="create_medal_table",
         mysql_conn_id=mysql_connection_id,
-        sql="SELECT 1;",
+        sql="SELECT 1 as dummy;",
     )
 
-    # Task 2
+    # Завдання 2: Створення таблиць і вставка даних через Python
     create_test_data_task = PythonOperator(
         task_id="create_test_data",
         python_callable=create_tables_and_insert_data,
         provide_context=True,
     )
 
-    # Task 3 - Просто підрахуємо ВСІ медалі (без branching)
+    # Завдання 3: Випадковий вибір типу медалі
     select_medal_task = PythonOperator(
         task_id="select_medal",
-        python_callable=lambda: print("Counting all medals..."),
+        python_callable=random_medal_choice,
     )
 
-    # Task 4 - Dummy
-    branching_task = PythonOperator(
+    # Завдання 4: Розгалуження на основі вибраної медалі
+    def branching_logic(**kwargs):
+        ti = kwargs["ti"]
+        selected_medal = ti.xcom_pull(task_ids="select_medal")
+        print(f"🔀 Branching logic: Selected medal is '{selected_medal}'")
+        
+        if selected_medal == "Gold":
+            print("   → Routing to count_gold_medals")
+            return "count_gold_medals"
+        elif selected_medal == "Silver":
+            print("   → Routing to count_silver_medals")
+            return "count_silver_medals"
+        else:
+            print("   → Routing to count_bronze_medals")
+            return "count_bronze_medals"
+
+    branching_task = BranchPythonOperator(
         task_id="branch_based_on_medal",
-        python_callable=lambda: print("Skipping branch..."),
+        python_callable=branching_logic,
+        provide_context=True,
     )
 
-    # Task 5 - Підрахунок Gold
-    count_gold_task = MySqlOperator(
-        task_id="count_gold_medals",
-        mysql_conn_id=mysql_connection_id,
-        sql="INSERT INTO kravchenko_serhii_medal_counts (medal_type, medal_count) SELECT 'Gold', COUNT(*) FROM athlete_event_results WHERE medal = 'Gold';",
-    )
-
-    # Task 6 - Підрахунок Silver  
-    count_silver_task = MySqlOperator(
-        task_id="count_silver_medals",
-        mysql_conn_id=mysql_connection_id,
-        sql="INSERT INTO kravchenko_serhii_medal_counts (medal_type, medal_count) SELECT 'Silver', COUNT(*) FROM athlete_event_results WHERE medal = 'Silver';",
-    )
-
-    # Task 7 - Підрахунок Bronze
+    # Завдання 5: Підрахунок бронзових медалей
     count_bronze_task = MySqlOperator(
         task_id="count_bronze_medals",
         mysql_conn_id=mysql_connection_id,
         sql="INSERT INTO kravchenko_serhii_medal_counts (medal_type, medal_count) SELECT 'Bronze', COUNT(*) FROM athlete_event_results WHERE medal = 'Bronze';",
     )
 
-    # Task 8 - Короткий delay (5 сек)
+    # Завдання 6: Підрахунок срібних медалей
+    count_silver_task = MySqlOperator(
+        task_id="count_silver_medals",
+        mysql_conn_id=mysql_connection_id,
+        sql="INSERT INTO kravchenko_serhii_medal_counts (medal_type, medal_count) SELECT 'Silver', COUNT(*) FROM athlete_event_results WHERE medal = 'Silver';",
+    )
+
+    # Завдання 7: Підрахунок золотих медалей
+    count_gold_task = MySqlOperator(
+        task_id="count_gold_medals",
+        mysql_conn_id=mysql_connection_id,
+        sql="INSERT INTO kravchenko_serhii_medal_counts (medal_type, medal_count) SELECT 'Gold', COUNT(*) FROM athlete_event_results WHERE medal = 'Gold';",
+    )
+
+    # Завдання 8: Затримка обробки
     delay_task = PythonOperator(
         task_id="delay_task",
-        python_callable=lambda: time.sleep(5),
-        trigger_rule=TriggerRule.ALL_DONE,
+        python_callable=delay_execution,
+        trigger_rule=TriggerRule.ONE_SUCCESS,
     )
 
-    # Task 9 - Перевірка
-    verify_task = MySqlOperator(
+    # Завдання 9: Перевірка наявності записів у таблиці
+    check_last_record_task = MySqlOperator(
         task_id="verify_recent_record",
         mysql_conn_id=mysql_connection_id,
-        sql="SELECT COUNT(*) FROM kravchenko_serhii_medal_counts WHERE created_at >= NOW() - INTERVAL 1 MINUTE;",
+        sql="SELECT COUNT(*) FROM kravchenko_serhii_medal_counts WHERE created_at >= NOW() - INTERVAL 30 SECOND;",
+        trigger_rule=TriggerRule.ONE_SUCCESS,
     )
 
-    # Task 10 - Success
+    # Завдання 10: Фінальне завдання для успішного завершення
     success_task = PythonOperator(
         task_id="force_success",
         python_callable=force_success_status,
         trigger_rule=TriggerRule.ALL_DONE,
     )
 
-    # БЕЗ BRANCHING - всі tasks виконуються послідовно
+    # Визначення послідовності виконання завдань у DAG
     create_table_task >> create_test_data_task >> select_medal_task >> branching_task
-    branching_task >> [count_gold_task, count_silver_task, count_bronze_task] >> delay_task
-    delay_task >> verify_task >> success_task
+    
+    # Branching: тільки ОДИН з цих tasks виконається
+    branching_task >> count_bronze_task >> delay_task
+    branching_task >> count_silver_task >> delay_task
+    branching_task >> count_gold_task >> delay_task
+    
+    # Продовження після branching
+    delay_task >> check_last_record_task >> success_task
