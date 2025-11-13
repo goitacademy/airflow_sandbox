@@ -137,7 +137,7 @@ mysql_connection_id = "goit_mysql_db_kravchenko_serhii"
 
 # Опис самого DAG
 with DAG(
-    "kravchenko_serhii_dag7",
+    "kravchenko_serhii_dag_final",
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
