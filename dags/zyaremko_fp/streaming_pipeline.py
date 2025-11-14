@@ -27,7 +27,8 @@ def run_streaming_pipeline_job():
         # ===============================
         spark = (
             SparkSession.builder.appName("EndToEndStreamingPipeline").config(
-                "spark.jars.packages", "mysql:mysql-connector-java:8.0.33"
+                "spark.jars.packages",
+                "mysql:mysql-connector-java:8.0.33,org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0",
             )
             # ^-- Головне виправлення №2:
             # Замість невірного локального шляху, ми кажемо Spark
