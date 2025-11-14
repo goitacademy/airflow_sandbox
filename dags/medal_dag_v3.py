@@ -1,57 +1,46 @@
 import time
 import random
 from datetime import datetime
+
 from airflow.decorators import dag
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.providers.mysql.operators.mysql import MySqlOperator
 from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule
 
-# --- ЗМІННА ДЛЯ ТЕСТУВАННЯ ---
-# 5 секунд = сенсор спрацює (Success)
-# 35 секунд = сенсор не спрацює (Failed)
-DELAY_SECONDS = 5
-# -------------------------
-
-# ID вашого MySQL-підключення в Airflow
-MYSQL_CONN_ID = "mysql_default"
-# Назва таблиці з результатами (як на скріншоті)
-RESULTS_TABLE = "oleksiy.hw_dag_results"
-# Назва таблиці з вихідними даними
+# -----------------------------------------
+# Налаштування
+# -----------------------------------------
+MYSQL_CONN_ID = "mysql_default"  # ID підключення в Airflow
+RESULTS_TABLE = "olympic_dataset.hw_dag_results"  # Куди пишемо результати
 SOURCE_TABLE = "olympic_dataset.athlete_event_results"
 
+# 5 сек → сенсор пройде; 35 сек → сенсор впаде (перевірка умови з 30 сек)
+DELAY_SECONDS = 5
+# -----------------------------------------
 
-# Функція для Завдання 2: Випадково обирає медаль
+
+# 2. Випадковий вибір медалі
 def _pick_medal():
-    """Випадково обирає тип медалі та передає його в XCom."""
     medals = ["Bronze", "Silver", "Gold"]
-    chosen_medal = random.choice(medals)
-    print(f"Випадково обрана медаль: {chosen_medal}")
-    return chosen_medal
+    chosen = random.choice(medals)
+    print(f"Випадково обрана медаль: {chosen}")
+    return chosen
 
 
-# Функція для Завдання 3: Визначає, яку гілку запустити
+# 3. Розгалуження залежно від вибраної медалі
 def _branch_on_medal(ti):
-    """
-    Читає XCom з 'pick_medal' і повертає task_id
-    наступного завдання для запуску.
-    """
-    chosen_medal = ti.xcom_pull(task_ids="pick_medal")
-    print(f"Розгалуження на основі медалі: {chosen_medal}")
-
-    # Повертаємо ID завдання, яке має запуститися
-    if chosen_medal == "Bronze":
+    medal = ti.xcom_pull(task_ids="pick_medal")
+    if medal == "Bronze":
         return "calc_Bronze"
-    elif chosen_medal == "Silver":
+    if medal == "Silver":
         return "calc_Silver"
-    elif chosen_medal == "Gold":
-        return "calc_Gold"
+    return "calc_Gold"
 
 
-# Функція для Завдання 5: Затримка
+# 5. Затримка виконання
 def _generate_delay():
-    """Просто "спить" вказану кількість секунд."""
-    print(f"Запускаю затримку на {DELAY_SECONDS} секунд...")
+    print(f"Затримую виконання на {DELAY_SECONDS} сек...")
     time.sleep(DELAY_SECONDS)
     print("Затримку завершено.")
 
@@ -64,8 +53,7 @@ def _generate_delay():
     tags=["branching", "sql", "sensor"],
 )
 def medal_branching_pipeline():
-
-    # Завдання 1: Створення таблиці
+    # 1. Створення таблиці (IF NOT EXISTS)
     create_table = MySqlOperator(
         task_id="create_table",
         mysql_conn_id=MYSQL_CONN_ID,
@@ -79,24 +67,21 @@ def medal_branching_pipeline():
         """,
     )
 
-    # Завдання 2: Вибір медалі
+    # 2. Вибір медалі
     pick_medal = PythonOperator(task_id="pick_medal", python_callable=_pick_medal)
 
-    # Завдання 3: Розгалуження
+    # 3. Розгалуження
     pick_medal_task = BranchPythonOperator(
         task_id="pick_medal_task", python_callable=_branch_on_medal
     )
 
-    # --- Завдання 4: Три гілки для підрахунку ---
-
+    # 4. Три гілки з підрахунком і записом
     calc_Bronze = MySqlOperator(
         task_id="calc_Bronze",
         mysql_conn_id=MYSQL_CONN_ID,
         sql=f"""
         INSERT INTO {RESULTS_TABLE} (medal_type, count)
-        SELECT 'Bronze', COUNT(*)
-        FROM {SOURCE_TABLE}
-        WHERE medal = 'Bronze';
+        SELECT 'Bronze', COUNT(*) FROM {SOURCE_TABLE} WHERE medal = 'Bronze';
         """,
     )
 
@@ -105,9 +90,7 @@ def medal_branching_pipeline():
         mysql_conn_id=MYSQL_CONN_ID,
         sql=f"""
         INSERT INTO {RESULTS_TABLE} (medal_type, count)
-        SELECT 'Silver', COUNT(*)
-        FROM {SOURCE_TABLE}
-        WHERE medal = 'Silver';
+        SELECT 'Silver', COUNT(*) FROM {SOURCE_TABLE} WHERE medal = 'Silver';
         """,
     )
 
@@ -116,54 +99,39 @@ def medal_branching_pipeline():
         mysql_conn_id=MYSQL_CONN_ID,
         sql=f"""
         INSERT INTO {RESULTS_TABLE} (medal_type, count)
-        SELECT 'Gold', COUNT(*)
-        FROM {SOURCE_TABLE}
-        WHERE medal = 'Gold';
+        SELECT 'Gold', COUNT(*) FROM {SOURCE_TABLE} WHERE medal = 'Gold';
         """,
     )
 
-    # Завдання 5: Затримка
+    # 5. Затримка (виконується, якщо УСПІШНА хоча б одна з гілок)
     generate_delay = PythonOperator(
         task_id="generate_delay",
         python_callable=_generate_delay,
-        # Це критично: завдання запуститься, якщо ХОЧА Б ОДИН
-        # із батьківських (calc_*) успішно завершиться.
-        trigger_rule=TriggerRule.ONE_SUCCESS,
+        trigger_rule=TriggerRule.ONE_SUCCESS,  # ключова умова
     )
 
-    # Завдання 6: Сенсор
+    # 6. Сенсор: перевірка, що останній запис не старіший за 30 секунд
     check_for_correctness = SqlSensor(
         task_id="check_for_correctness",
         conn_id=MYSQL_CONN_ID,
-        # Запит перевіряє, чи є в таблиці хоча б один запис,
-        # створений менш ніж 30 секунд тому.
         sql=f"""
         SELECT 1
         FROM (
-            SELECT MAX(created_at) as max_time
+            SELECT MAX(created_at) AS max_time
             FROM {RESULTS_TABLE}
         ) AS latest
         WHERE latest.max_time > (NOW() - INTERVAL 30 SECOND);
         """,
-        poke_interval=5,  # Перевіряти кожні 5 секунд
-        timeout=40,  # Максимальний час очікування = 40 сек
+        poke_interval=5,
+        timeout=40,  # 35 cек затримки → сенсор має впасти
         mode="poke",
     )
 
-    # --- Визначення послідовності (Dependencies) ---
-
-    # 1 -> 2 -> 3
+    # Залежності
     create_table >> pick_medal >> pick_medal_task
-
-    # 3 -> 4 (розгалуження)
     pick_medal_task >> [calc_Bronze, calc_Silver, calc_Gold]
-
-    # 4 -> 5 (з'єднання)
     [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay
-
-    # 5 -> 6
     generate_delay >> check_for_correctness
 
 
-# Викликаємо DAG
-medal_branching_pipeline()
+dag = medal_branching_pipeline()
