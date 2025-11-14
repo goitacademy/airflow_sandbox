@@ -11,7 +11,7 @@ from airflow.utils.trigger_rule import TriggerRule
 # 5 секунд = сенсор спрацює (Success)
 # 35 секунд = сенсор не спрацює (Failed)
 DELAY_SECONDS = 5
-# -----------------------------
+# -------------------------
 
 # ID вашого MySQL-підключення в Airflow
 MYSQL_CONN_ID = "mysql_default"
