@@ -13,8 +13,8 @@ OUTPUT_ARCHIVE="${BASE_NAME}_encrypted_parts.tar.gz"
 echo "Архівування файлу $INPUT_FILE у $INPUT_FILE.tar.gz..."
 tar -czf "$INPUT_FILE.tar.gz" "$INPUT_FILE"
 
-echo "Розбиваємо архів на частини по 2K байтів..."
-split -b 2K "$INPUT_FILE.tar.gz" "temp_parts/part_"
+echo "Розбиваємо архів на частини по 128 байтів..."
+split -b 128 "$INPUT_FILE.tar.gz" "temp_parts/part_"
 
 echo "Шифрування частин..."
 for part in temp_parts/part_*; do
