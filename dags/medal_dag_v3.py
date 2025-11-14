@@ -16,7 +16,7 @@ RESULTS_TABLE = "olympic_dataset.hw_dag_results"  # Куди пишемо рез
 SOURCE_TABLE = "olympic_dataset.athlete_event_results"
 
 # 5 сек → сенсор пройде; 35 сек → сенсор впаде (перевірка умови з 30 сек)
-DELAY_SECONDS = 35
+DELAY_SECONDS = 5
 # -----------------------------------------
 
 
