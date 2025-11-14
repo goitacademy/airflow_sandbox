@@ -57,7 +57,7 @@ def _generate_delay():
 
 
 @dag(
-    dag_id="medal_branching_dag_v2",
+    dag_id="medal_branching_dag_v3",
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
     catchup=False,
