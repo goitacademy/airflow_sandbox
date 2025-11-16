@@ -4298,3 +4298,583 @@
 [2025-11-16T12:08:11.943+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:08:11.943+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
 [2025-11-16T12:08:11.951+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
 [2025-11-16T12:08:11.959+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:08:42.690+0000] {processor.py:161} INFO - Started process (PID=88622) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:08:42.691+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:08:42.693+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:08:42.692+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:08:42.702+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:08:42.712+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.024 seconds
+[2025-11-16T12:09:13.468+0000] {processor.py:161} INFO - Started process (PID=88683) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:09:13.470+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:09:13.470+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:09:13.470+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:09:13.479+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:09:13.489+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.023 seconds
+[2025-11-16T12:09:44.219+0000] {processor.py:161} INFO - Started process (PID=88744) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:09:44.220+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:09:44.221+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:09:44.221+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:09:44.230+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:09:44.237+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:10:14.847+0000] {processor.py:161} INFO - Started process (PID=88805) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:10:14.848+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:10:14.849+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:10:14.849+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:10:14.857+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:10:14.865+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:10:45.592+0000] {processor.py:161} INFO - Started process (PID=88866) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:10:45.593+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:10:45.594+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:10:45.594+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:10:45.602+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:10:45.611+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:11:16.316+0000] {processor.py:161} INFO - Started process (PID=88927) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:11:16.317+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:11:16.318+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:11:16.317+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:11:16.326+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:11:16.333+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:11:47.111+0000] {processor.py:161} INFO - Started process (PID=88988) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:11:47.112+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:11:47.113+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:11:47.113+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:11:47.120+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:11:47.128+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:12:17.735+0000] {processor.py:161} INFO - Started process (PID=89049) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:12:17.736+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:12:17.737+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:12:17.737+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:12:17.745+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:12:17.753+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:12:48.462+0000] {processor.py:161} INFO - Started process (PID=89110) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:12:48.463+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:12:48.465+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:12:48.465+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:12:48.473+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:12:48.480+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:13:19.184+0000] {processor.py:161} INFO - Started process (PID=89171) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:13:19.185+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:13:19.187+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:13:19.187+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:13:19.194+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:13:19.201+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.018 seconds
+[2025-11-16T12:13:49.861+0000] {processor.py:161} INFO - Started process (PID=89232) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:13:49.862+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:13:49.863+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:13:49.863+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:13:49.874+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:13:49.881+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:14:20.565+0000] {processor.py:161} INFO - Started process (PID=89293) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:14:20.566+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:14:20.567+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:14:20.567+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:14:20.574+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:14:20.582+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.018 seconds
+[2025-11-16T12:14:51.282+0000] {processor.py:161} INFO - Started process (PID=89354) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:14:51.283+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:14:51.285+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:14:51.285+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:14:51.292+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:14:51.301+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:15:21.950+0000] {processor.py:161} INFO - Started process (PID=89415) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:15:21.951+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:15:21.952+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:15:21.952+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:15:21.959+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:15:21.967+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.018 seconds
+[2025-11-16T12:15:52.606+0000] {processor.py:161} INFO - Started process (PID=89476) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:15:52.607+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:15:52.609+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:15:52.609+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:15:52.616+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:15:52.625+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:16:23.331+0000] {processor.py:161} INFO - Started process (PID=89537) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:16:23.331+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:16:23.332+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:16:23.332+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:16:23.341+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:16:23.350+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:16:54.095+0000] {processor.py:161} INFO - Started process (PID=89598) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:16:54.096+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:16:54.097+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:16:54.097+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:16:54.107+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:16:54.116+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.024 seconds
+[2025-11-16T12:17:24.883+0000] {processor.py:161} INFO - Started process (PID=89659) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:17:24.883+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:17:24.884+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:17:24.884+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:17:24.893+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:17:24.902+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.022 seconds
+[2025-11-16T12:17:55.611+0000] {processor.py:161} INFO - Started process (PID=89720) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:17:55.613+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:17:55.615+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:17:55.614+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:17:55.628+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:17:55.641+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.033 seconds
+[2025-11-16T12:18:26.434+0000] {processor.py:161} INFO - Started process (PID=89781) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:18:26.435+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:18:26.437+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:18:26.437+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:18:26.446+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:18:26.457+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.025 seconds
+[2025-11-16T12:18:57.237+0000] {processor.py:161} INFO - Started process (PID=89842) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:18:57.238+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:18:57.240+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:18:57.240+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:18:57.249+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:18:57.259+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.024 seconds
+[2025-11-16T12:19:27.936+0000] {processor.py:161} INFO - Started process (PID=89903) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:19:27.938+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:19:27.939+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:19:27.939+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:19:27.946+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:19:27.956+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.022 seconds
+[2025-11-16T12:19:58.676+0000] {processor.py:161} INFO - Started process (PID=89964) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:19:58.677+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:19:58.679+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:19:58.679+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:19:58.685+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:19:58.694+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:20:29.360+0000] {processor.py:161} INFO - Started process (PID=90025) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:20:29.361+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:20:29.362+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:20:29.362+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:20:29.370+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:20:29.380+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.022 seconds
+[2025-11-16T12:21:00.050+0000] {processor.py:161} INFO - Started process (PID=90086) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:21:00.051+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:21:00.053+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:21:00.052+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:21:00.060+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:21:00.067+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:21:30.748+0000] {processor.py:161} INFO - Started process (PID=90147) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:21:30.749+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:21:30.749+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:21:30.749+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:21:30.756+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:21:30.763+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:22:01.441+0000] {processor.py:161} INFO - Started process (PID=90208) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:22:01.442+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:22:01.443+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:22:01.443+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:22:01.450+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:22:01.457+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:22:32.180+0000] {processor.py:161} INFO - Started process (PID=90269) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:22:32.181+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:22:32.182+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:22:32.182+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:22:32.190+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:22:32.199+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:23:02.843+0000] {processor.py:161} INFO - Started process (PID=90330) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:23:02.843+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:23:02.845+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:23:02.845+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:23:02.852+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:23:02.861+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:23:33.496+0000] {processor.py:161} INFO - Started process (PID=90391) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:23:33.496+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:23:33.497+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:23:33.497+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:23:33.504+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:23:33.514+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:24:04.239+0000] {processor.py:161} INFO - Started process (PID=90452) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:24:04.240+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:24:04.241+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:24:04.241+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:24:04.248+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:24:04.256+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:24:34.951+0000] {processor.py:161} INFO - Started process (PID=90513) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:24:34.951+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:24:34.952+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:24:34.952+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:24:34.959+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:24:34.967+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:25:05.634+0000] {processor.py:161} INFO - Started process (PID=90574) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:25:05.635+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:25:05.637+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:25:05.637+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:25:05.644+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:25:05.655+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.023 seconds
+[2025-11-16T12:25:36.297+0000] {processor.py:161} INFO - Started process (PID=90635) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:25:36.298+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:25:36.299+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:25:36.299+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:25:36.308+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:25:36.317+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.022 seconds
+[2025-11-16T12:26:06.914+0000] {processor.py:161} INFO - Started process (PID=90696) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:26:06.915+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:26:06.917+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:26:06.917+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:26:06.929+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:26:06.937+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.025 seconds
+[2025-11-16T12:26:37.652+0000] {processor.py:161} INFO - Started process (PID=90757) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:26:37.653+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:26:37.655+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:26:37.655+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:26:37.666+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:26:37.676+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.027 seconds
+[2025-11-16T12:27:08.313+0000] {processor.py:161} INFO - Started process (PID=90818) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:27:08.314+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:27:08.315+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:27:08.315+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:27:08.324+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:27:08.335+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.023 seconds
+[2025-11-16T12:27:38.986+0000] {processor.py:161} INFO - Started process (PID=90879) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:27:38.987+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:27:38.988+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:27:38.988+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:27:38.995+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:27:39.005+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:28:09.671+0000] {processor.py:161} INFO - Started process (PID=90940) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:28:09.672+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:28:09.673+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:28:09.673+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:28:09.680+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:28:09.691+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.022 seconds
+[2025-11-16T12:28:40.323+0000] {processor.py:161} INFO - Started process (PID=91001) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:28:40.324+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:28:40.325+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:28:40.325+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:28:40.331+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:28:40.339+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:29:11.005+0000] {processor.py:161} INFO - Started process (PID=91062) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:29:11.006+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:29:11.008+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:29:11.008+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:29:11.020+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:29:11.029+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.027 seconds
+[2025-11-16T12:29:41.622+0000] {processor.py:161} INFO - Started process (PID=91129) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:29:41.623+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:29:41.624+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:29:41.624+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:29:41.631+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:29:41.639+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.018 seconds
+[2025-11-16T12:30:12.371+0000] {processor.py:161} INFO - Started process (PID=91190) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:30:12.372+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:30:12.375+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:30:12.375+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:30:12.387+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:30:12.397+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.029 seconds
+[2025-11-16T12:30:43.138+0000] {processor.py:161} INFO - Started process (PID=91251) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:30:43.138+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:30:43.140+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:30:43.140+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:30:43.148+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:30:43.158+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.023 seconds
+[2025-11-16T12:31:13.867+0000] {processor.py:161} INFO - Started process (PID=91312) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:31:13.868+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:31:13.870+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:31:13.869+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:31:13.877+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:31:13.886+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:31:44.662+0000] {processor.py:161} INFO - Started process (PID=91373) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:31:44.663+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:31:44.664+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:31:44.664+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:31:44.673+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:31:44.683+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.023 seconds
+[2025-11-16T12:32:14.888+0000] {processor.py:161} INFO - Started process (PID=91434) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:32:14.889+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:32:14.890+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:32:14.890+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:32:14.900+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:32:14.908+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.022 seconds
+[2025-11-16T12:32:45.662+0000] {processor.py:161} INFO - Started process (PID=91495) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:32:45.663+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:32:45.664+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:32:45.664+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:32:45.672+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:32:45.679+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:33:16.240+0000] {processor.py:161} INFO - Started process (PID=91556) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:33:16.241+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:33:16.242+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:33:16.242+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:33:16.249+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:33:16.259+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:33:46.406+0000] {processor.py:161} INFO - Started process (PID=91617) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:33:46.408+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:33:46.409+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:33:46.409+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:33:46.418+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:33:46.425+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:34:17.144+0000] {processor.py:161} INFO - Started process (PID=91678) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:34:17.145+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:34:17.146+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:34:17.146+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:34:17.154+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:34:17.160+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.018 seconds
+[2025-11-16T12:34:47.849+0000] {processor.py:161} INFO - Started process (PID=91739) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:34:47.850+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:34:47.851+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:34:47.851+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:34:47.861+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:34:47.869+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:35:18.572+0000] {processor.py:161} INFO - Started process (PID=91800) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:35:18.573+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:35:18.575+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:35:18.575+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:35:18.584+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:35:18.594+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.024 seconds
+[2025-11-16T12:35:49.294+0000] {processor.py:161} INFO - Started process (PID=91861) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:35:49.295+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:35:49.296+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:35:49.296+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:35:49.303+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:35:49.313+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:36:19.975+0000] {processor.py:161} INFO - Started process (PID=91922) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:36:19.975+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:36:19.977+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:36:19.977+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:36:19.985+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:36:19.994+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.022 seconds
+[2025-11-16T12:36:50.682+0000] {processor.py:161} INFO - Started process (PID=91983) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:36:50.683+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:36:50.684+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:36:50.684+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:36:50.691+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:36:50.704+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.023 seconds
+[2025-11-16T12:37:21.366+0000] {processor.py:161} INFO - Started process (PID=92044) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:37:21.367+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:37:21.369+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:37:21.369+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:37:21.376+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:37:21.384+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:37:52.072+0000] {processor.py:161} INFO - Started process (PID=92105) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:37:52.073+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:37:52.075+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:37:52.075+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:37:52.084+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:37:52.096+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.026 seconds
+[2025-11-16T12:38:22.776+0000] {processor.py:161} INFO - Started process (PID=92166) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:38:22.778+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:38:22.779+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:38:22.779+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:38:22.789+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:38:22.799+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.025 seconds
+[2025-11-16T12:38:53.482+0000] {processor.py:161} INFO - Started process (PID=92227) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:38:53.483+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:38:53.484+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:38:53.484+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:38:53.493+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:38:53.504+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.024 seconds
+[2025-11-16T12:39:24.112+0000] {processor.py:161} INFO - Started process (PID=92288) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:39:24.113+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:39:24.115+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:39:24.115+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:39:24.122+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:39:24.131+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:39:54.840+0000] {processor.py:161} INFO - Started process (PID=92349) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:39:54.840+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:39:54.841+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:39:54.841+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:39:54.850+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:39:54.857+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:40:25.537+0000] {processor.py:161} INFO - Started process (PID=92410) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:40:25.537+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:40:25.540+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:40:25.539+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:40:25.548+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:40:25.555+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T12:40:56.245+0000] {processor.py:161} INFO - Started process (PID=92471) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:40:56.246+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:40:56.247+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:40:56.247+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:40:56.254+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:40:56.265+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.022 seconds
+[2025-11-16T12:41:26.938+0000] {processor.py:161} INFO - Started process (PID=92532) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:41:26.939+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:41:26.940+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:41:26.940+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:41:26.950+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:41:26.960+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.024 seconds
+[2025-11-16T12:41:34.789+0000] {processor.py:161} INFO - Started process (PID=41) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:41:34.789+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:41:34.790+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:41:34.790+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:41:34.795+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:41:34.801+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T12:42:04.922+0000] {processor.py:161} INFO - Started process (PID=103) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:42:04.923+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:42:04.924+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:42:04.923+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:42:04.931+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:42:04.939+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:42:35.838+0000] {processor.py:161} INFO - Started process (PID=165) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:42:35.839+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:42:35.840+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:42:35.840+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:42:35.847+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:42:35.854+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:43:06.546+0000] {processor.py:161} INFO - Started process (PID=233) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:43:06.546+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:43:06.548+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:43:06.547+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:43:06.554+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:43:06.560+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:43:37.238+0000] {processor.py:161} INFO - Started process (PID=295) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:43:37.238+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:43:37.239+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:43:37.239+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:43:37.245+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:43:37.251+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:44:07.923+0000] {processor.py:161} INFO - Started process (PID=357) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:44:07.923+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:44:07.924+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:44:07.924+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:44:07.930+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:44:07.936+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:44:38.723+0000] {processor.py:161} INFO - Started process (PID=419) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:44:38.724+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:44:38.725+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:44:38.724+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:44:38.730+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:44:38.736+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:45:09.508+0000] {processor.py:161} INFO - Started process (PID=481) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:45:09.509+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:45:09.510+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:45:09.510+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:45:09.515+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:45:09.522+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T12:45:40.246+0000] {processor.py:161} INFO - Started process (PID=543) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:45:40.246+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:45:40.247+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:45:40.247+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:45:40.253+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:45:40.259+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:46:11.002+0000] {processor.py:161} INFO - Started process (PID=605) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:46:11.003+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:46:11.003+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:46:11.003+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:46:11.009+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:46:11.015+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:46:41.636+0000] {processor.py:161} INFO - Started process (PID=667) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:46:41.637+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:46:41.638+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:46:41.638+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:46:41.645+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:46:41.653+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:47:11.770+0000] {processor.py:161} INFO - Started process (PID=728) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:47:11.771+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:47:11.772+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:47:11.771+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:47:11.777+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:47:11.784+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T12:47:41.850+0000] {processor.py:161} INFO - Started process (PID=790) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:47:41.851+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:47:41.852+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:47:41.852+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:47:41.857+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:47:41.863+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T12:48:12.626+0000] {processor.py:161} INFO - Started process (PID=852) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:48:12.626+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:48:12.627+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:48:12.627+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:48:12.633+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:48:12.639+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T12:48:43.339+0000] {processor.py:161} INFO - Started process (PID=914) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:48:43.339+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:48:43.340+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:48:43.340+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:48:43.348+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:48:43.355+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T12:49:14.026+0000] {processor.py:161} INFO - Started process (PID=976) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:49:14.027+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:49:14.028+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:49:14.027+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:49:14.034+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:49:14.041+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:49:44.799+0000] {processor.py:161} INFO - Started process (PID=1038) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:49:44.800+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:49:44.801+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:49:44.801+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:49:44.807+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:49:44.814+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:50:15.450+0000] {processor.py:161} INFO - Started process (PID=1100) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:50:15.450+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:50:15.451+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:50:15.451+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:50:15.457+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:50:15.463+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:50:46.156+0000] {processor.py:161} INFO - Started process (PID=1162) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:50:46.156+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:50:46.158+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:50:46.158+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:50:46.164+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:50:46.171+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:51:16.314+0000] {processor.py:161} INFO - Started process (PID=1224) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:51:16.315+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:51:16.316+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:51:16.316+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:51:16.322+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:51:16.328+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T12:51:47.285+0000] {processor.py:161} INFO - Started process (PID=1286) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:51:47.286+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:51:47.287+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:51:47.287+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:51:47.293+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:51:47.300+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:52:18.038+0000] {processor.py:161} INFO - Started process (PID=1347) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:52:18.039+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:52:18.039+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:52:18.039+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:52:18.045+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:52:18.051+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T12:52:48.677+0000] {processor.py:161} INFO - Started process (PID=1408) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:52:48.677+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:52:48.678+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:52:48.678+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:52:48.684+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:52:48.690+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:53:19.400+0000] {processor.py:161} INFO - Started process (PID=1469) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:53:19.400+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:53:19.401+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:53:19.400+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:53:19.407+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:53:19.414+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T12:53:50.093+0000] {processor.py:161} INFO - Started process (PID=1530) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:53:50.094+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:53:50.094+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:53:50.094+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:53:50.101+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:53:50.108+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:54:20.756+0000] {processor.py:161} INFO - Started process (PID=1591) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:54:20.757+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:54:20.757+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:54:20.757+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:54:20.763+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:54:20.770+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T12:54:51.421+0000] {processor.py:161} INFO - Started process (PID=1652) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:54:51.421+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:54:51.422+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:54:51.422+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:54:51.428+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:54:51.434+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:55:22.305+0000] {processor.py:161} INFO - Started process (PID=1713) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:55:22.306+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:55:22.306+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:55:22.306+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:55:22.316+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:55:22.324+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.021 seconds
+[2025-11-16T12:55:53.065+0000] {processor.py:161} INFO - Started process (PID=1774) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:55:53.066+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:55:53.066+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:55:53.066+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:55:53.072+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:55:53.079+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T12:56:23.805+0000] {processor.py:161} INFO - Started process (PID=1835) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:56:23.806+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:56:23.806+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:56:23.806+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:56:23.813+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:56:23.820+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:56:54.544+0000] {processor.py:161} INFO - Started process (PID=1897) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:56:54.545+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:56:54.546+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:56:54.545+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:56:54.552+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:56:54.559+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T12:57:25.367+0000] {processor.py:161} INFO - Started process (PID=1959) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:57:25.368+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:57:25.369+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:57:25.368+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:57:25.375+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:57:25.383+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:57:56.120+0000] {processor.py:161} INFO - Started process (PID=2021) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:57:56.120+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:57:56.121+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:57:56.120+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:57:56.126+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:57:56.132+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T12:58:26.774+0000] {processor.py:161} INFO - Started process (PID=2084) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:58:26.775+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:58:26.775+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:58:26.775+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:58:26.782+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:58:26.789+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T12:58:57.459+0000] {processor.py:161} INFO - Started process (PID=2146) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:58:57.460+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:58:57.460+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:58:57.460+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:58:57.467+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:58:57.473+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T12:59:28.256+0000] {processor.py:161} INFO - Started process (PID=2208) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:59:28.257+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:59:28.257+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:59:28.257+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:59:28.263+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:59:28.269+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T12:59:58.881+0000] {processor.py:161} INFO - Started process (PID=2270) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:59:58.881+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T12:59:58.882+0000] {logging_mixin.py:188} INFO - [2025-11-16T12:59:58.882+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:59:58.888+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T12:59:58.894+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T13:00:29.633+0000] {processor.py:161} INFO - Started process (PID=2332) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:00:29.633+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:00:29.634+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:00:29.634+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:00:29.640+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:00:29.645+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T13:01:00.372+0000] {processor.py:161} INFO - Started process (PID=2394) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:01:00.372+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:01:00.373+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:01:00.373+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:01:00.379+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:01:00.385+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T13:01:31.226+0000] {processor.py:161} INFO - Started process (PID=2458) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:01:31.227+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:01:31.227+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:01:31.227+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:01:31.232+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:01:31.239+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T13:02:01.425+0000] {processor.py:161} INFO - Started process (PID=2520) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:02:01.426+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:02:01.427+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:02:01.426+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:02:01.432+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:02:01.439+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T13:02:31.652+0000] {processor.py:161} INFO - Started process (PID=2582) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:02:31.653+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:02:31.653+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:02:31.653+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:02:31.659+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:02:31.664+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.014 seconds
+[2025-11-16T13:03:01.747+0000] {processor.py:161} INFO - Started process (PID=2644) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:03:01.748+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:03:01.749+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:03:01.748+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:03:01.755+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:03:01.761+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.016 seconds
+[2025-11-16T13:03:31.994+0000] {processor.py:161} INFO - Started process (PID=2706) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:03:31.995+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:03:31.995+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:03:31.995+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:03:32.001+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:03:32.007+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.015 seconds
+[2025-11-16T13:04:03.066+0000] {processor.py:161} INFO - Started process (PID=2768) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:04:03.067+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:04:03.067+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:04:03.067+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:04:03.152+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:04:03.159+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.095 seconds
+[2025-11-16T13:04:34.189+0000] {processor.py:161} INFO - Started process (PID=2830) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:04:34.189+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:04:34.190+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:04:34.190+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:04:34.197+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:04:34.204+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.017 seconds
+[2025-11-16T13:05:04.921+0000] {processor.py:161} INFO - Started process (PID=2891) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:05:04.921+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:05:04.922+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:05:04.922+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:05:04.930+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:05:04.938+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T13:05:35.655+0000] {processor.py:161} INFO - Started process (PID=2952) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:05:35.656+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:05:35.657+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:05:35.657+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:05:35.664+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:05:35.673+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
+[2025-11-16T13:06:06.404+0000] {processor.py:161} INFO - Started process (PID=3013) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:06:06.405+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:06:06.406+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:06:06.406+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:06:06.413+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:06:06.421+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T13:06:37.202+0000] {processor.py:161} INFO - Started process (PID=3074) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:06:37.203+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:06:37.203+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:06:37.203+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:06:37.210+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:06:37.219+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.019 seconds
+[2025-11-16T13:07:07.901+0000] {processor.py:161} INFO - Started process (PID=3135) to work on /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:07:07.902+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar for tasks to queue
+[2025-11-16T13:07:07.902+0000] {logging_mixin.py:188} INFO - [2025-11-16T13:07:07.902+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:07:07.909+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar
+[2025-11-16T13:07:07.919+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/zyaremko_fp/mysql-connector-j-8.0.32.jar took 0.020 seconds
