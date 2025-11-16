@@ -1,0 +1,57 @@
+[2025-11-16T13:29:49.463+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: oie_olympic_medal_counter_with_sensor.count_gold_task manual__2025-11-16T13:29:45.197626+00:00 [queued]>
+[2025-11-16T13:29:49.466+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: oie_olympic_medal_counter_with_sensor.count_gold_task manual__2025-11-16T13:29:45.197626+00:00 [queued]>
+[2025-11-16T13:29:49.467+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 1
+[2025-11-16T13:29:49.470+0000] {taskinstance.py:2214} INFO - Executing <Task(PostgresOperator): count_gold_task> on 2025-11-16 13:29:45.197626+00:00
+[2025-11-16T13:29:49.473+0000] {standard_task_runner.py:60} INFO - Started process 12870 to run task
+[2025-11-16T13:29:49.475+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'oie_olympic_medal_counter_with_sensor', 'count_gold_task', 'manual__2025-11-16T13:29:45.197626+00:00', '--job-id', '12', '--raw', '--subdir', 'DAGS_FOLDER/hw_topic7_DAG_Oleksandr_Iesypenko.py', '--cfg-path', '/tmp/tmpxe0ephgy']
+[2025-11-16T13:29:49.476+0000] {standard_task_runner.py:88} INFO - Job 12: Subtask count_gold_task
+[2025-11-16T13:29:49.495+0000] {task_command.py:423} INFO - Running <TaskInstance: oie_olympic_medal_counter_with_sensor.count_gold_task manual__2025-11-16T13:29:45.197626+00:00 [running]> on host d36c22d53cd0
+[2025-11-16T13:29:49.520+0000] {taskinstance.py:2510} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='oie_olympic_medal_counter_with_sensor' AIRFLOW_CTX_TASK_ID='count_gold_task' AIRFLOW_CTX_EXECUTION_DATE='2025-11-16T13:29:45.197626+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-11-16T13:29:45.197626+00:00'
+[2025-11-16T13:29:49.520+0000] {sql.py:276} INFO - Executing: 
+    INSERT INTO medals (medal_type, count)
+    SELECT
+        %s,
+        COUNT(*)
+    FROM
+        olympic_dataset.athlete_event_results
+    WHERE
+        medal = %s;
+    
+[2025-11-16T13:29:49.523+0000] {base.py:83} INFO - Using connection ID 'postgres_default' for task execution.
+[2025-11-16T13:29:49.526+0000] {base.py:83} INFO - Using connection ID 'postgres_default' for task execution.
+[2025-11-16T13:29:49.528+0000] {sql.py:457} INFO - Running statement: 
+    INSERT INTO medals (medal_type, count)
+    SELECT
+        %s,
+        COUNT(*)
+    FROM
+        olympic_dataset.athlete_event_results
+    WHERE
+        medal = %s;
+    , parameters: ['Gold', 'Gold']
+[2025-11-16T13:29:49.528+0000] {taskinstance.py:2728} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/common/sql/operators/sql.py", line 282, in execute
+    output = hook.run(
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/common/sql/hooks/sql.py", line 404, in run
+    self._run_command(cur, sql_statement, parameters)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/common/sql/hooks/sql.py", line 460, in _run_command
+    cur.execute(sql_statement, parameters)
+psycopg2.errors.UndefinedTable: relation "olympic_dataset.athlete_event_results" does not exist
+LINE 7:         olympic_dataset.athlete_event_results
+                ^
+
+[2025-11-16T13:29:49.531+0000] {taskinstance.py:1149} INFO - Marking task as FAILED. dag_id=oie_olympic_medal_counter_with_sensor, task_id=count_gold_task, execution_date=20251116T132945, start_date=20251116T132949, end_date=20251116T132949
+[2025-11-16T13:29:49.534+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 12 for task count_gold_task (relation "olympic_dataset.athlete_event_results" does not exist
+LINE 7:         olympic_dataset.athlete_event_results
+                ^
+; 12870)
+[2025-11-16T13:29:49.575+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2025-11-16T13:29:49.580+0000] {warnings.py:109} WARNING - /home/***/.local/lib/python3.8/site-packages/***/models/baseoperator.py:1201: AirflowProviderDeprecationWarning: Call to deprecated class PostgresOperator. (Please use `***.providers.common.sql.operators.sql.SQLExecuteQueryOperator`.Also, you can provide `hook_params={'schema': <database>}`.)
+  result = cls.__new__(cls)
+
+[2025-11-16T13:29:49.586+0000] {taskinstance.py:3309} INFO - 0 downstream tasks scheduled from follow-on schedule check
