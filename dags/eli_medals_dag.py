@@ -1,4 +1,4 @@
-from random import random
+import random
 from airflow import DAG
 from datetime import datetime
 import time
