@@ -45,9 +45,9 @@ df.show(truncate=False)
 
 # ==================== ДОДАНО: ЗАПИС В MySQL ====================
 
-# Налаштування для підключення до MySQL
+# Налаштування для підключення до MySQL (ВИПРАВЛЕНО: база olympic_dataset)
 jdbc_config = {
-    "url": "jdbc:mysql://217.61.57.46:3306/neo_data",
+    "url": "jdbc:mysql://217.61.57.46:3306/olympic_dataset",
     "user": "neo_data_admin",
     "password": "Proyahaxuqithab9oplp",
     "driver": "com.mysql.cj.jdbc.Driver",
