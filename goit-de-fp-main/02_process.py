@@ -81,7 +81,7 @@ jdbc_df.selectExpr(
 ).option(
     "kafka.sasl.jaas.config", kafka_config["sasl_jaas_config"]
 ).option(
-    "topic", "viktor_svertoka_athlete_event_results"
+    "topic", "serhii_kravchenko_athlete_event_results"
 ).save()
 
 # Зчитування даних з Kafka
@@ -91,7 +91,7 @@ kafka_streaming_df = (
     .option("kafka.security.protocol", kafka_config["security_protocol"])
     .option("kafka.sasl.mechanism", kafka_config["sasl_mechanism"])
     .option("kafka.sasl.jaas.config", kafka_config["sasl_jaas_config"])
-    .option("subscribe", "viktor_svertoka_athlete_event_results")
+    .option("subscribe", "serhii_kravchenko_athlete_event_results")
     .option("startingOffsets", "earliest")
     .option("maxOffsetsPerTrigger", "5")
     .option("failOnDataLoss", "false")
@@ -153,7 +153,7 @@ def foreach_batch_function(df, epoch_id):
     ).option(
         "kafka.sasl.jaas.config", kafka_config["sasl_jaas_config"]
     ).option(
-        "topic", "viktor_svertoka_enriched_athlete_avg"
+        "topic", "serhii_kravchenko_enriched_athlete_avg"
     ).save()
 
     # Запис в MySQL
