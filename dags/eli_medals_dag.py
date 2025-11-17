@@ -117,7 +117,7 @@ with DAG(
         sql="""
             SELECT 1
             FROM medals_eli
-            WHERE created_at >= NOW() - INTERVAL '30 seconds'
+            WHERE created_at >= NOW() - INTERVAL 30 SECOND
             ORDER BY created_at DESC
             LIMIT 1;
         """,
