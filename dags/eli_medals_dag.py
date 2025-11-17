@@ -27,7 +27,7 @@ def check_medal_type(ti):
     
 def wait_task():
     print("Sleep...")
-    time.sleep(5)
+    time.sleep(35)
     print("Ready!")
 
 # Parameters DAG
