@@ -76,8 +76,9 @@ with DAG(
         task_id='calc_Bronze',
         mysql_conn_id=connection_name,
         sql="""
-            INSERT INTO medals_eli 
-            SELECT 'Bronze' AS medal_type, COUNT(*) AS count FROM olympic_dataset.athlete_event_results
+            INSERT INTO medals_eli (medal_type, count)
+            SELECT 'Bronze', COUNT(*)
+            FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Bronze';
         """,
     )
@@ -86,8 +87,9 @@ with DAG(
         task_id='calc_Silver',
         mysql_conn_id=connection_name,
         sql="""
-            INSERT INTO medals_eli 
-            SELECT 'Silver' AS medal_type, COUNT(*) AS count FROM olympic_dataset.athlete_event_results
+            INSERT INTO medals_eli (medal_type, count)
+            SELECT 'Silver', COUNT(*)
+            FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Silver';
         """,
     )
@@ -96,8 +98,9 @@ with DAG(
         task_id='calc_Gold',
         mysql_conn_id=connection_name,
         sql="""
-            INSERT INTO medals_eli 
-            SELECT 'Gold' AS medal_type, COUNT(*) AS count FROM olympic_dataset.athlete_event_results
+            INSERT INTO medals_eli (medal_type, count)
+            SELECT 'Gold', COUNT(*)
+            FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Gold';
         """,
     )
