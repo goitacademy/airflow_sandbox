@@ -122,3 +122,8 @@ with DAG(
         poke_interval=5,  # Check every 5 seconds
         timeout=6,  # Timeout after 6 seconds (1 retry)
     )
+
+    # Setting dependencies
+    create_table >> generate_medal_task >> pick_medal_task
+    pick_medal_task >> [calc_Bronze, calc_Silver, calc_Gold]
+    [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay >> check_for_correctness
