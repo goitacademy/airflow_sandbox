@@ -160,7 +160,7 @@ def foreach_batch_function(df, epoch_id):
     df.write.format("jdbc").options(
         url="jdbc:mysql://217.61.57.46:3306/neo_data",
         driver=jdbc_config["driver"],
-        dbtable="viktor_svertoka_enriched_athlete_avg",
+        dbtable="serhii_kravchenko_enriched_athlete_avg",
         user=jdbc_config["user"],
         password=jdbc_config["password"],
     ).mode("append").save()
