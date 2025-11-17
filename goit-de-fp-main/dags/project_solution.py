@@ -4,18 +4,18 @@ from airflow.operators.bash import BashOperator
 from airflow.utils.dates import days_ago
 import os
 
-# Визначаємо базовий шлях до файлів в DAG (якщо змінна оточення не задана, використовуємо за замовчуванням)
-BASE_PATH = os.getenv("BASE_PATH", "/opt/airflow/dags/goit-de-fp-main")
+# ВИПРАВЛЕНО: файли знаходяться в /opt/airflow/dags/goit-de-fp-main/dags/
+BASE_PATH = os.getenv("BASE_PATH", "/opt/airflow/dags/goit-de-fp-main/dags")
 
 # Задаємо значення за замовчуванням для аргументів DAG
 default_args = {
-    "owner": "airflow",  # Власник DAG
-    "start_date": days_ago(1),  # Початкова дата для виконання DAG (1 день тому)
+    "owner": "airflow",
+    "start_date": days_ago(1),
 }
 
 # Створюємо об'єкт DAG
 dag = DAG(
-    "serhii_kravchenko_dag1",
+    "serhii_kravchenko_dag",
     default_args=default_args,  
     description="DAG by Serhii Kravchenko", 
     schedule_interval=None,  
@@ -45,4 +45,3 @@ silver_to_gold = BashOperator(
 
 # Визначаємо порядок виконання задач
 landing_to_bronze >> bronze_to_silver >> silver_to_gold
-
