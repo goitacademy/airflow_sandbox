@@ -15,11 +15,11 @@ default_args = {
 
 # Створюємо об'єкт DAG
 dag = DAG(
-    "viktor_svertoka_dag",
+    "serhii_kravchenko_dag",
     default_args=default_args,  
-    description="DAG by Viktor Svertoka", 
+    description="DAG by Serhii Kravchenko", 
     schedule_interval=None,  
-    tags=["viktor_svertoka"],
+    tags=["serhii_kravchenko"],
 )
 
 # Оператор для виконання скрипту landing_to_bronze.py
