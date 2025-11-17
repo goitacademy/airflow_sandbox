@@ -3,8 +3,13 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import avg, current_timestamp 
 import os  
 
-# Створюємо сесію Spark з ім'ям програми
-spark = SparkSession.builder.appName("SilverToGold").getOrCreate()
+# Створюємо сесію Spark з ім'ям програми та підключенням MySQL драйвера
+spark = (
+    SparkSession.builder
+    .appName("SilverToGold")
+    .config("spark.jars", "/opt/airflow/dags/goit-de-fp-main/mysql-connector-j-8.0.32.jar")
+    .getOrCreate()
+)
 
 # Читаємо дані з паркетних файлів для таблиць "athlete_bio" та "athlete_event_results"
 athlete_bio_df = spark.read.parquet("/tmp/silver/athlete_bio") 
@@ -38,6 +43,34 @@ print(f"Data saved to {output_path}")
 df = spark.read.parquet(output_path)
 df.show(truncate=False)
 
+# ==================== ДОДАНО: ЗАПИС В MySQL ====================
+
+# Налаштування для підключення до MySQL
+jdbc_config = {
+    "url": "jdbc:mysql://217.61.57.46:3306/neo_data",
+    "user": "neo_data_admin",
+    "password": "Proyahaxuqithab9oplp",
+    "driver": "com.mysql.cj.jdbc.Driver",
+}
+
+print("Writing data to MySQL table: serhii_kravchenko_enriched_athlete_avg")
+
+try:
+    # Запис агрегованих даних в MySQL
+    aggregated_df.write.format("jdbc").options(
+        url=jdbc_config["url"],
+        driver=jdbc_config["driver"],
+        dbtable="serhii_kravchenko_enriched_athlete_avg",
+        user=jdbc_config["user"],
+        password=jdbc_config["password"],
+    ).mode("overwrite").save()
+    
+    print("✅ Data successfully saved to MySQL table: serhii_kravchenko_enriched_athlete_avg")
+    print(f"✅ Total records written: {aggregated_df.count()}")
+    
+except Exception as e:
+    print(f"❌ Error writing to MySQL: {e}")
+    raise
+
 # Завершуємо роботу з сесією Spark
 spark.stop()
-
