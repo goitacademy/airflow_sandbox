@@ -15,7 +15,7 @@ default_args = {
 
 # Створюємо об'єкт DAG
 dag = DAG(
-    "serhii_kravchenko_dag",
+    "serhii_kravchenko_dag1",
     default_args=default_args,  
     description="DAG by Serhii Kravchenko", 
     schedule_interval=None,  
