@@ -5,7 +5,7 @@ from airflow.utils.dates import days_ago
 import os
 
 # Визначаємо базовий шлях до файлів в DAG (якщо змінна оточення не задана, використовуємо за замовчуванням)
-BASE_PATH = os.getenv("BASE_PATH", "/opt/airflow/dags")
+BASE_PATH = os.getenv("BASE_PATH", "/opt/airflow/dags/goit-de-fp-main")
 
 # Задаємо значення за замовчуванням для аргументів DAG
 default_args = {
