@@ -18,7 +18,7 @@ from airflow.utils.trigger_rule import TriggerRule
 MYSQL_CONN_ID = "mysql_default"  # ID підключення у Airflow
 SOURCE_TABLE = "olympic_dataset.athlete_event_results"  # таблиця з медалями
 TARGET_TABLE = "olympic_dataset.medal_counts_log"       # таблиця для результатів
-SLEEP_SECONDS = 5  # потім змінити на 35 для демонстрації "failed" сенсора
+SLEEP_SECONDS = 35  #  для демонстрації "failed" сенсора
 
 default_args = {
     "owner": "airflow",
