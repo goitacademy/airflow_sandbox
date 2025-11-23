@@ -34,7 +34,7 @@ with DAG(
         task_id='create_schema',
         mysql_conn_id=connection_name,
         sql="""
-        CREATE DATABASE IF NOT EXISTS oleksiy;
+        CREATE DATABASE IF NOT EXISTS oksana;
         """
     )
 
