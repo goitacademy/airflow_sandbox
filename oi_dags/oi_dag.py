@@ -50,7 +50,7 @@ default_args = {
 }
 
 with DAG(
-        'even_or_odd_square_or_cube',
+        'oi_even_or_odd_square_or_cube',
         default_args=default_args,
         schedule_interval='*/10 * * * *',
         catchup=False,
