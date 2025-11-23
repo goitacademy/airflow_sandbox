@@ -19,7 +19,7 @@ def mark_dag_success(ti, **kwargs):
 
 def wait_some_time():
 
-    time.sleep(10)  
+    time.sleep(35)  
 
 
 # 2. Випадково обирає одне із трьох значень ['Bronze', 'Silver', 'Gold'].
