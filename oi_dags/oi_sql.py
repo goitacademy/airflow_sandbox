@@ -64,7 +64,7 @@ with DAG(
         task_id='check_if_counts_same',
         conn_id=connection_name,
         sql="""WITH count_in_copy AS (
-                select COUNT(*) nrows_copy from oleksiy.games
+                select COUNT(*) nrows_copy from oksana.games
                 ),
                 count_in_original AS (
                 select COUNT(*) nrows_original from olympic_dataset.games
@@ -82,8 +82,8 @@ with DAG(
         task_id='refresh',
         mysql_conn_id=connection_name,
         sql="""
-            TRUNCATE oleksiy.games;  # Очищення таблиці
-            INSERT INTO oleksiy.games SELECT * FROM olympic_dataset.games;  # Вставка даних з іншої таблиці
+            TRUNCATE oksana.games;  # Очищення таблиці
+            INSERT INTO oksana.games SELECT * FROM olympic_dataset.games;  # Вставка даних з іншої таблиці
         """,
     )
 
