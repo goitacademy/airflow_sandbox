@@ -124,12 +124,12 @@ with DAG(
     )
 
 # 5. Запускає затримку виконання наступного завдання.
-# 👉🏻 Використайте PythonOperaor із функцією time.sleep(n), якщо одне з трьох попередніх завдань виконано успішно.
-    #delay_task = PythonOperator(
-     #   task_id="delay_after_insert",
-      #  python_callable=wait_some_time,
-       # trigger_rule=tr.ONE_SUCCESS, 
-   # )
+ #👉🏻 Використайте PythonOperaor із функцією time.sleep(n), якщо одне з трьох попередніх завдань виконано успішно.
+    delay_task = PythonOperator(
+        task_id="delay_after_insert",
+        python_callable=wait_some_time,
+        trigger_rule=tr.ONE_SUCCESS, 
+    )
 
 #6. Перевіряє за допомогою сенсора, чи найновіший запис у таблиці, створеній на етапі 1, не старший за 30 секунд 
 # (порівнюючи з поточним часом). Ідея в тому, щоб упевнитися, чи справді відбувся запис у таблицю.
@@ -150,11 +150,30 @@ with DAG(
         timeout=10,  # Тайм-аут після 6 секунд (1 повторна перевірка)
     )
 
+    # Завдання для оновлення даних у таблиці `oleksiy.games`
+    refresh_data = MySqlOperator(
+        task_id='refresh',
+        mysql_conn_id=connection_name,
+        sql="""
+            INSERT INTO oi_hw.medals (medal_type, count, created_at)
+            VALUES ("ForTest", 0, Now())
+        """,
+    )
+
+    # Завдання для примусового встановлення статусу DAG як успішного в разі невдачі
+    mark_success_task = PythonOperator(
+        task_id='mark_success',
+        trigger_rule=tr.ONE_FAILED,  # Виконати, якщо хоча б одне попереднє завдання завершилося невдачею
+        python_callable=mark_dag_success,
+        provide_context=True,  # Надати контекст завдання у виклик функції
+        dag=dag,
+    )
+
 
     # Встановлення залежностей між завданнями
     create_schema >> create_table >> generate_medal_task >> choose_medal_task
-    choose_medal_task >> [process_gold, process_bronze, process_silver] >> check_for_data
- #   process_gold >> delay_task >> check_for_data
-  #  process_bronze >> delay_task >> check_for_data
-   # process_silver >> delay_task >> check_for_data
+    choose_medal_task >> [process_gold, process_bronze, process_silver] 
+    process_gold >> delay_task >> check_for_data >> mark_success_task
+    process_bronze >> delay_task >> check_for_data >> mark_success_task
+    process_silver >> delay_task >> check_for_data >> refresh_data
    
