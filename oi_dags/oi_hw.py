@@ -1,5 +1,7 @@
 # Домашнє завдання до теми “Apache Airflow”
 
+
+
 from airflow import DAG
 from datetime import datetime
 from airflow.sensors.sql import SqlSensor
@@ -16,6 +18,7 @@ def mark_dag_success(ti, **kwargs):
     dag_run.set_state(State.SUCCESS)
 
 def wait_some_time():
+    
     time.sleep(10)  
 
 
