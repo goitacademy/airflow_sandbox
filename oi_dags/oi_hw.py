@@ -18,7 +18,7 @@ def mark_dag_success(ti, **kwargs):
     dag_run.set_state(State.SUCCESS)
 
 def wait_some_time():
-    
+
     time.sleep(10)  
 
 
@@ -32,11 +32,11 @@ def generate_medal(ti):
 def choose_medal(ti):
     medal = ti.xcom_pull(task_ids='generate_medal')
 
-    if medal == 'Bronze':
+    if medal == 'bronze':
         return 'process_bronze'
-    if medal == 'Gold':
+    if medal == 'gold':
         return 'process_gold'
-    if medal == 'Silver':
+    if medal == 'silver':
         return 'process_silver'
     
 
@@ -65,7 +65,7 @@ with DAG(
         task_id='create_schema',
         mysql_conn_id=connection_name,
         sql="""
-        CREATE DATABASE IF NOT EXISTS oi_hw;
+            CREATE DATABASE IF NOT EXISTS oi_hw;
         """
     )
 
@@ -75,10 +75,10 @@ with DAG(
         mysql_conn_id=connection_name,
         sql="""
         CREATE TABLE IF NOT EXISTS oi_hw.medals (
-        `id` INT AUTO_INCREMENT PRIMARY KEY
-        `medal_type` TEXT,
-        `count` INT,
-        `created_at` DATE DEFAULT NULL
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            medal_type VARCHAR(16),
+            count INT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
         """
     )
@@ -137,32 +137,17 @@ with DAG(
         task_id='check_if_updated',
         conn_id=connection_name,
         sql="""
-            SELECT * FROM oi_hw.medals
-            WHERE TIMESTAMPDIFF(SECOND, created_at, NOW()) <= 30
+            SELECT 1
+            FROM oi_hw.medals
+            ORDER BY created_at DESC
+            LIMIT 1
+            HAVING TIMESTAMPDIFF(SECOND, created_at, NOW()) <= 30;
         """,
         mode='poke',  # Режим перевірки: періодична перевірка умови
         poke_interval=5,  # Перевірка кожні 5 секунд
         timeout=6,  # Тайм-аут після 6 секунд (1 повторна перевірка)
     )
 
-    # Завдання для оновлення даних у таблиці `oleksiy.games`
-    refresh_data = MySqlOperator(
-        task_id='refresh',
-        mysql_conn_id=connection_name,
-        sql="""
-            TRUNCATE oksana.games;  # Очищення таблиці
-            INSERT INTO oksana.games SELECT * FROM olympic_dataset.games;  # Вставка даних з іншої таблиці
-        """,
-    )
-
-    # Завдання для примусового встановлення статусу DAG як успішного в разі невдачі
-    mark_success_task = PythonOperator(
-        task_id='mark_success',
-        trigger_rule=tr.ONE_FAILED,  # Виконати, якщо хоча б одне попереднє завдання завершилося невдачею
-        python_callable=mark_dag_success,
-        provide_context=True,  # Надати контекст завдання у виклик функції
-        dag=dag,
-    )
 
     # Встановлення залежностей між завданнями
     create_schema >> create_table >> check_for_data >> generate_medal_task >> choose_medal_task
