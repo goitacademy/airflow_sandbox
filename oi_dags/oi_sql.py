@@ -43,7 +43,7 @@ with DAG(
         task_id='create_table',
         mysql_conn_id=connection_name,
         sql="""
-        CREATE TABLE IF NOT EXISTS oleksiy.games (
+        CREATE TABLE IF NOT EXISTS oksana.games (
         `edition` text,
         `edition_id` int DEFAULT NULL,
         `edition_url` text,
