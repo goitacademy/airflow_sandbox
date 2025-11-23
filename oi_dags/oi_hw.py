@@ -150,7 +150,7 @@ with DAG(
 
 
     # Встановлення залежностей між завданнями
-    create_schema >> create_table >> check_for_data >> generate_medal_task >> choose_medal_task
+    create_schema >> create_table >> generate_medal_task >> choose_medal_task
     choose_medal_task >> [process_gold, process_bronze, process_silver]
     process_gold >> delay_task >> check_for_data
     process_bronze >> delay_task >> check_for_data
