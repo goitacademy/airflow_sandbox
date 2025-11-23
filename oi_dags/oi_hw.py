@@ -53,7 +53,7 @@ connection_name = "oi_hw_airflow"
 with DAG(
         'oi_hw_airflow',
         default_args=default_args,
-        schedule_interval=None,  # DAG не має запланованого інтервалу виконання
+        schedule_interval='*/1 * * * *',
         catchup=False,  # Вимкнути запуск пропущених задач
         tags=["oi_hw"]  # Теги для класифікації DAG
 ) as dag:
@@ -125,11 +125,11 @@ with DAG(
 
 # 5. Запускає затримку виконання наступного завдання.
 # 👉🏻 Використайте PythonOperaor із функцією time.sleep(n), якщо одне з трьох попередніх завдань виконано успішно.
-    delay_task = PythonOperator(
-        task_id="delay_after_insert",
-        python_callable=wait_some_time,
-        trigger_rule=tr.ONE_SUCCESS, 
-    )
+    #delay_task = PythonOperator(
+     #   task_id="delay_after_insert",
+      #  python_callable=wait_some_time,
+       # trigger_rule=tr.ONE_SUCCESS, 
+   # )
 
 #6. Перевіряє за допомогою сенсора, чи найновіший запис у таблиці, створеній на етапі 1, не старший за 30 секунд 
 # (порівнюючи з поточним часом). Ідея в тому, щоб упевнитися, чи справді відбувся запис у таблицю.
@@ -137,22 +137,24 @@ with DAG(
         task_id='check_if_updated',
         conn_id=connection_name,
         sql="""
-            SELECT 1
-            FROM oi_hw.medals
-            ORDER BY created_at DESC
-            LIMIT 1
-            HAVING TIMESTAMPDIFF(SECOND, created_at, NOW()) <= 30;
+            SELECT TIMESTAMPDIFF(SECOND, last_row.created_at, Now()) <= 30
+            FROM (
+                SELECT created_at
+                FROM oi_hw.medals
+                ORDER BY created_at DESC
+                LIMIT 1
+            ) AS last_row;
         """,
         mode='poke',  # Режим перевірки: періодична перевірка умови
         poke_interval=5,  # Перевірка кожні 5 секунд
-        timeout=6,  # Тайм-аут після 6 секунд (1 повторна перевірка)
+        timeout=10,  # Тайм-аут після 6 секунд (1 повторна перевірка)
     )
 
 
     # Встановлення залежностей між завданнями
     create_schema >> create_table >> generate_medal_task >> choose_medal_task
-    choose_medal_task >> [process_gold, process_bronze, process_silver]
-    process_gold >> delay_task >> check_for_data
-    process_bronze >> delay_task >> check_for_data
-    process_silver >> delay_task >> check_for_data
+    choose_medal_task >> [process_gold, process_bronze, process_silver] >> check_for_data
+ #   process_gold >> delay_task >> check_for_data
+  #  process_bronze >> delay_task >> check_for_data
+   # process_silver >> delay_task >> check_for_data
    
