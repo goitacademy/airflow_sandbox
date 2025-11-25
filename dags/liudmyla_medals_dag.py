@@ -32,7 +32,7 @@ def branch_by_medal(ti, **kwargs):
 def delay_function():
     # set 35 sec — sensor will fall
     # set 10–20 sec — sensor will pass
-    time.sleep(35)
+    time.sleep(10)
 
 
 default_args = {
