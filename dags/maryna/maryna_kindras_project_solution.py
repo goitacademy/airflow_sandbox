@@ -18,21 +18,24 @@ with DAG(
 
     landing_to_bronze = SparkSubmitOperator(
         task_id="landing_to_bronze",
-        application="dags/maryna/maryna_kindras_landing_to_bronze.py",
+        application="maryna_kindras_landing_to_bronze.py",
+        py_files="dags/maryna/*.py",
         conn_id="spark-default",
         verbose=True,
     )
 
     bronze_to_silver = SparkSubmitOperator(
         task_id="bronze_to_silver",
-        application="dags/maryna/maryna_kindras_bronze_to_silver.py",
+        application="maryna_kindras_bronze_to_silver.py",
+        py_files="dags/maryna/*.py",
         conn_id="spark-default",
         verbose=True,
     )
 
     silver_to_gold = SparkSubmitOperator(
         task_id="silver_to_gold",
-        application="dags/maryna/maryna_kindras_silver_to_gold.py",
+        application="maryna_kindras_silver_to_gold.py",
+        py_files="dags/maryna/*.py",
         conn_id="spark-default",
         verbose=True,
     )
