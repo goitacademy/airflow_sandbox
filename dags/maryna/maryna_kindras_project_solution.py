@@ -13,25 +13,26 @@ with DAG(
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
+    description="ETL pipeline from landing to gold using Spark and Airflow",
 ) as dag:
 
     landing_to_bronze = SparkSubmitOperator(
-        task_id="maryna_kindras_landing_to_bronze",
-        application="/usr/local/spark/app/maryna_kindras_landing_to_bronze.py",
+        task_id="landing_to_bronze",
+        application="dags/maryna/maryna_kindras_landing_to_bronze.py",
         conn_id="spark-default",
         verbose=True,
     )
 
     bronze_to_silver = SparkSubmitOperator(
-        task_id="maryna_kindras_bronze_to_silver",
-        application="/usr/local/spark/app/maryna_kindras_bronze_to_silver.py",
+        task_id="bronze_to_silver",
+        application="dags/maryna/maryna_kindras_bronze_to_silver.py",
         conn_id="spark-default",
         verbose=True,
     )
 
     silver_to_gold = SparkSubmitOperator(
-        task_id="maryna_kindras_silver_to_gold",
-        application="/usr/local/spark/app/maryna_kindras_silver_to_gold.py",
+        task_id="silver_to_gold",
+        application="dags/maryna/maryna_kindras_silver_to_gold.py",
         conn_id="spark-default",
         verbose=True,
     )
