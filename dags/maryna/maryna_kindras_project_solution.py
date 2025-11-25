@@ -7,7 +7,7 @@ dags_dir = os.path.dirname(os.path.realpath(__file__))
 
 default_args = {
     "owner": "airflow",
-    "start_date": datetime(2025, 11, 25),
+    "start_date": datetime(2024, 1, 1),
     "depends_on_past": False,
     "retries": 1,
 }
