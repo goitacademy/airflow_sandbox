@@ -13,8 +13,9 @@ from airflow.utils.trigger_rule import TriggerRule as tr
 connection_name = "goit_mysql_db_liudmylalash"
 
 # my schema name
-schema_name = "liudmylalash"
-table_name = f"{schema_name}.medal_stats"
+schema_name = "olympic_dataset"
+table_name = f"{schema_name}.liudmyla_medal_stats"
+
 
 
 def choose_medal(ti, **kwargs):
@@ -52,7 +53,6 @@ with DAG(
         task_id="create_table",
         mysql_conn_id=connection_name,
         sql=f"""
-        CREATE DATABASE IF NOT EXISTS {schema_name};
         CREATE TABLE IF NOT EXISTS {table_name} (
             id INT AUTO_INCREMENT PRIMARY KEY,
             medal_type VARCHAR(10),
