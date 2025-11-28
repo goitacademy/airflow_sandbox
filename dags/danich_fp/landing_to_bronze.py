@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
-import requests
+from pyspark.sql.functions import col, expr
+import requests  # <--- ПЕРЕМІЩЕНО ВГОРУ
 import os
 
 # --- КОНФІГУРАЦІЯ ---
@@ -45,7 +46,6 @@ def run_landing_to_bronze():
             continue
 
         # 2. Читання CSV за допомогою Spark
-        # inferSchema=True дозволяє Spark визначити типи даних
         df = spark.read.csv(local_csv_path, header=True, inferSchema=True)
 
         # Фінальний DataFrame вивести на екран (для скріншота)
@@ -64,14 +64,5 @@ def run_landing_to_bronze():
 
 
 if __name__ == "__main__":
-    # Щоб Airflow міг знайти запити.requests
-    import sys
-    import subprocess
-
-    try:
-        import requests
-    except ImportError:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
-        import requests
-
+    # Видалено блок встановлення PIP, щоб Airflow не падав під час парсингу
     run_landing_to_bronze()
