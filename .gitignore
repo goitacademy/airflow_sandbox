@@ -12,3 +12,8 @@ decrypted_*
 reconstructed_*
 
 logs
+bronze/
+silver/
+gold/
+*.parquet
+*.crc
