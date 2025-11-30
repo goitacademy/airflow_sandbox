@@ -19,25 +19,24 @@ with DAG(
     # Завдання 1: Landing до Bronze (Завантаження + CSV до Parquet)
     landing_to_bronze = SparkSubmitOperator(
         task_id="landing_to_bronze",
-        application=LANDING_TO_BRONZE_APP,
         conn_id="spark-default",
-        verbose=1,
+        application="/opt/airflow/dags/danich_fp/landing_to_bronze.py",
+        dag=dag,
     )
-
     # Завдання 2: Bronze до Silver (Очищення + Дедуплікація)
     bronze_to_silver = SparkSubmitOperator(
         task_id="bronze_to_silver",
-        application=BRONZE_TO_SILVER_APP,
         conn_id="spark-default",
-        verbose=1,
+        application="/opt/airflow/dags/danich_fp/bronze_to_silver.py",
+        dag=dag,
     )
 
     # Завдання 3: Silver до Gold (Об'єднання + Агрегація)
     silver_to_gold = SparkSubmitOperator(
         task_id="silver_to_gold",
-        application=SILVER_TO_GOLD_APP,
         conn_id="spark-default",
-        verbose=1,
+        application="/opt/airflow/dags/danich_fp/silver_to_gold.py",
+        dag=dag,
     )
 
     # Визначення порядку виконання завдань
