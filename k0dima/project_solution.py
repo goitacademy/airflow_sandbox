@@ -1,12 +1,7 @@
-import os
 from pathlib import Path
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from airflow.utils.dates import days_ago
-
-
-# ВИПРАВЛЕНО: файли знаходяться в /opt/airflow/dags/goit-de-fp-main/dags/
-BASE_PATH = os.getenv("BASE_PATH", "/opt/airflow/dags/goit-de-fp-main/dags")
 
 default_args = {
     "owner": "airflow",
@@ -23,7 +18,7 @@ with DAG(
 ) as dag:
       
     landing_to_bronze = SparkSubmitOperator(
-        application=path / 'landing_to_bronze.py',
+        application=str(path / 'landing_to_bronze.py'),
         task_id='landing_to_bronze',
         conn_id='spark-default',
         verbose=1,
@@ -31,7 +26,7 @@ with DAG(
     )
     
     bronze_to_silver = SparkSubmitOperator(
-        application=path / 'bronze_to_silver.py',
+        application=str(path / 'bronze_to_silver.py'),
         task_id='bronze_to_silver',
         conn_id='spark-default',
         verbose=1,
@@ -40,7 +35,7 @@ with DAG(
     
         
     silver_to_gold = SparkSubmitOperator(
-        application=path / 'silver_to_gold.py',
+        application=str(path / 'silver_to_gold.py'),
         task_id='silver_to_gold',
         conn_id='spark-default',
         verbose=1,
