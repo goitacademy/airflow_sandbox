@@ -17,7 +17,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id='ola_medal_count_pipeline',
+    dag_id='ola_medal_count_pipeline_3',
     default_args=default_args,
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
