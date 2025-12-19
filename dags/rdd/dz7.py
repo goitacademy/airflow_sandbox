@@ -88,7 +88,7 @@ with DAG(
         provide_context=True
     )
 
-    # 4️⃣ Завдання для підрахунку і запису в таблицю
+    # 4 Завдання для підрахунку і запису в таблицю
     count_bronze = MySqlOperator(
         task_id='count_bronze',
         mysql_conn_id=connection_name,
@@ -122,7 +122,7 @@ with DAG(
         """
     )
 
-    # 5️⃣ Затримка виконання наступного завдання
+    # 5 Затримка виконання наступного завдання
     def delay_task():
         time.sleep(5)  # наприклад, 5 секунд
 
@@ -132,7 +132,7 @@ with DAG(
         trigger_rule='one_success'  # якщо одне з попередніх завдань успішно
     )
 
-    # 6️⃣ Сенсор перевірки останнього запису
+    # 6 Сенсор перевірки останнього запису
     check_recent_record = SqlSensor(
         task_id='check_recent_record',
         conn_id=connection_name,
@@ -148,7 +148,7 @@ with DAG(
     )
 
     # 🔗 Dependencies
-    create_table >> choose_medal_task >> branch_task
+    create_schema >> create_table >> choose_medal_task >> branch_task
     branch_task >> count_bronze >> delay >> check_recent_record
     branch_task >> count_silver >> delay >> check_recent_record
     branch_task >> count_gold >> delay >> check_recent_record
