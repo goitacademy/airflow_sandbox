@@ -82,7 +82,7 @@ with DAG(
         else:
             return 'count_gold'
 
-    branch_task = BranchPythonOperator(
+    branch_task = PythonOperator(
         task_id='branch_by_medal',
         python_callable=branch_by_medal,
         provide_context=True
