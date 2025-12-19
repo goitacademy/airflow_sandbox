@@ -12,7 +12,7 @@ def mark_dag_success(ti, **kwargs):
     dag_run.set_state(State.SUCCESS)
 
 # Назва з'єднання з базою даних MySQL
-connection_name = "goit_mysql_db"
+connection_name = "goit_mysql_db_mds6rdd"
 
 # Аргументи за замовчуванням для DAG
 default_args = {
@@ -62,6 +62,11 @@ with DAG(
         """
     )
 
+    check_db = MySqlOperator(
+    task_id='check_db',
+    mysql_conn_id=connection_name,
+    sql="SHOW DATABASES LIKE 'mds6rdd';"
+)
 
-create_schema >> create_table
+create_schema >> create_table >> check_db
 
