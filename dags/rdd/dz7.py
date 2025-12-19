@@ -7,9 +7,9 @@ from airflow.utils.trigger_rule import TriggerRule as tr
 from airflow.utils.state import State
 
 # Функція для примусового встановлення статусу DAG як успішного
-def mark_dag_success(ti, **kwargs):
-    dag_run = kwargs['dag_run']
-    dag_run.set_state(State.SUCCESS)
+# def mark_dag_success(ti, **kwargs):
+#     dag_run = kwargs['dag_run']
+#     dag_run.set_state(State.SUCCESS)
 
 # Назва з'єднання з базою даних MySQL
 connection_name = "goit_mysql_db_mds6rdd"
