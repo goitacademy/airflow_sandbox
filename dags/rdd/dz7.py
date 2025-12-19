@@ -6,6 +6,10 @@ from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule as tr
 from airflow.utils.state import State
 
+import random
+import time
+from datetime import datetime, timedelta
+
 # Функція для примусового встановлення статусу DAG як успішного
 # def mark_dag_success(ti, **kwargs):
 #     dag_run = kwargs['dag_run']
@@ -56,13 +60,95 @@ with DAG(
         PRIMARY KEY (`id`)
     );
     """
-)
+    )
 
-    check_db = MySqlOperator(
-    task_id='check_db',
-    mysql_conn_id=connection_name,
-    sql="SHOW DATABASES LIKE 'mds6rdd';"
-)
 
-create_schema >> create_table >> check_db
+    # Випадково обираємо одну медаль
+    def choose_medal():
+        return random.choice(['Bronze', 'Silver', 'Gold'])
 
+    choose_medal_task = PythonOperator(
+        task_id='choose_medal',
+        python_callable=choose_medal
+    )
+
+    # Розгалуження залежно від обраного значення
+    def branch_by_medal(ti, **kwargs):
+        medal = ti.xcom_pull(task_ids='choose_medal')
+        if medal == 'Bronze':
+            return 'count_bronze'
+        elif medal == 'Silver':
+            return 'count_silver'
+        else:
+            return 'count_gold'
+
+    branch_task = BranchPythonOperator(
+        task_id='branch_by_medal',
+        python_callable=branch_by_medal,
+        provide_context=True
+    )
+
+    # 4️⃣ Завдання для підрахунку і запису в таблицю
+    count_bronze = MySqlOperator(
+        task_id='count_bronze',
+        mysql_conn_id=connection_name,
+        sql="""
+        INSERT INTO mds6rdd.medals (medal_type, count, created_at)
+        SELECT 'Bronze', COUNT(*), NOW()
+        FROM olympic_dataset.athlete_event_results
+        WHERE medal='Bronze';
+        """
+    )
+
+    count_silver = MySqlOperator(
+        task_id='count_silver',
+        mysql_conn_id=connection_name,
+        sql="""
+        INSERT INTO mds6rdd.medals (medal_type, count, created_at)
+        SELECT 'Silver', COUNT(*), NOW()
+        FROM olympic_dataset.athlete_event_results
+        WHERE medal='Silver';
+        """
+    )
+
+    count_gold = MySqlOperator(
+        task_id='count_gold',
+        mysql_conn_id=connection_name,
+        sql="""
+        INSERT INTO mds6rdd.medals (medal_type, count, created_at)
+        SELECT 'Gold', COUNT(*), NOW()
+        FROM olympic_dataset.athlete_event_results
+        WHERE medal='Gold';
+        """
+    )
+
+    # 5️⃣ Затримка виконання наступного завдання
+    def delay_task():
+        time.sleep(5)  # наприклад, 5 секунд
+
+    delay = PythonOperator(
+        task_id='delay',
+        python_callable=delay_task,
+        trigger_rule='one_success'  # якщо одне з попередніх завдань успішно
+    )
+
+    # 6️⃣ Сенсор перевірки останнього запису
+    check_recent_record = SqlSensor(
+        task_id='check_recent_record',
+        conn_id=connection_name,
+        sql="""
+        SELECT 1
+        FROM mds6rdd.medals
+        WHERE created_at >= NOW() - INTERVAL 30 SECOND
+        ORDER BY id DESC
+        LIMIT 1;
+        """,
+        poke_interval=5,
+        timeout=35
+    )
+
+    # 🔗 Dependencies
+    create_table >> choose_medal_task >> branch_task
+    branch_task >> count_bronze >> delay >> check_recent_record
+    branch_task >> count_silver >> delay >> check_recent_record
+    branch_task >> count_gold >> delay >> check_recent_record
