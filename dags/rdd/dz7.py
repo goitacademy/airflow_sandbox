@@ -43,24 +43,20 @@ with DAG(
 
     # Завдання для створення таблиці (якщо не існує)
     create_table = MySqlOperator(
-        task_id='create_table',
-        mysql_conn_id=connection_name,
-        sql="""
-        CREATE TABLE IF NOT EXISTS mds6rdd.games (
-        `edition` text,
-        `edition_id` int DEFAULT NULL,
-        `edition_url` text,
-        `year` int DEFAULT NULL,
-        `city` text,
-        `country_flag_url` text,
-        `country_noc` text,
-        `start_date` text,
-        `end_date` text,
-        `competition_date` text,
-        `isHeld` text
-        );
-        """
-    )
+    task_id='create_table',
+    mysql_conn_id=connection_name,
+    sql="""
+    DROP TABLE IF EXISTS mds6rdd.medals;
+    
+    CREATE TABLE IF NOT EXISTS mds6rdd.medals (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `medal_type` VARCHAR(50),
+        `count` INT,
+        `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)
+    );
+    """
+)
 
     check_db = MySqlOperator(
     task_id='check_db',
