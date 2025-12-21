@@ -42,10 +42,9 @@ def main(table_name: str):
 
     url = urls[table_name]
 
-    # Локальный временный файл
-    tmp_dir = "/tmp"
-    os.makedirs(tmp_dir, exist_ok=True)
-    local_csv_path = os.path.join(tmp_dir, f"{table_name}.csv")
+    # Локальный файл внутри DAG
+    DAG_DIR = os.path.dirname(os.path.abspath(__file__))
+    local_csv_path = os.path.join(DAG_DIR, f"{table_name}.csv")
 
     # Скачиваем CSV
     download_csv(url, local_csv_path)
@@ -53,10 +52,12 @@ def main(table_name: str):
     # Читаем CSV через Spark
     logger.info("Reading CSV into Spark DataFrame")
     df = spark.read.option("header", "true").option("inferSchema", "true").csv(local_csv_path)
+    
     logger.info(f"CSV loaded. Number of rows: {df.count()}")
+    df.show(5, truncate=False)  # показываем первые 5 строк
 
     # Путь для сохранения bronze
-    bronze_path = os.path.join("bronze", table_name)
+    bronze_path = os.path.join(DAG_DIR, "bronze", table_name)
     os.makedirs(bronze_path, exist_ok=True)
 
     logger.info(f"Writing DataFrame to bronze path: {bronze_path}")

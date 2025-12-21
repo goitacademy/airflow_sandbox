@@ -1,113 +1,68 @@
 import sys
+import os
 import logging
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, trim, lower, regexp_replace
-from pyspark.sql.types import StringType, NumericType
+from pyspark.sql import functions as F
 
-
-# -------------------- logging config --------------------
+# -------------------- logging --------------------
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 )
 logger = logging.getLogger("bronze_to_silver")
-# --------------------------------------------------------
+# -------------------------------------------------
 
-
-def clean_columns(df):
-    """
-    Cleaning rules:
-    - string columns: trim, lower, remove extra spaces
-    - numeric columns: cast to double, filter not null
-    """
-    numeric_columns = []
-
-    for field in df.schema.fields:
-        col_name = field.name
-
-        # ---- string columns ----
-        if isinstance(field.dataType, StringType):
-            logger.info(f"Cleaning text column: {col_name}")
-            df = df.withColumn(
-                col_name,
-                regexp_replace(
-                    lower(trim(col(col_name))),
-                    r"\s+",
-                    " "
-                )
-            )
-
-        # ---- numeric columns ----
-        elif isinstance(field.dataType, NumericType):
-            logger.info(f"Casting numeric column to double: {col_name}")
-            df = df.withColumn(
-                col_name,
-                col(col_name).cast("double")
-            )
-            numeric_columns.append(col_name)
-
-    # ---- filter numeric not null (like your example) ----
-    if numeric_columns:
-        logger.info(
-            f"Filtering rows with NULLs in numeric columns: {numeric_columns}"
-        )
-        condition = None
-        for c in numeric_columns:
-            expr = col(c).isNotNull()
-            condition = expr if condition is None else condition & expr
-
-        df = df.filter(condition)
-
+def clean_text_columns(df):
+    """Чистим все текстовые колонки (trim, lower)"""
+    text_cols = [f.name for f in df.schema.fields if str(f.dataType) == "StringType"]
+    for c in text_cols:
+        df = df.withColumn(c, F.trim(F.lower(F.col(c))))
     return df
 
-
 def main(table_name: str):
-    logger.info("Starting bronze_to_silver job")
-    logger.info(f"Table name: {table_name}")
+    logger.info(f"Starting bronze_to_silver job for table: {table_name}")
 
-    spark = (
-        SparkSession.builder
-        .appName(f"Bronze to Silver - {table_name}")
-        .getOrCreate()
-    )
+    spark = SparkSession.builder.appName(f"Bronze to Silver - {table_name}").getOrCreate()
+    logger.info("SparkSession created")
 
-    bronze_path = f"bronze/{table_name}"
-    silver_path = f"silver/{table_name}"
+    # Путь к bronze
+    DAG_DIR = os.path.dirname(os.path.abspath(__file__))
+    bronze_path = os.path.join(DAG_DIR, "bronze", table_name)
+    if not os.path.exists(bronze_path):
+        logger.error(f"Bronze path does not exist: {bronze_path}")
+        spark.stop()
+        sys.exit(1)
 
     logger.info(f"Reading bronze table from: {bronze_path}")
     df = spark.read.parquet(bronze_path)
 
-    logger.info(f"Bronze rows count: {df.count()}")
+    logger.info(f"Bronze table loaded. Number of rows: {df.count()}")
+    df.show(5, truncate=False)  # показываем первые 5 строк
 
-    # Cleaning
-    logger.info("Starting columns cleaning")
-    df_cleaned = clean_columns(df)
+    # Чистим текстовые колонки
+    df = clean_text_columns(df)
 
-    # Deduplication
-    logger.info("Starting deduplication")
-    before = df_cleaned.count()
-    df_dedup = df_cleaned.dropDuplicates()
-    after = df_dedup.count()
+    # Дедубликация
+    df = df.dropDuplicates()
+    logger.info(f"After deduplication. Number of rows: {df.count()}")
+    df.show(5, truncate=False)
 
-    logger.info(f"Rows before dedup: {before}, after dedup: {after}")
+    # Путь к silver
+    silver_path = os.path.join(DAG_DIR, "silver", table_name)
+    os.makedirs(silver_path, exist_ok=True)
 
-    # Write silver
-    logger.info(f"Writing silver table to: {silver_path}")
-    (
-        df_dedup.write
-        .mode("overwrite")
-        .parquet(silver_path)
-    )
+    logger.info(f"Writing DataFrame to silver path: {silver_path}")
+    df.write.mode("overwrite").parquet(silver_path)
+    logger.info("Write completed successfully")
 
     spark.stop()
+    logger.info("SparkSession stopped")
     logger.info("bronze_to_silver job finished")
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        logger.error(
-            "Usage: python bronze_to_silver.py <table_name>"
-        )
+        logger.error("Usage: python bronze_to_silver.py <table_name>")
         sys.exit(1)
 
     main(sys.argv[1])
