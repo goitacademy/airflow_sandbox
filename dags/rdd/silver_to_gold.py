@@ -37,9 +37,28 @@ def main():
     logger.info(f"athlete_event_results rows: {results_df.count()}")
     results_df.show(5, truncate=False)
 
+    bio_df_clean = bio_df.select(
+        "athlete_id",
+        "sex",
+        F.col("height").alias("height"),
+        F.col("weight").alias("weight"),
+        F.col("country_noc").alias("country_noc_bio")
+    )
+
+    results_df_clean = results_df.select(
+        "athlete_id",
+        "sport",
+        "medal",
+        F.col("country_noc").alias("country_noc_results")
+    )
+
     # Join по athlete_id
     logger.info("Joining tables on athlete_id")
-    joined_df = results_df.join(bio_df, on="athlete_id", how="inner")
+    joined_df = results_df_clean.join(bio_df_clean, on="athlete_id", how="inner")
+
+    # Выбираем колонку country_noc, которую будем использовать (например из results)
+    joined_df = joined_df.withColumnRenamed("country_noc_results", "country_noc")
+
     logger.info(f"Joined rows: {joined_df.count()}")
     joined_df.show(5, truncate=False)
 
@@ -53,6 +72,9 @@ def main():
         )
         .withColumn("timestamp", F.current_timestamp())
     )
+
+    logger.info("Resulting avg_stats DataFrame:")
+    avg_df.show(5, truncate=False)
 
     logger.info("Resulting avg_stats DataFrame:")
     avg_df.show(5, truncate=False)
