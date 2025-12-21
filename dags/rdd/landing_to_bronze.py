@@ -1,54 +1,66 @@
 import sys
+import os
 import logging
+import requests
 from pyspark.sql import SparkSession
 
-
-# -------------------- logging config --------------------
+# -------------------- logging --------------------
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 )
 logger = logging.getLogger("landing_to_bronze")
-# --------------------------------------------------------
+# -------------------------------------------------
+
+def download_csv(url: str, local_path: str):
+    """Скачивает CSV с URL в локальный файл"""
+    logger.info(f"Downloading CSV from {url} to {local_path}")
+    r = requests.get(url)
+    r.raise_for_status()  # если ошибка HTTP, падение
+    with open(local_path, "wb") as f:
+        f.write(r.content)
+    logger.info("Download completed")
+    return local_path
 
 
 def main(table_name: str):
-    logger.info("Starting landing_to_bronze job")
-    logger.info(f"Table name: {table_name}")
+    logger.info(f"Starting landing_to_bronze job for table: {table_name}")
 
-    spark = (
-        SparkSession.builder
-        .appName(f"Landing to Bronze - {table_name}")
-        .getOrCreate()
-    )
-
+    spark = SparkSession.builder.appName(f"Landing to Bronze - {table_name}").getOrCreate()
     logger.info("SparkSession created")
 
-    # URL to source CSV
-    url = f"https://ftp.goit.study/neoversity/{table_name}.csv"
-    logger.info(f"Source URL: {url}")
+    # Определяем URL для скачивания
+    urls = {
+        "athlete_bio": "https://ftp.goit.study/neoversity/athlete_bio.csv",
+        "athlete_event_results": "https://ftp.goit.study/neoversity/athlete_event_results.csv"
+    }
 
-    # Read CSV
-    logger.info("Reading CSV from source")
-    df = (
-        spark.read
-        .option("header", "true")
-        .option("inferSchema", "true")
-        .csv(url)
-    )
+    if table_name not in urls:
+        logger.error(f"Unknown table_name: {table_name}")
+        spark.stop()
+        sys.exit(1)
 
-    logger.info(f"CSV loaded successfully. Rows count: {df.count()}")
+    url = urls[table_name]
 
-    # Write to bronze (relative path)
-    output_path = f"bronze/{table_name}"
-    logger.info(f"Writing data to parquet. Output path: {output_path}")
+    # Локальный временный файл
+    tmp_dir = "/tmp"
+    os.makedirs(tmp_dir, exist_ok=True)
+    local_csv_path = os.path.join(tmp_dir, f"{table_name}.csv")
 
-    (
-        df.write
-        .mode("overwrite")
-        .parquet(output_path)
-    )
+    # Скачиваем CSV
+    download_csv(url, local_csv_path)
 
+    # Читаем CSV через Spark
+    logger.info("Reading CSV into Spark DataFrame")
+    df = spark.read.option("header", "true").option("inferSchema", "true").csv(local_csv_path)
+    logger.info(f"CSV loaded. Number of rows: {df.count()}")
+
+    # Путь для сохранения bronze
+    bronze_path = os.path.join("bronze", table_name)
+    os.makedirs(bronze_path, exist_ok=True)
+
+    logger.info(f"Writing DataFrame to bronze path: {bronze_path}")
+    df.write.mode("overwrite").parquet(bronze_path)
     logger.info("Write completed successfully")
 
     spark.stop()
@@ -58,10 +70,7 @@ def main(table_name: str):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        logger.error(
-            "Invalid arguments. Usage: python landing_to_bronze.py <table_name>"
-        )
+        logger.error("Usage: python landing_to_bronze.py <table_name>")
         sys.exit(1)
 
-    table = sys.argv[1]
-    main(table)
+    main(sys.argv[1])
