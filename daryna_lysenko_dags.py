@@ -31,8 +31,8 @@ def choose_branch(**kwargs):
 
 
 def pause_before_check():
-    print("Pause for 35 seconds before sensor check")
-    time.sleep(35)
+    print("Pause for 10 seconds before sensor check")
+    time.sleep(10)
 
 
 with DAG(
