@@ -60,7 +60,8 @@ echo "Шифрування частин..."
 for part in "${TEMP_DIR}"/part_*; do
     if [ -f "$part" ]; then
         echo "  Шифрування $(basename "$part")..."
-        openssl pkeyutl -encrypt -pubin -inkey "$PUBLIC_KEY" -in "$part" -out "${part}.enc"
+        openssl rsautl -encrypt -pubin -inkey "$PUBLIC_KEY" -in "$part" -out "${part}.enc"
+
 
         # Перевірка успішності шифрування
         if [ $? -ne 0 ]; then
