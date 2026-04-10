@@ -10,7 +10,7 @@ from airflow.utils.trigger_rule import TriggerRule
 
 
 DB_CONN = "DBneodata"
-RESULT_TABLE = "neo_data.daryna_lysenko_medal_statistics"
+RESULT_TABLE = "daryna_lysenko.medal_statistics"
 
 
 def get_random_medal():
