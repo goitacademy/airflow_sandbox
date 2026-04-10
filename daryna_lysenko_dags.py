@@ -13,7 +13,7 @@ from airflow.utils.trigger_rule import TriggerRule
 DB_CONN = "DBneodata"
 
 # Назва таблиці, куди будемо записувати результати
-RESULT_TABLE = "medal_statistics"
+RESULT_TABLE = "daryna_lysenko.medal_statistics"
 
 
 # Функція, яка випадково обирає тип медалі
