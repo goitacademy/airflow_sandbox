@@ -76,7 +76,7 @@ done
 
 # Створення фінального архіву
 echo "Створення фінального архіву з зашифрованими частинами..."
-tar -czf "$OUTPUT_ARCHIVE" -C "$TEMP_DIR" .
+tar -czf "$OUTPUT_ARCHIVE" "$TEMP_DIR"
 
 # Перевірка створення архіву
 if [ $? -ne 0 ]; then
@@ -91,4 +91,4 @@ rm -rf "$TEMP_DIR" "$TEMP_ARCHIVE"
 
 echo "✓ Шифрування завершено успішно!"
 echo "✓ Фінальний архів: $OUTPUT_ARCHIVE"
-echo "✓ Кількість зашифрованих частин: $(tar -tzf "$OUTPUT_ARCHIVE" | wc -l)"
+echo "✓ Кількість зашифрованих частин: $(tar -tzf "$OUTPUT_ARCHIVE" | grep '\.enc$' | wc -l)"
