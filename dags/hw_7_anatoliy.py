@@ -3,6 +3,8 @@ from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.providers.mysql.operators.mysql import MySqlOperator
 from datetime import datetime
 import random
+from airflow.utils.trigger_rule import TriggerRule
+import time
 
 # Connection ID, у Airflow
 CONNECTION_ID = "hw_7_anatoliy"
@@ -27,6 +29,8 @@ def choose_branch(ti):
     else:
         return "calc_Gold"
 
+def generate_delay():
+    time.sleep(10)
 
 default_args = {
     "owner": "airflow",
@@ -96,6 +100,12 @@ with DAG(
         WHERE medal = 'Gold';
         """
     )
+    generate_delay_task = PythonOperator(
+        task_id="generate_delay",
+        python_callable=generate_delay,
+        trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS,
+    )
 
     create_table >> pick_medal_task >> branch_task
     branch_task >> [calc_Bronze, calc_Silver, calc_Gold]
+    [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay_task
