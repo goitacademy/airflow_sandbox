@@ -22,7 +22,7 @@ for enc_part in temp_parts/*.enc; do
 done
 
 echo "Об'єднуємо частини у архів reconstructed_archive.tar.gz..."
-cat temp_parts/part_?? > reconstructed_archive.tar.gz
+cat $(ls temp_parts/part_* | grep -v '\.enc$' | sort) > reconstructed_archive.tar.gz
 echo "=== Размер reconstructed_archive.tar.gz ==="
 ls -lh reconstructed_archive.tar.gz
 file reconstructed_archive.tar.gz
