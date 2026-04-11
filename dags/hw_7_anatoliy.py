@@ -5,6 +5,7 @@ from datetime import datetime
 import random
 from airflow.utils.trigger_rule import TriggerRule
 import time
+from airflow.sensors.sql import SqlSensor
 
 # Connection ID, у Airflow
 CONNECTION_ID = "hw_7_anatoliy"
@@ -106,6 +107,23 @@ with DAG(
         trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS,
     )
 
+    check_for_correctness = SqlSensor(
+        task_id="check_for_correctness",
+        conn_id=CONNECTION_ID,
+        sql=f"""
+            SELECT CASE
+                WHEN MAX(created_at) IS NOT NULL
+                     AND TIMESTAMPDIFF(SECOND, MAX(created_at), NOW()) <= 30
+                THEN 1
+                ELSE 0
+            END AS is_fresh
+            FROM {TABLE_NAME};
+            """,
+        mode="poke",
+        poke_interval=5,
+        timeout=10,
+    )
+
     create_table >> pick_medal_task >> branch_task
     branch_task >> [calc_Bronze, calc_Silver, calc_Gold]
-    [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay_task
+    [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay_task >> check_for_correctness
