@@ -12,6 +12,8 @@ DECRYPTED_FILE="decrypted_$(basename "$ENCRYPTED_ARCHIVE" _encrypted_parts.tar.g
 
 echo "Розпаковуємо архів $ENCRYPTED_ARCHIVE..."
 tar -xzf "$ENCRYPTED_ARCHIVE"
+echo "=== Файлы в temp_parts/ ==="
+ls -la temp_parts/
 
 echo "Дешифруємо частини..."
 for enc_part in temp_parts/*.enc; do
@@ -21,6 +23,9 @@ done
 
 echo "Об'єднуємо частини у архів reconstructed_archive.tar.gz..."
 cat temp_parts/part_?? > reconstructed_archive.tar.gz
+echo "=== Размер reconstructed_archive.tar.gz ==="
+ls -lh reconstructed_archive.tar.gz
+file reconstructed_archive.tar.gz
 
 echo "Перевіряємо архів reconstructed_archive.tar.gz..."
 tar -tzf reconstructed_archive.tar.gz
