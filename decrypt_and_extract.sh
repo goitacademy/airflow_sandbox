@@ -8,7 +8,8 @@ fi
 
 ENCRYPTED_ARCHIVE="$1"
 PRIVATE_KEY="$2"
-ORIGINAL_NAME=$(basename "$ENCRYPTED_ARCHIVE" _encrypted_parts.tar.gz)
+ENCRYPTED_ARCHIVE_BASE=$(basename "$ENCRYPTED_ARCHIVE")
+ORIGINAL_NAME="${ENCRYPTED_ARCHIVE_BASE%_encrypted_parts.tar.gz}"
 
 echo "Розпаковуємо архів $ENCRYPTED_ARCHIVE..."
 tar -xzf "$ENCRYPTED_ARCHIVE"
