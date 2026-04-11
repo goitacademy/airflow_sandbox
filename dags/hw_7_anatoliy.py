@@ -38,7 +38,7 @@ with DAG(
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
-    tags=["hw7", "anatoliy", "mysql"],
+    tags=["anatoliy_hw7"],
 ) as dag:
 
     create_table = MySqlOperator(
