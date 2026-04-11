@@ -27,14 +27,11 @@ echo "=== Размер reconstructed_archive.tar.gz ==="
 ls -lh reconstructed_archive.tar.gz
 file reconstructed_archive.tar.gz
 
-echo "Перевіряємо архів reconstructed_archive.tar.gz..."
-tar -tzf reconstructed_archive.tar.gz
-
-echo "Розпаковуємо архів для відновлення файлів..."
-tar -xzf reconstructed_archive.tar.gz
+echo "Перевіряємо що отримали..."
+file reconstructed_archive.tar.gz
 
 echo "Файл успішно відновлено!"
-cp "$(basename "$ENCRYPTED_ARCHIVE" _encrypted_parts.tar.gz)" "$DECRYPTED_FILE"
+cp reconstructed_archive.tar.gz "$DECRYPTED_FILE"
 
 # Очистка
 rm -rf temp_parts/ reconstructed_archive.tar.gz
