@@ -7,9 +7,9 @@ from datetime import datetime
 import random
 import time
 
-CONNECTION_ID = "goit_mysql_db"
-
+CONNECTION_ID = "goit_mysql_db_alina_n"
 TABLE_NAME = "alina_hw7_medal_counts"
+DELAY_SECONDS = 10
 
 
 def pick_medal():
@@ -30,7 +30,8 @@ def choose_branch(ti):
 
 
 def generate_delay():
-    time.sleep(10)
+    print(f"Sleeping for {DELAY_SECONDS} seconds...")
+    time.sleep(DELAY_SECONDS)
 
 
 default_args = {
