@@ -31,7 +31,7 @@ def choose_branch(ti):
         return "calc_Gold"
 
 def generate_delay():
-    time.sleep(10)
+    time.sleep(35)
 
 default_args = {
     "owner": "airflow",
