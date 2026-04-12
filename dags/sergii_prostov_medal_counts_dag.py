@@ -14,7 +14,7 @@ TABLE_NAME = f"{SCHEMA}.sergii_prostov_medal_counts"
 
 # Toggle this to demonstrate success (<30s) and failure (>30s) runs of the sensor.
 # The assignment asks for 35s to trigger the "failed" scenario.
-DELAY_SECONDS = 35
+DELAY_SECONDS = 5
 
 
 def pick_medal():
