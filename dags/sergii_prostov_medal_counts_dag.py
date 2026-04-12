@@ -8,7 +8,7 @@ from airflow.providers.mysql.operators.mysql import MySqlOperator
 from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule
 
-CONNECTION_ID = "goit_mysql_db"
+CONNECTION_ID = "mysql_default"
 TABLE_NAME = "sergii_prostov_medal_counts"
 
 # Toggle this to demonstrate success (<30s) and failure (>30s) runs of the sensor.
