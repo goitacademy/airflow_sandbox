@@ -45,7 +45,7 @@ default_args = {
 with DAG(
     dag_id="oleg_medal_stats_dag",
     default_args=default_args,
-    schedule_interval=None,
+    schedule_interval="*/10 * * * *",
     catchup=False,
     tags=["airflow", "mysql", "homework"],
 ) as dag:
