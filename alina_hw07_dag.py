@@ -8,8 +8,7 @@ import random
 import time
 
 connection_name = "goit_mysql_db_alina_n"
-schema_name = "alina_n"
-table_name = f"{schema_name}.alina_hw7_medal_counts"
+table_name = "alina_n.alina_hw7_medal_counts"
 DELAY_SECONDS = 10
 
 
@@ -47,14 +46,6 @@ with DAG(
     catchup=False,
     tags=["alina_hw7"],
 ) as dag:
-
-    create_schema = MySqlOperator(
-        task_id="create_schema",
-        mysql_conn_id=connection_name,
-        sql=f"""
-        CREATE DATABASE IF NOT EXISTS {schema_name};
-        """
-    )
 
     create_table = MySqlOperator(
         task_id="create_table",
@@ -135,6 +126,6 @@ with DAG(
         timeout=10,
     )
 
-    create_schema >> create_table >> pick_medal_task >> branch_task
+    create_table >> pick_medal_task >> branch_task
     branch_task >> [calc_Bronze, calc_Silver, calc_Gold]
     [calc_Bronze, calc_Silver, calc_Gold] >> generate_delay_task >> check_for_correctness
