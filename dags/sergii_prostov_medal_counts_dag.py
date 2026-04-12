@@ -9,7 +9,8 @@ from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule
 
 CONNECTION_ID = "goit_mysql_db_sergii_prostov"
-TABLE_NAME = "sergii_prostov_medal_counts"
+SCHEMA = "neo_data"
+TABLE_NAME = f"{SCHEMA}.sergii_prostov_medal_counts"
 
 # Toggle this to demonstrate success (<30s) and failure (>30s) runs of the sensor.
 # The assignment asks for 35s to trigger the "failed" scenario.
@@ -48,14 +49,17 @@ with DAG(
     create_table = MySqlOperator(
         task_id="create_table",
         mysql_conn_id=CONNECTION_ID,
-        sql=f"""
-        CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            medal_type VARCHAR(20),
-            `count` INT,
-            created_at DATETIME
-        );
-        """,
+        sql=[
+            f"CREATE DATABASE IF NOT EXISTS {SCHEMA};",
+            f"""
+            CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                medal_type VARCHAR(20),
+                `count` INT,
+                created_at DATETIME
+            );
+            """,
+        ],
     )
 
     pick_medal_task = PythonOperator(
