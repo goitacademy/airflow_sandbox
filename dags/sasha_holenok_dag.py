@@ -23,7 +23,7 @@ def pick_branch(ti):
     return f'calc_{medal}'
 
 def delay():
-    time.sleep(35)
+    time.sleep(1)
 
 with DAG(
     'sasha_holenok_homework_dag',
