@@ -83,7 +83,7 @@ with DAG(
 
     check_for_correctness = SqlSensor(
         task_id='check_for_correctness',
-        mysql_conn_id='sasha_holenok_db',
+        conn_id='sasha_holenok_db',
         sql=f"SELECT 1 FROM {TABLE_NAME} WHERE created_at >= NOW() - INTERVAL 30 SECOND LIMIT 1;",
         poke_interval=5,
         timeout=60
