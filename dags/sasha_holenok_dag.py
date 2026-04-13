@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.providers.mysql.operators.mysql import MySqlOperator
-from airflow.providers.mysql.sensors.mysql import SqlSensor
+from airflow.operators.mysql_operator import MySqlOperator
+from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule
 from datetime import datetime, timedelta
 import random
