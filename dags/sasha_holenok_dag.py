@@ -8,7 +8,7 @@ import random
 import time
 
 
-TABLE_NAME = 'medal_counts'
+TABLE_NAME = 's_holenok_medal_counts'
 
 default_args = {
     'owner': 'airflow',
