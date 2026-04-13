@@ -45,7 +45,7 @@ def generate_delay():
 
 # --- СТВОРЕННЯ DAG ---
 with DAG(
-    'alexdtsc_olympic_medals_dag',
+    'alexdtsc_olympic_medals_dag_final',
     default_args=default_args,
     schedule_interval=None, # Запускаємо тільки вручну
     catchup=False,
