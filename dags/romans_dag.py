@@ -24,7 +24,7 @@ def check_medal(ti):
         return 'calc_bronze_task'
 
 def generate_delay():
-    time.sleep(25)
+    time.sleep(10)
 
 default_args = {
     'owner': 'airflow',
