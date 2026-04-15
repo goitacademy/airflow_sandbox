@@ -75,7 +75,7 @@ with DAG(
         sql='''
         WITH gold_count AS (
             SELECT COUNT(*) AS cnt
-            FROM romans.medals
+            FROM olympic_dataset.athlete_event_results
             WHERE medal_type = 'Gold'
         )
         INSERT INTO romans.medals (medal_type, count)
@@ -90,7 +90,7 @@ with DAG(
         sql='''
         WITH silver_count AS (
             SELECT COUNT(*) AS cnt
-            FROM romans.medals
+            FROM olympic_dataset.athlete_event_results
             WHERE medal_type = 'Silver'
         )
         INSERT INTO romans.medals (medal_type, count)
@@ -105,7 +105,7 @@ with DAG(
         sql='''
         WITH bronze_count AS (
             SELECT COUNT(*) AS cnt
-            FROM romans.medals
+            FROM olympic_dataset.athlete_event_results
             WHERE medal_type = 'Bronze'
         )
         INSERT INTO romans.medals (medal_type, count)
