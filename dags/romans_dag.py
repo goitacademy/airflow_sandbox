@@ -122,7 +122,7 @@ with DAG(
 
     check_for_correctness_task = SqlSensor(
         task_id='check_for_correctness',
-        mysql_conn_id=connection_name,
+        conn_id=connection_name,
         sql='''
         SELECT CASE
             WHEN MAX(created_at) IS NOT NULL
