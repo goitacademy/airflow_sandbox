@@ -1,6 +1,6 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.providers.mysql.operators.mysql import MySqlOperator
+from airflow.operators.mysql_operator import MySqlOperator
 from airflow.sensors.sql import SqlSensor
 from airflow.utils.trigger_rule import TriggerRule as tr
 from datetime import datetime
@@ -28,7 +28,7 @@ def generate_delay():
 
 default_args = {
     'owner': 'airflow',
-    'start_date': datetime(2026, 3, 13)
+    'start_date': datetime(2025, 3, 13)
 }
 
 connection_name = 'goit_mysql_db_romans'
@@ -38,7 +38,7 @@ with DAG(
     default_args=default_args,
     schedule_interval='*/10 * * * *',
     catchup=False,
-    tags=['roman']
+    tags=['romans']
 ) as dag:
     create_schema = MySqlOperator(
         task_id='create_schema',
