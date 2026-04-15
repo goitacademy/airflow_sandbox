@@ -73,12 +73,12 @@ with DAG(
         task_id='calc_gold_task',
         mysql_conn_id=connection_name,
         sql='''
+        INSERT INTO romans.medals (medal_type, count)
         WITH gold_count AS (
             SELECT COUNT(*) AS cnt
             FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Gold'
         )
-        INSERT INTO romans.medals (medal_type, count)
         SELECT 'Gold', cnt
         FROM gold_count;
         '''
@@ -88,12 +88,12 @@ with DAG(
         task_id='calc_silver_task',
         mysql_conn_id=connection_name,
         sql='''
+        INSERT INTO romans.medals (medal_type, count)
         WITH silver_count AS (
             SELECT COUNT(*) AS cnt
             FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Silver'
         )
-        INSERT INTO romans.medals (medal_type, count)
         SELECT 'Silver', cnt
         FROM silver_count;
         '''
@@ -103,12 +103,12 @@ with DAG(
         task_id='calc_bronze_task',
         mysql_conn_id=connection_name,
         sql='''
+        INSERT INTO romans.medals (medal_type, count)
         WITH bronze_count AS (
             SELECT COUNT(*) AS cnt
             FROM olympic_dataset.athlete_event_results
             WHERE medal = 'Bronze'
         )
-        INSERT INTO romans.medals (medal_type, count)
         SELECT 'Bronze', cnt
         FROM bronze_count;
         '''
