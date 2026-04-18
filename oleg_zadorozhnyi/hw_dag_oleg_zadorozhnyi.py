@@ -41,7 +41,7 @@ def generate_delay():
       - 5  секунд -> сенсор пройде (success)
       - 35 секунд -> сенсор впаде (failed, бо запис старший за 30 сек)
     """
-    delay_seconds = 35   # <-- ЗМІНЮЙТЕ для демонстрації
+    delay_seconds = 5
     print(f"Sleeping for {delay_seconds} seconds...")
     time.sleep(delay_seconds)
     print("Wake up!")
