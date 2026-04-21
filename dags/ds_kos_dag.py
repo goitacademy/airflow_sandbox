@@ -58,7 +58,7 @@ default_args = {
 with DAG(
         dag_id='ds_kos_dag_id',
         default_args=default_args,
-        schedule='*/10 * * * *',
+        schedule=None,
         catchup=False,
         tags=["kostiya"]
 ) as dag:
