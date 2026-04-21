@@ -85,7 +85,7 @@ with DAG(
     end_task = PythonOperator(
         task_id='end_task',
         python_callable=final_function,
-        trigger_rule=TriggerRule.ONE_SUCCESS
+        trigger_rule=tr.ONE_SUCCESS
     )
 
     # Встановлення залежностей
