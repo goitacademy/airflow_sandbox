@@ -1,6 +1,6 @@
 from airflow import DAG
-from airflow.providers.standard.operators.python import PythonOperator, BranchPythonOperator
-from airflow.task.trigger_rule import TriggerRule as tr
+from airflow.operators.python import PythonOperator, BranchPythonOperatorfrom
+from airflow.utils.trigger_rule import TriggerRule
 from datetime import datetime
 import random
 
@@ -85,7 +85,7 @@ with DAG(
     end_task = PythonOperator(
         task_id='end_task',
         python_callable=final_function,
-        trigger_rule=tr.ONE_SUCCESS
+        trigger_rule=TriggerRule.ONE_SUCCESS
     )
 
     # Встановлення залежностей
