@@ -1,6 +1,6 @@
 from airflow import DAG
-from airflow.operators.python import PythonOperator, BranchPythonOperatorfrom
-from airflow.utils.trigger_rule import TriggerRule
+from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.utils.trigger_rule import TriggerRule as tr
 from datetime import datetime
 import random
 
