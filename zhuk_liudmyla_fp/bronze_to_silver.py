@@ -3,43 +3,46 @@ Part 2 · bronze_to_silver
 =========================
 
 1) Зчитує parquet-таблиці з bronze/<table>/.
-2) Чистить текстові колонки (залишає тільки літери/цифри та базові пункт.).
+2) Чистить текстові колонки (залишає тільки літери/цифри та базові пунктуацію).
 3) Дедублікує рядки.
 4) Зберігає parquet у silver/<table>/.
 
+Для очистки тексту використано нативний Spark `regexp_replace` замість
+Python UDF — Python UDF вимагає pickle→send→unpickle на executor-ах і на
+shared кластері курсу спричиняє крах Python worker-ів (executors exit 1).
+Регекс тотожний рекомендованому: залишає a-zA-Z0-9 , . \\ " '.
+
 Запуск:
     spark-submit bronze_to_silver.py athlete_bio athlete_event_results
-
-За замовчуванням обробляє обидві таблиці.
 """
 
 from __future__ import annotations
 
 import os
-import re
 import sys
 
 from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col, udf
-from pyspark.sql.types import StringType
+from pyspark.sql.functions import col, regexp_replace
 
 DEFAULT_TABLES = ["athlete_bio", "athlete_event_results"]
 
-
-def clean_text(text):
-    if text is None:
-        return None
-    return re.sub(r'[^a-zA-Z0-9,.\\"\']', "", str(text))
-
-
-clean_text_udf = udf(clean_text, StringType())
+# Регекс залишає: літери a-z/A-Z, цифри 0-9, кома, крапка, зворотна коса,
+# подвійна й одинарна лапки. Усе інше — викидає.
+# У Java-regexp char class '\\' означає літеральну \, тож '\\\\' у Python
+# рядку = '\\' у регексі = літеральна коса риска.
+CLEAN_TEXT_PATTERN = r"[^a-zA-Z0-9,.\\\"']"
 
 
 def clean_string_columns(df: DataFrame) -> DataFrame:
-    """Застосувати clean_text_udf до всіх string-колонок DataFrame."""
-    string_cols = [f.name for f in df.schema.fields if f.dataType.simpleString() == "string"]
+    string_cols = [
+        f.name for f in df.schema.fields
+        if f.dataType.simpleString() == "string"
+    ]
     for col_name in string_cols:
-        df = df.withColumn(col_name, clean_text_udf(col(col_name)))
+        df = df.withColumn(
+            col_name,
+            regexp_replace(col(col_name), CLEAN_TEXT_PATTERN, ""),
+        )
     return df
 
 
