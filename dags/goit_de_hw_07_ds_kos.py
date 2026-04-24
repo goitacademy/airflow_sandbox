@@ -40,8 +40,8 @@ def choose_branch(ti):
 
 def delay():
     print("Delay started")
-    time.sleep(5)
-    #time.sleep(35) check for failed
+    #time.sleep(5)
+    time.sleep(35) #check for failed
     print("Delay finished")
 
 
