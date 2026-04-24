@@ -46,7 +46,7 @@ def delay():
 
 
 with DAG(
-    dag_id="working_with_mysql_db_ds_kos",
+    dag_id="ds_kos_medal_branching_hw",
     default_args=default_args,
     schedule=None,
     catchup=False,
