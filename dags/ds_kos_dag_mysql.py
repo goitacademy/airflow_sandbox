@@ -18,7 +18,7 @@ default_args = {
 }
 
 # Назва з'єднання з базою даних MySQL
-connection_name = "goit_mysql_db"
+connection_name = "goit_mysql_db_ds_kos"
 
 # Визначення DAG
 with DAG(
