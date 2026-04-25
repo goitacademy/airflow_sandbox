@@ -9,15 +9,10 @@ import os
 from datetime import datetime
 
 from airflow import DAG
-from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from airflow.operators.bash import BashOperator
 
 # Визначаємо поточну директорію, де лежить DAG та інші скрипти (пакетна структура)
 DAG_DIR = os.path.dirname(os.path.abspath(__file__))
-SPARK_DRIVER_HOST = os.getenv("SPARK_DRIVER_HOST", "217.61.58.159")
-SPARK_CONF = {
-    "spark.driver.host": SPARK_DRIVER_HOST,
-    "spark.driver.bindAddress": "0.0.0.0",
-}
 
 
 # ---------------------------------------------------------------------------
@@ -36,33 +31,21 @@ with DAG(
 ) as dag:
 
     # Крок 1: Landing to Bronze
-    landing_to_bronze = SparkSubmitOperator(
-        application=os.path.join(DAG_DIR, "maxim_landing_to_bronze.py"),
+    landing_to_bronze = BashOperator(
         task_id="landing_to_bronze",
-        conn_id="spark-default",
-        conf=SPARK_CONF,
-        verbose=1,
-        dag=dag,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_landing_to_bronze.py')}",
     )
 
     # Крок 2: Bronze to Silver
-    bronze_to_silver = SparkSubmitOperator(
-        application=os.path.join(DAG_DIR, "maxim_bronze_to_silver.py"),
+    bronze_to_silver = BashOperator(
         task_id="bronze_to_silver",
-        conn_id="spark-default",
-        conf=SPARK_CONF,
-        verbose=1,
-        dag=dag,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_bronze_to_silver.py')}",
     )
 
     # Крок 3: Silver to Gold
-    silver_to_gold = SparkSubmitOperator(
-        application=os.path.join(DAG_DIR, "maxim_silver_to_gold.py"),
+    silver_to_gold = BashOperator(
         task_id="silver_to_gold",
-        conn_id="spark-default",
-        conf=SPARK_CONF,
-        verbose=1,
-        dag=dag,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_silver_to_gold.py')}",
     )
 
     # Послідовне виконання
