@@ -14,7 +14,7 @@ with DAG(
     schedule_interval=None,
     tags=["sergiy_pavlyshyn", "final_project"],
 ) as dag:
-    BASE_PATH = "dags/sergiy_pavlyshyn"
+    BASE_PATH = "dags/sergiy_pavlyshyn_fp"
 
     task_landing_to_bronze = SparkSubmitOperator(
         task_id="run_landing_to_bronze",
