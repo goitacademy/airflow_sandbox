@@ -2,12 +2,7 @@ import os
 from datetime import datetime
 
 from airflow import DAG
-from airflow.operators.bash import BashOperator
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-
-from landing_to_bronze import main as landing_to_bronze
-from bronze_to_silver import main as bronze_to_silver
-from silver_to_gold import main as silver_to_gold
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 
 # -------------------- paths --------------------
 DAG_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,24 +17,30 @@ default_args = {
 with DAG(
         'romans_fin_proj_dag',
         default_args=default_args,
-        schedule_interval='*/10 * * * *',
+        schedule_interval=None,
         catchup=False,
         tags=["romans"]
 ) as dag:
 
-    landing_to_bronze_task = PythonOperator(
-        task_id='landing_to_bronze',
-        python_callable=landing_to_bronze,
+    landing_to_bronze_task = SparkSubmitOperator(
+        task_id="run_landing_to_bronze",
+        application=f"{DAG_DIR}/landing_to_bronze.py",
+        conn_id="spark-default",
+        verbose=1,
     )
 
-    bronze_to_silver_task = PythonOperator(
-        task_id='bronze_to_silver',
-        python_callable=bronze_to_silver,
+    bronze_to_silver_task = SparkSubmitOperator(
+        task_id="run_bronze_to_silver",
+        application=f"{DAG_DIR}/bronze_to_silver.py",
+        conn_id="spark-default",
+        verbose=1,
     )
 
-    silver_to_gold_task = PythonOperator(
-        task_id='silver_to_gold',
-        python_callable=silver_to_gold,
+    silver_to_gold_task = SparkSubmitOperator(
+        task_id="run_silver_to_gold",
+        application=f"{DAG_DIR}/silver_to_gold.py",
+        conn_id="spark-default",
+        verbose=1,
     )
 
     landing_to_bronze_task >> bronze_to_silver_task
