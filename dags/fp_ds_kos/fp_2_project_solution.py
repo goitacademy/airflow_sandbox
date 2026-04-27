@@ -17,7 +17,7 @@ with DAG(
     default_args=default_args,
     description='Landing -> Bronze -> Silver -> Gold',
     schedule=None,
-    tags=['fp_2_project_solution'],
+    tags=['kostiya'],
 )as dag:
 
     landing_to_bronze = SparkSubmitOperator(
