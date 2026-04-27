@@ -32,6 +32,8 @@ def parse_and_save_table(spark, table_name):
      .mode('overwrite')
      .parquet(silver_path))
 
+    df.show()
+
     print(f"Table '{table_name}' saved to {silver_path}")
 
 

@@ -34,6 +34,8 @@ def save_file_to_bronze(local_file_path):
               .option('inferSchema', True)
               .csv(csv_path))
 
+        df.show()
+
         (df.write
          .mode('overwrite')
          .parquet(full_path))
