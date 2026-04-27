@@ -26,6 +26,7 @@ with DAG(
     description="Multi-hop Data Lake: landing → bronze → silver → gold",
 ) as dag:
 
+    # Етап 1. Landing -> Bronze для athlete_bio
     landing_to_bronze_athlete_bio = BashOperator(
         task_id="landing_to_bronze_athlete_bio",
         bash_command=(
@@ -34,6 +35,7 @@ with DAG(
         ),
     )
 
+    # Етап 1. Landing -> Bronze для athlete_event_results
     landing_to_bronze_athlete_event_results = BashOperator(
         task_id="landing_to_bronze_athlete_event_results",
         bash_command=(
@@ -42,6 +44,7 @@ with DAG(
         ),
     )
 
+    # Етап 2. Bronze -> Silver для athlete_bio
     bronze_to_silver_athlete_bio = BashOperator(
         task_id="bronze_to_silver_athlete_bio",
         bash_command=(
@@ -50,6 +53,7 @@ with DAG(
         ),
     )
 
+    # Етап 2. Bronze -> Silver для athlete_event_results
     bronze_to_silver_athlete_event_results = BashOperator(
         task_id="bronze_to_silver_athlete_event_results",
         bash_command=(
@@ -58,6 +62,7 @@ with DAG(
         ),
     )
 
+    # Етап 3. Silver -> Gold avg_stats
     silver_to_gold = BashOperator(
         task_id="silver_to_gold",
         bash_command=(
@@ -66,10 +71,9 @@ with DAG(
         ),
     )
 
-    [
-        landing_to_bronze_athlete_bio,
-        landing_to_bronze_athlete_event_results,
-    ] >> [
-        bronze_to_silver_athlete_bio,
-        bronze_to_silver_athlete_event_results,
-    ] >> silver_to_gold
+    # Залежності без list >> list, бо ця версія Airflow це не підтримує
+    landing_to_bronze_athlete_bio >> bronze_to_silver_athlete_bio
+    landing_to_bronze_athlete_event_results >> bronze_to_silver_athlete_event_results
+
+    bronze_to_silver_athlete_bio >> silver_to_gold
+    bronze_to_silver_athlete_event_results >> silver_to_gold
