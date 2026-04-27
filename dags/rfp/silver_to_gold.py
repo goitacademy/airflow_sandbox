@@ -1,11 +1,11 @@
 import os
 
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import avg, col, current_timestamp
-
 DAG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def main():
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import avg, col, current_timestamp
+
     spark = SparkSession.builder.appName('Landing To Gold').getOrCreate()
 
     df_bio = spark.read.parquet(f'{DAG_DIR}/silver/athlete_bio')
@@ -29,7 +29,6 @@ def main():
     )
 
     spark.stop()
-
 
 if __name__ == '__main__':
     main()

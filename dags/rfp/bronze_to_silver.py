@@ -1,23 +1,25 @@
 import re
 import os
 
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf, col
-from pyspark.sql.types import StringType
-
-spark = SparkSession.builder.appName('Landing To Silver').getOrCreate()
-
 DAG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 table_names = ['athlete_event_results', 'athlete_bio']
 
+
 def clean_text(text):
-    return re.sub(r'[^a-zA-Z0-9,.\\"\']', '', str(text))
+    return re.sub(r'[^a-zA-Z0-9,.\"\']', '', str(text))
 
-clean_text_udf = udf(clean_text, StringType())
 
-def parse_table(table_name):
-    df = spark.read.parquet(f'{DAG_DIR}/bronze/{table_name}')
+def parse_and_save_table(spark, table_name):
+    from pyspark.sql.functions import udf, col
+    from pyspark.sql.types import StringType
+
+    clean_text_udf = udf(clean_text, StringType())
+
+    bronze_path = os.path.join(DAG_DIR, 'bronze', table_name)
+    silver_path = os.path.join(DAG_DIR, 'silver', table_name)
+
+    df = spark.read.parquet(bronze_path)
 
     for column_name, column_type in df.dtypes:
         if column_type == 'string':
@@ -26,20 +28,23 @@ def parse_table(table_name):
                 clean_text_udf(col(column_name))
             )
 
-    return df
+    (df.write
+     .mode('overwrite')
+     .parquet(silver_path))
+
+    print(f"Table '{table_name}' saved to {silver_path}")
+
 
 def main():
-    for table_name in table_names:
-        full_path = f'{DAG_DIR}/silver/{table_name}'
+    from pyspark.sql import SparkSession
 
-        df = parse_table(table_name)
+    spark = SparkSession.builder.appName('Bronze To Silver').getOrCreate()
 
-        (df.write
-         .mode('overwrite')
-         .parquet(full_path)
-         )
-
-    spark.stop()
+    try:
+        for table_name in table_names:
+            parse_and_save_table(spark, table_name)
+    finally:
+        spark.stop()
 
 
 if __name__ == '__main__':
