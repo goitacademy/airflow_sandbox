@@ -1,25 +1,26 @@
+import os
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, avg, current_timestamp, when
 
 
-def main():
-    print("Starting silver_to_gold")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
+def main():
     spark = (
         SparkSession.builder
         .appName("SilverToGold_AvgStats")
         .getOrCreate()
     )
 
+    athlete_bio_path = os.path.join(BASE_DIR, "silver", "athlete_bio")
+    athlete_event_results_path = os.path.join(BASE_DIR, "silver", "athlete_event_results")
+    gold_path = os.path.join(BASE_DIR, "gold", "avg_stats")
+
     # Етап 1: зчитування двох таблиць із silver layer
-    athlete_bio = spark.read.parquet("silver/athlete_bio")
-    athlete_event_results = spark.read.parquet("silver/athlete_event_results")
-
-    print("athlete_bio schema:")
-    athlete_bio.printSchema()
-
-    print("athlete_event_results schema:")
-    athlete_event_results.printSchema()
+    athlete_bio = spark.read.parquet(athlete_bio_path)
+    athlete_event_results = spark.read.parquet(athlete_event_results_path)
 
     # Етап 2: фільтрація height/weight — залишаємо тільки числові значення
     athlete_bio_cleaned = (
@@ -65,17 +66,17 @@ def main():
         .withColumn("timestamp", current_timestamp())
     )
 
-    print("Gold avg_stats preview:")
+    # Мінімальний вивід для скриншота результату
     avg_stats.show(50, truncate=False)
 
     # Етап 6: запис результату у gold layer
     (
         avg_stats.write
         .mode("overwrite")
-        .parquet("gold/avg_stats")
+        .parquet(gold_path)
     )
 
-    print("Saved to: gold/avg_stats")
+    print("Gold avg_stats saved successfully")
 
     spark.stop()
 
