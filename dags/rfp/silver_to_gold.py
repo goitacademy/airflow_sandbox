@@ -28,6 +28,8 @@ def main():
     .parquet(f'{DAG_DIR}/gold/avg_stats')
     )
 
+    spark.stop()
+
 
 if __name__ == '__main__':
     main()

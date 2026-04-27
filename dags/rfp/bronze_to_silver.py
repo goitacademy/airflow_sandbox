@@ -39,6 +39,8 @@ def main():
          .parquet(full_path)
          )
 
+    spark.stop()
+
 
 if __name__ == '__main__':
     main()

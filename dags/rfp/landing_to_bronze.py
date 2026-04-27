@@ -48,5 +48,7 @@ def main():
         download_data(table_name)
         save_file_to_bronze(table_name)
 
+    spark.stop()
+
 if __name__ == "__main__":
     main()
