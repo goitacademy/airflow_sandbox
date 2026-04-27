@@ -1,54 +1,48 @@
+from __future__ import annotations
+
+from pathlib import Path
+
 import requests
-import os
 
-DAG_DIR = os.path.dirname(os.path.abspath(__file__))
+from utils import get_spark_session, logger, write_parquet
 
-table_names = ['athlete_event_results', 'athlete_bio']
+FTP_BASE_URL = "https://ftp.goit.study/neoversity"
+SOURCE_TABLES = ["athlete_bio", "athlete_event_results"]
+LANDING_DIR = Path("landing")
+BRONZE_DIR = Path("bronze")
 
-def download_data(local_file_path):
-    url = "https://ftp.goit.study/neoversity/"
-    downloading_url = url + local_file_path + ".csv"
-    print(f"Downloading from {downloading_url}")
-    response = requests.get(downloading_url)
 
-    path = DAG_DIR + "/" + local_file_path + ".csv"
+def fetch_csv(table: str, dest_dir: Path) -> Path:
+    """Download a CSV file from the FTP server and save it locally."""
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    file_path = dest_dir / f"{table}.csv"
+    url = f"{FTP_BASE_URL}/{table}.csv"
+    logger.info("Fetching %s", url)
+    resp = requests.get(url, timeout=90)
+    resp.raise_for_status()
+    file_path.write_bytes(resp.content)
+    logger.info("Saved to %s (%d bytes)", file_path, len(resp.content))
+    return file_path
 
-    if response.status_code == 200:
-        with open(path, 'wb') as file:
-            file.write(response.content)
-        print(f"File downloaded successfully and saved as {local_file_path}")
-    else:
-        exit(f"Failed to download the file. Status code: {response.status_code}")
 
-def save_file_to_bronze(local_file_path):
-    from pyspark.sql import SparkSession
+def ingest_table(spark, table: str) -> None:
+    """Download one table, read as CSV and persist to the bronze layer."""
+    # Stage 1: download CSV files from FTP to the landing zone.
+    csv_file = fetch_csv(table, LANDING_DIR)
 
-    spark = SparkSession.builder.appName('Landing To Bronze').getOrCreate()
+    # Stage 1: read CSV with Spark and write to bronze/{table} as Parquet.
+    df = spark.read.option("header", True).option("inferSchema", True).csv(str(csv_file))
+    df.show(20, truncate=False)
 
-    try:
-        csv_path = os.path.join(DAG_DIR, local_file_path + '.csv')
-        full_path = os.path.join(DAG_DIR, 'bronze', local_file_path)
+    output = BRONZE_DIR / table
+    output.parent.mkdir(parents=True, exist_ok=True)
+    write_parquet(df, output)
 
-        df = (spark.read
-              .option('header', True)
-              .option('inferSchema', True)
-              .csv(csv_path))
-
-        (df.write
-         .mode('overwrite')
-         .parquet(full_path))
-        print(f"File saved to {full_path}")
-
-    finally:
-        spark.stop()
-        local_path = os.path.join(DAG_DIR, local_file_path + '.csv')
-        if os.path.exists(local_path):
-            os.remove(local_path)
-
-def main():
-    for table_name in table_names:
-        download_data(table_name)
-        save_file_to_bronze(table_name)
 
 if __name__ == "__main__":
-    main()
+    spark = get_spark_session("goit-de-fp-oza-landing-to-bronze")
+    try:
+        for source_table in SOURCE_TABLES:
+            ingest_table(spark, source_table)
+    finally:
+        spark.stop()
