@@ -3,7 +3,7 @@
 Airflow DAG: shon_fp_datalake_pipeline.
 
 Послідовно запускає Spark jobs:
-  landing_to_bronze → bronze_to_silver → silver_to_gold
+landing_to_bronze -> bronze_to_silver -> silver_to_gold
 """
 
 import os
@@ -23,10 +23,9 @@ with DAG(
     catchup=False,
     max_active_runs=1,
     tags=["final_project", "datalake", "spark", "shon"],
-    description="Multi-hop Data Lake: landing → bronze → silver → gold",
+    description="Multi-hop Data Lake: landing -> bronze -> silver -> gold",
 ) as dag:
 
-    # Етап 1. Landing -> Bronze для athlete_bio
     landing_to_bronze_athlete_bio = BashOperator(
         task_id="landing_to_bronze_athlete_bio",
         bash_command=(
@@ -35,7 +34,6 @@ with DAG(
         ),
     )
 
-    # Етап 1. Landing -> Bronze для athlete_event_results
     landing_to_bronze_athlete_event_results = BashOperator(
         task_id="landing_to_bronze_athlete_event_results",
         bash_command=(
@@ -44,7 +42,6 @@ with DAG(
         ),
     )
 
-    # Етап 2. Bronze -> Silver для athlete_bio
     bronze_to_silver_athlete_bio = BashOperator(
         task_id="bronze_to_silver_athlete_bio",
         bash_command=(
@@ -53,7 +50,6 @@ with DAG(
         ),
     )
 
-    # Етап 2. Bronze -> Silver для athlete_event_results
     bronze_to_silver_athlete_event_results = BashOperator(
         task_id="bronze_to_silver_athlete_event_results",
         bash_command=(
@@ -62,7 +58,6 @@ with DAG(
         ),
     )
 
-    # Етап 3. Silver -> Gold avg_stats
     silver_to_gold = BashOperator(
         task_id="silver_to_gold",
         bash_command=(
@@ -71,7 +66,6 @@ with DAG(
         ),
     )
 
-    # Залежності без list >> list, бо ця версія Airflow це не підтримує
     landing_to_bronze_athlete_bio >> bronze_to_silver_athlete_bio
     landing_to_bronze_athlete_event_results >> bronze_to_silver_athlete_event_results
 
