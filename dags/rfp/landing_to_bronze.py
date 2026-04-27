@@ -5,6 +5,8 @@ from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName('Landing To Bronze').getOrCreate()
 
+DAG_DIR = os.path.dirname(os.path.abspath(__file__))
+
 table_names = ['athlete_event_results', 'athlete_bio']
 
 def download_data(local_file_path):
@@ -13,15 +15,17 @@ def download_data(local_file_path):
     print(f"Downloading from {downloading_url}")
     response = requests.get(downloading_url)
 
+    path = DAG_DIR + "/" + local_file_path + ".csv"
+
     if response.status_code == 200:
-        with open(local_file_path + ".csv", 'wb') as file:
+        with open(path, 'wb') as file:
             file.write(response.content)
         print(f"File downloaded successfully and saved as {local_file_path}")
     else:
         exit(f"Failed to download the file. Status code: {response.status_code}")
 
 def save_file_to_bronze(local_file_path):
-    full_path = f'bronze/{local_file_path}'
+    full_path = f'{DAG_DIR}/bronze/{local_file_path}'
     df = (spark.read
           .option('header', True)
           .option('inferSchema', True)
@@ -32,8 +36,10 @@ def save_file_to_bronze(local_file_path):
      .parquet(full_path)
      )
 
-    if os.path.exists(local_file_path + '.csv'):
-        os.remove(local_file_path + '.csv')
+    local_path = f'{DAG_DIR}/{local_file_path}.csv'
+
+    if os.path.exists(local_path):
+        os.remove(local_path)
 
     print(f"File saved to {full_path}")
 

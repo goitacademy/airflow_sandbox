@@ -1,11 +1,15 @@
+import os
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import avg, col, current_timestamp
+
+DAG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def main():
     spark = SparkSession.builder.appName('Landing To Gold').getOrCreate()
 
-    df_bio = spark.read.parquet('silver/athlete_bio')
-    df_aer = spark.read.parquet('silver/athlete_event_results')
+    df_bio = spark.read.parquet(f'{DAG_DIR}/silver/athlete_bio')
+    df_aer = spark.read.parquet(f'{DAG_DIR}/silver/athlete_event_results')
 
     df_bio = df_bio.drop('country_noc')
 
@@ -21,7 +25,7 @@ def main():
 
     (agg_df.write
     .mode('overwrite')
-    .parquet('gold/avg_stats')
+    .parquet(f'{DAG_DIR}/gold/avg_stats')
     )
 
 
