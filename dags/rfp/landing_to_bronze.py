@@ -1,48 +1,49 @@
-from __future__ import annotations
-
-from pathlib import Path
-
 import requests
 
-from utils import get_spark_session, logger, write_parquet
+from pyspark.sql import SparkSession
+from pathlib import Path
 
-FTP_BASE_URL = "https://ftp.goit.study/neoversity"
-SOURCE_TABLES = ["athlete_bio", "athlete_event_results"]
-LANDING_DIR = Path("landing")
-BRONZE_DIR = Path("bronze")
+BASE_DIR = Path(__file__).resolve().parent
+BRONZE_DIR = BASE_DIR / "bronze"
 
-
-def fetch_csv(table: str, dest_dir: Path) -> Path:
-    """Download a CSV file from the FTP server and save it locally."""
-    dest_dir.mkdir(parents=True, exist_ok=True)
-    file_path = dest_dir / f"{table}.csv"
-    url = f"{FTP_BASE_URL}/{table}.csv"
-    logger.info("Fetching %s", url)
-    resp = requests.get(url, timeout=90)
-    resp.raise_for_status()
-    file_path.write_bytes(resp.content)
-    logger.info("Saved to %s (%d bytes)", file_path, len(resp.content))
-    return file_path
+spark = SparkSession.builder.appName("LandingToBronzeLayer").getOrCreate()
 
 
-def ingest_table(spark, table: str) -> None:
-    """Download one table, read as CSV and persist to the bronze layer."""
-    # Stage 1: download CSV files from FTP to the landing zone.
-    csv_file = fetch_csv(table, LANDING_DIR)
+def download_data(local_file_path):
+    url = "https://ftp.goit.study/neoversity/"
+    downloading_url = url + local_file_path + ".csv"
+    print(f"Downloading: {downloading_url}")
+    response = requests.get(downloading_url)
 
-    # Stage 1: read CSV with Spark and write to bronze/{table} as Parquet.
-    df = spark.read.option("header", True).option("inferSchema", True).csv(str(csv_file))
-    df.show(20, truncate=False)
+    if response.status_code == 200:
+        save_path = BRONZE_DIR / f"{local_file_path}.csv"
+        with open(save_path, "wb") as file:
+            file.write(response.content)
+        print(f"Saved: {save_path}")
+    else:
+        print(f"Failed: {local_file_path} (Code: {response.status_code})")
 
-    output = BRONZE_DIR / table
-    output.parent.mkdir(parents=True, exist_ok=True)
-    write_parquet(df, output)
 
+def main():
+    BRONZE_DIR.mkdir(parents=True, exist_ok=True)  # Create folder
+
+    files = ["athlete_bio", "athlete_event_results"]
+
+    for filename in files:
+        download_data(filename)
+
+
+    for filename in files:
+        csv_path = BRONZE_DIR / f"{filename}.csv"
+        df = spark.read.option("header", True).csv(str(csv_path))
+        print(f"Preview {filename}:")
+        df.show(3)
+        print(f"Rows: {df.count()}")
+
+        df.write.mode("overwrite").parquet(str(BRONZE_DIR / filename))
+        print(f"Parquet saved: {BRONZE_DIR / filename}")
 
 if __name__ == "__main__":
-    spark = get_spark_session("goit-de-fp-oza-landing-to-bronze")
-    try:
-        for source_table in SOURCE_TABLES:
-            ingest_table(spark, source_table)
-    finally:
-        spark.stop()
+    main()
+
+spark.stop()
