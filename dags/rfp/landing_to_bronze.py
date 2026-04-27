@@ -1,49 +1,54 @@
 import requests
+import os
 
-from pyspark.sql import SparkSession
-from pathlib import Path
+DAG_DIR = os.path.dirname(os.path.abspath(__file__))
 
-BASE_DIR = Path(__file__).resolve().parent
-BRONZE_DIR = BASE_DIR / "bronze"
-
-spark = SparkSession.builder.appName("LandingToBronzeLayer").getOrCreate()
-
+table_names = ['athlete_event_results', 'athlete_bio']
 
 def download_data(local_file_path):
     url = "https://ftp.goit.study/neoversity/"
     downloading_url = url + local_file_path + ".csv"
-    print(f"Downloading: {downloading_url}")
+    print(f"Downloading from {downloading_url}")
     response = requests.get(downloading_url)
 
-    if response.status_code == 200:
-        save_path = BRONZE_DIR / f"{local_file_path}.csv"
-        with open(save_path, "wb") as file:
-            file.write(response.content)
-        print(f"Saved: {save_path}")
-    else:
-        print(f"Failed: {local_file_path} (Code: {response.status_code})")
+    path = DAG_DIR + "/" + local_file_path + ".csv"
 
+    if response.status_code == 200:
+        with open(path, 'wb') as file:
+            file.write(response.content)
+        print(f"File downloaded successfully and saved as {local_file_path}")
+    else:
+        exit(f"Failed to download the file. Status code: {response.status_code}")
+
+def save_file_to_bronze(local_file_path):
+    from pyspark.sql import SparkSession
+
+    spark = SparkSession.builder.appName('Landing To Bronze').getOrCreate()
+
+    try:
+        csv_path = os.path.join(DAG_DIR, local_file_path + '.csv')
+        full_path = os.path.join(DAG_DIR, 'bronze', local_file_path)
+
+        df = (spark.read
+              .option('header', True)
+              .option('inferSchema', True)
+              .csv(csv_path))
+
+        (df.write
+         .mode('overwrite')
+         .parquet(full_path))
+        print(f"File saved to {full_path}")
+
+    finally:
+        spark.stop()
+        local_path = os.path.join(DAG_DIR, local_file_path + '.csv')
+        if os.path.exists(local_path):
+            os.remove(local_path)
 
 def main():
-    BRONZE_DIR.mkdir(parents=True, exist_ok=True)  # Create folder
-
-    files = ["athlete_bio", "athlete_event_results"]
-
-    for filename in files:
-        download_data(filename)
-
-
-    for filename in files:
-        csv_path = BRONZE_DIR / f"{filename}.csv"
-        df = spark.read.option("header", True).csv(str(csv_path))
-        print(f"Preview {filename}:")
-        df.show(3)
-        print(f"Rows: {df.count()}")
-
-        df.write.mode("overwrite").parquet(str(BRONZE_DIR / filename))
-        print(f"Parquet saved: {BRONZE_DIR / filename}")
+    for table_name in table_names:
+        download_data(table_name)
+        save_file_to_bronze(table_name)
 
 if __name__ == "__main__":
     main()
-
-spark.stop()

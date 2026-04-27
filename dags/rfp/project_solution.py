@@ -2,59 +2,38 @@ import os
 from datetime import datetime
 
 from airflow import DAG
-from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from airflow.operators.bash import BashOperator
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-LANDING_TO_BRONZE_APP = os.path.join(BASE_DIR, "landing_to_bronze.py")
-BRONZE_TO_SILVER_APP = os.path.join(BASE_DIR, "bronze_to_silver.py")
-SILVER_TO_GOLD_APP = os.path.join(BASE_DIR, "silver_to_gold.py")
-
-
-default_args = {
-    "owner": "airflow",
-    "start_date": datetime(2026, 4, 1),
-}
+# Визначаємо поточну директорію, де лежить DAG та інші скрипти (пакетна структура)
+DAG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 with DAG(
     dag_id="romans_fin_proj_dag",
-    default_args=default_args,
-    schedule=None,
+    start_date=datetime(2024, 1, 1),
+    schedule_interval=None,
     catchup=False,
     max_active_runs=1,
+    max_active_tasks=1,
     tags=["romans"],
 ) as dag:
-    landing_to_bronze = SparkSubmitOperator(
+
+    # Крок 1: Landing to Bronze
+    landing_to_bronze = BashOperator(
         task_id="landing_to_bronze",
-        application=LANDING_TO_BRONZE_APP,
-        conn_id="spark-default",
-        driver_memory="512m",
-        executor_memory="512m",
-        executor_cores=1,
-        total_executor_cores=1,
-        verbose=True,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_landing_to_bronze.py')}",
     )
 
-    bronze_to_silver = SparkSubmitOperator(
+    # Крок 2: Bronze to Silver
+    bronze_to_silver = BashOperator(
         task_id="bronze_to_silver",
-        application=BRONZE_TO_SILVER_APP,
-        conn_id="spark-default",
-        driver_memory="512m",
-        executor_memory="512m",
-        executor_cores=1,
-        total_executor_cores=1,
-        verbose=True,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_bronze_to_silver.py')}",
     )
 
-    silver_to_gold = SparkSubmitOperator(
+    # Крок 3: Silver to Gold
+    silver_to_gold = BashOperator(
         task_id="silver_to_gold",
-        application=SILVER_TO_GOLD_APP,
-        conn_id="spark-default",
-        driver_memory="512m",
-        executor_memory="512m",
-        executor_cores=1,
-        total_executor_cores=1,
-        verbose=True,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_silver_to_gold.py')}",
     )
 
+    # Послідовне виконання
     landing_to_bronze >> bronze_to_silver >> silver_to_gold
