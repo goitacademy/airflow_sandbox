@@ -12,6 +12,11 @@ default_args = {
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
+landing_script = os.path.join(current_directory, "fp_2_landing_to_bronze.py")
+bronze_script = os.path.join(current_directory, "fp_2_bronze_to_silver.py")
+gold_script = os.path.join(current_directory, "fp_2_silver_to_gold.py")
+
+
 with DAG(
     dag_id='fp_2_project_solution_ds',
     default_args=default_args,
@@ -21,7 +26,7 @@ with DAG(
 )as dag:
 
     landing_to_bronze = SparkSubmitOperator(
-        application=os.path.join(current_directory, 'fp_2_landing_to_bronze.py'),
+        application=landing_script,
         task_id='landing_to_bronze',
         conn_id='spark_default',
         verbose=1,
@@ -29,7 +34,7 @@ with DAG(
     )
 
     bronze_to_silver = SparkSubmitOperator(
-        application=os.path.join(current_directory, 'fp_2_bronze_to_silver.py'),
+        application=bronze_script,
         task_id='bronze_to_silver',
         conn_id='spark_default',
         verbose=1,
@@ -37,7 +42,7 @@ with DAG(
     )
 
     silver_to_gold = SparkSubmitOperator(
-        application=os.path.join(current_directory, 'fp_2_silver_to_gold.py'),
+        application=gold_script,
         task_id='silver_to_gold',
         conn_id='spark_default',
         verbose=1,
