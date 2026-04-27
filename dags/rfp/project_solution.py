@@ -20,19 +20,19 @@ with DAG(
     # Крок 1: Landing to Bronze
     landing_to_bronze = BashOperator(
         task_id="landing_to_bronze",
-        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_landing_to_bronze.py')}",
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'landing_to_bronze.py')}",
     )
 
     # Крок 2: Bronze to Silver
     bronze_to_silver = BashOperator(
         task_id="bronze_to_silver",
-        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_bronze_to_silver.py')}",
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'bronze_to_silver.py')}",
     )
 
     # Крок 3: Silver to Gold
     silver_to_gold = BashOperator(
         task_id="silver_to_gold",
-        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'maxim_silver_to_gold.py')}",
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'silver_to_gold.py')}",
     )
 
     # Послідовне виконання
