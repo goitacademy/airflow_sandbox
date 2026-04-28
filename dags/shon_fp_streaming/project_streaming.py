@@ -53,6 +53,7 @@ with DAG(
             f"{os.path.join(DAG_DIR, 'mysql_to_kafka.py')}"
         ),
         env=COMMON_ENV,
+        append_env=True,
     )
 
     streaming_pipeline = BashOperator(
@@ -63,6 +64,7 @@ with DAG(
             f"{os.path.join(DAG_DIR, 'streaming_pipeline.py')}"
         ),
         env=COMMON_ENV,
+        append_env=True,
     )
 
     mysql_to_kafka >> streaming_pipeline
