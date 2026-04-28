@@ -3,7 +3,7 @@
 Airflow DAG: shon_fp_streaming_pipeline.
 
 Pipeline:
-1. MySQL athlete_event_results -> Kafka topic athlete_event_results
+1. MySQL athlete_event_results -> Kafka topic athlete_event_results_shon
 2. Kafka stream + MySQL athlete_bio -> aggregation
 3. foreachBatch -> output Kafka topic + MySQL table
 """

@@ -28,11 +28,12 @@ KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS")
 KAFKA_USER = os.getenv("KAFKA_USER")
 KAFKA_PASSWORD = os.getenv("KAFKA_PASSWORD")
 
-SOURCE_TOPIC = "athlete_event_results"
+SOURCE_TOPIC = "athlete_event_results_shon"
 OUTPUT_TOPIC = "athlete_avg_stats_shon"
 
 OUTPUT_TABLE = "athlete_avg_stats_shon"
-CHECKPOINT_LOCATION = "/tmp/shon_fp_streaming_checkpoint"
+
+CHECKPOINT_LOCATION = "/tmp/shon_fp_streaming_checkpoint_v2"
 
 
 def validate_env():
@@ -125,13 +126,14 @@ def main():
         StructField("isTeamSport", StringType(), True),
     ])
 
-    # Етап 3: зчитування результатів змагань з Kafka topic athlete_event_results
+    # Етап 3: зчитування результатів змагань з Kafka topic athlete_event_results_shon
     kafka_stream = (
         kafka_security_options(
             spark.readStream
             .format("kafka")
             .option("subscribe", SOURCE_TOPIC)
             .option("startingOffsets", "earliest")
+            .option("maxOffsetsPerTrigger", 5000)
         )
         .load()
     )
@@ -226,11 +228,12 @@ def main():
         .foreachBatch(write_batch)
         .outputMode("complete")
         .option("checkpointLocation", CHECKPOINT_LOCATION)
-        .trigger(availableNow=True)
+        .trigger(processingTime="30 seconds")
         .start()
     )
 
-    query.awaitTermination()
+    query.awaitTermination(120)
+    query.stop()
 
     spark.stop()
 
