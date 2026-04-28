@@ -3,22 +3,23 @@ import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, to_json, struct
 
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 MYSQL_HOST = "217.61.57.46"
 MYSQL_PORT = "3306"
 MYSQL_DB = "neo_data"
 MYSQL_USER = "neo_data_admin"
-MYSQL_PASSWORD = "Proyahaxuqithab9oplp"
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "")
 
 KAFKA_BOOTSTRAP_SERVERS = "77.81.230.104:9092"
 KAFKA_USER = "admin"
-KAFKA_PASSWORD = "VawEzo1ikLtrA8Ug8THa"
+KAFKA_PASSWORD = os.getenv("KAFKA_PASSWORD")
 
 SOURCE_TOPIC = "athlete_event_results"
 
 MYSQL_JAR = os.path.join(BASE_DIR, "mysql-connector-j-8.0.32.jar")
+
+SPARK_KAFKA_PACKAGE = "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1"
 
 
 def kafka_security_options(writer_or_reader):
@@ -42,7 +43,9 @@ def main():
     spark = (
         SparkSession.builder
         .appName("MySQLToKafkaAthleteEventResults")
+        .master("local[2]")
         .config("spark.jars", MYSQL_JAR)
+        .config("spark.jars.packages", SPARK_KAFKA_PACKAGE)
         .getOrCreate()
     )
 
