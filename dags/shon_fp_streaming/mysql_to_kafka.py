@@ -9,11 +9,11 @@ MYSQL_HOST = "217.61.57.46"
 MYSQL_PORT = "3306"
 MYSQL_DB = "neo_data"
 MYSQL_USER = "neo_data_admin"
-MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "")
+MYSQL_PASSWORD = "Proyahaxuqithab9oplp"
 
 KAFKA_BOOTSTRAP_SERVERS = "77.81.230.104:9092"
 KAFKA_USER = "admin"
-KAFKA_PASSWORD = os.getenv("KAFKA_PASSWORD")
+KAFKA_PASSWORD = "VawEzo1ikLtrA8Ug8THa"
 
 SOURCE_TOPIC = "athlete_event_results"
 
