@@ -22,6 +22,18 @@ SPARK_PACKAGES = ",".join([
     "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1",
 ])
 
+COMMON_ENV = {
+    "KAFKA_BOOTSTRAP_SERVERS": "{{ conn.kafka_shon.host }}:{{ conn.kafka_shon.port }}",
+    "KAFKA_USER": "{{ conn.kafka_shon.login }}",
+    "KAFKA_PASSWORD": "{{ conn.kafka_shon.password }}",
+
+    "MYSQL_HOST": "{{ conn.goit_mysql_db_oleg.host }}",
+    "MYSQL_PORT": "{{ conn.goit_mysql_db_oleg.port }}",
+    "MYSQL_DB": "{{ conn.goit_mysql_db_oleg.schema }}",
+    "MYSQL_USER": "{{ conn.goit_mysql_db_oleg.login }}",
+    "MYSQL_PASSWORD": "{{ conn.goit_mysql_db_oleg.password }}",
+}
+
 
 with DAG(
     dag_id="shon_fp_streaming_pipeline",
@@ -40,6 +52,7 @@ with DAG(
             f"--packages {SPARK_PACKAGES} "
             f"{os.path.join(DAG_DIR, 'mysql_to_kafka.py')}"
         ),
+        env=COMMON_ENV,
     )
 
     streaming_pipeline = BashOperator(
@@ -49,6 +62,7 @@ with DAG(
             f"--packages {SPARK_PACKAGES} "
             f"{os.path.join(DAG_DIR, 'streaming_pipeline.py')}"
         ),
+        env=COMMON_ENV,
     )
 
     mysql_to_kafka >> streaming_pipeline
