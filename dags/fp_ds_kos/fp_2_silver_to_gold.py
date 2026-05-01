@@ -1,10 +1,25 @@
+import os
+
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import avg, current_timestamp, col, expr, round
+from pyspark.sql.functions import avg, current_timestamp, col, expr, round, lower, trim, when
 
 spark = SparkSession.builder.appName("SilverToGold").getOrCreate()
+spark.sparkContext.setLogLevel("WARN")
 
-athlete_bio = spark.read.parquet("silver/athlete_bio")
-athlete_event_results = spark.read.parquet("silver/athlete_event_results")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+SILVER_DIR = os.path.join(BASE_DIR, "silver")
+GOLD_DIR = os.path.join(BASE_DIR, "gold")
+
+athlete_bio_path = os.path.join(SILVER_DIR, "athlete_bio")
+athlete_event_results_path = os.path.join(SILVER_DIR, "athlete_event_results")
+gold_output_path = os.path.join(GOLD_DIR, "avg_stats")
+
+print(f"Reading athlete_bio from: {athlete_bio_path}")
+athlete_bio = spark.read.parquet(athlete_bio_path)
+
+print(f"Reading athlete_event_results from: {athlete_event_results_path}")
+athlete_event_results = spark.read.parquet(athlete_event_results_path)
 
 athlete_bio = athlete_bio \
     .withColumn("height", expr("try_cast(height as double)")) \
@@ -20,23 +35,35 @@ joined = athlete_event_results.join(
     how="inner"
 )
 
+joined = joined.withColumn(
+    "medal",
+    when(
+        col("medal").isNull() |
+        lower(trim(col("medal").cast("string"))).isin("nan", "none", "null", ""),
+        "No medal"
+    ).otherwise(col("medal"))
+)
+
 gold = joined.groupBy(
     "sport",
     "medal",
     "sex",
     "bio_country_noc"
 ).agg(
-    round(avg("weight"),2).alias("avg_weight"),
-    round(avg("height"),2).alias("avg_height")
+    round(avg("weight"), 2).alias("avg_weight"),
+    round(avg("height"), 2).alias("avg_height")
 ).withColumn(
     "timestamp",
     current_timestamp()
 )
 
-gold.withColumnRenamed("bio_country_noc", "country_noc")
+gold = gold.withColumnRenamed("bio_country_noc", "country_noc")
 
-gold.write.mode("overwrite").parquet("gold/avg_stats")
+print(f"Writing gold to: {gold_output_path}")
+gold.write.mode("overwrite").parquet(gold_output_path)
 
 gold.show(10, truncate=False)
+
+spark.stop()
 
 print("Silver to Gold Successfully Done")
