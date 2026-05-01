@@ -30,7 +30,6 @@ with DAG(
         application=landing_script,
         task_id='landing_to_bronze',
         conn_id='spark_default',
-        py_files=os.path.join(current_directory, "downloader.py"),
         verbose=1,
         dag=dag
     )
