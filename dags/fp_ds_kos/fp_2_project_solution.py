@@ -39,7 +39,6 @@ with DAG(
         application=bronze_script,
         task_id='bronze_to_silver',
         conn_id='spark_default',
-        py_files=os.path.join(current_directory, "text_cleaner.py"),
         verbose=1,
         dag = dag
     )

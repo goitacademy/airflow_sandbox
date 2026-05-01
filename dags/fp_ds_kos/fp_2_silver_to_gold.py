@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import broadcast, avg, current_timestamp, col, expr, round
+from pyspark.sql.functions import avg, current_timestamp, col, expr, round
 
 spark = SparkSession.builder.appName("SilverToGold").getOrCreate()
 
@@ -15,7 +15,7 @@ athlete_bio = athlete_bio \
 athlete_bio = athlete_bio.withColumnRenamed("country_noc", "bio_country_noc")
 
 joined = athlete_event_results.join(
-    broadcast(athlete_bio),
+    athlete_bio,
     on="athlete_id",
     how="inner"
 )
@@ -32,6 +32,8 @@ gold = joined.groupBy(
     "timestamp",
     current_timestamp()
 )
+
+gold.withColumnRenamed("bio_country_noc", "country_noc")
 
 gold.write.mode("overwrite").parquet("gold/avg_stats")
 
