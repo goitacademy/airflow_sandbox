@@ -1,7 +1,6 @@
 import os
-
-from pyspark.sql import SparkSession
 from downloader import download_data
+from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("LandingToBronze").getOrCreate()
 
@@ -10,26 +9,21 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 landing_dir = os.path.join(BASE_DIR, "landing")
 bronze_dir = os.path.join(BASE_DIR, "bronze")
 
-tables = ["athlete_bio", "athlete_event_results"]
+os.makedirs(landing_dir, exist_ok=True)
+os.makedirs(bronze_dir, exist_ok=True)
 
-for table in tables:
+for table in ["athlete_bio", "athlete_event_results"]:
     download_data(table, landing_dir)
 
-    input_path = os.path.join(landing_dir, f"{table}.csv")
+    input_path = "file://" + os.path.join(landing_dir, f"{table}.csv")
     output_path = os.path.join(bronze_dir, table)
 
     print(f"Reading from: {input_path}")
-
-    df = spark.read \
-        .option("header", True) \
-        .csv(input_path)
+    df = spark.read.option("header", True).csv(input_path)
 
     df.show(5, truncate=False)
 
     print(f"Writing to: {output_path}")
-
-    df.write \
-        .mode("overwrite") \
-        .parquet(output_path)
+    df.write.mode("overwrite").parquet(output_path)
 
     print(f"Saved in {output_path}")

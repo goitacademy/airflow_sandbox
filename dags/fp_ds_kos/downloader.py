@@ -1,21 +1,19 @@
-import requests
 import os
+import requests
 
+def download_data(table, output_dir):
+    url = f"https://ftp.goit.study/neoversity/{table}.csv"
 
-def download_data(file_name: str, landing_dir: str):
-    url = f"https://ftp.goit.study/neoversity/{file_name}.csv"
+    os.makedirs(output_dir, exist_ok=True)
 
-    os.makedirs(landing_dir, exist_ok=True)
-
-    local_path = os.path.join(landing_dir, f"{file_name}.csv")
+    output_path = os.path.join(output_dir, f"{table}.csv")
 
     print(f"Downloading {url}")
 
     response = requests.get(url)
+    response.raise_for_status()
 
-    if response.status_code == 200:
-        with open(local_path, "wb") as f:
-            f.write(response.content)
-        print(f"{file_name} successfully saved in {local_path}")
-    else:
-        raise Exception(f"{file_name} failed to download. Status code: {response.status_code}")
+    with open(output_path, "wb") as file:
+        file.write(response.content)
+
+    print(f"{table} successfully saved in {output_path}")
