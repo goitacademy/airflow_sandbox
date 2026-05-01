@@ -27,27 +27,25 @@ with DAG(
 )as dag:
 
     landing_to_bronze = SparkSubmitOperator(
-        application=landing_script,
-        task_id='landing_to_bronze',
-        conn_id='spark_default',
-        verbose=1,
-        dag=dag
+        application=os.path.join(current_directory, "fp_2_landing_to_bronze.py"),
+        task_id="landing_to_bronze",
+        conn_id="spark_default",
+        py_files=os.path.join(current_directory, "downloader.py"),
+        verbose=True,
     )
 
     bronze_to_silver = SparkSubmitOperator(
-        application=bronze_script,
-        task_id='bronze_to_silver',
-        conn_id='spark_default',
-        verbose=1,
-        dag = dag
+        application=os.path.join(current_directory, "fp_2_bronze_to_silver.py"),
+        task_id="bronze_to_silver",
+        conn_id="spark_default",
+        verbose=True,
     )
 
     silver_to_gold = SparkSubmitOperator(
-        application=gold_script,
-        task_id='silver_to_gold',
-        conn_id='spark_default',
-        verbose=1,
-        dag=dag
+        application=os.path.join(current_directory, "fp_2_silver_to_gold.py"),
+        task_id="silver_to_gold",
+        conn_id="spark_default",
+        verbose=True,
     )
 
     landing_to_bronze >> bronze_to_silver >> silver_to_gold

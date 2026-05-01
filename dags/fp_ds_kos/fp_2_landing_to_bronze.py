@@ -1,25 +1,35 @@
-from pyspark.sql import SparkSession
+import os
 
+from pyspark.sql import SparkSession
+from downloader import download_data
 
 spark = SparkSession.builder.appName("LandingToBronze").getOrCreate()
 
-urls = {
-    "athlete_bio": "https://ftp.goit.study/neoversity/athlete_bio.csv",
-    "athlete_event_results": "https://ftp.goit.study/neoversity/athlete_event_results.csv",
-}
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-for table in ["athlete_bio", "athlete_event_results"]:
-    input_url = urls[table]
-    output_path = f"bronze/{table}"
+landing_dir = os.path.join(BASE_DIR, "landing")
+bronze_dir = os.path.join(BASE_DIR, "bronze")
 
-    print(f"Reading from URL: {input_url}")
+tables = ["athlete_bio", "athlete_event_results"]
+
+for table in tables:
+    download_data(table, landing_dir)
+
+    input_path = os.path.join(landing_dir, f"{table}.csv")
+    output_path = os.path.join(bronze_dir, table)
+
+    print(f"Reading from: {input_path}")
 
     df = spark.read \
         .option("header", True) \
-        .csv(input_url)
+        .csv(input_path)
 
     df.show(5, truncate=False)
 
-    df.write.mode("overwrite").parquet(output_path)
+    print(f"Writing to: {output_path}")
+
+    df.write \
+        .mode("overwrite") \
+        .parquet(output_path)
 
     print(f"Saved in {output_path}")
