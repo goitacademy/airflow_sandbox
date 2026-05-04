@@ -1,4 +1,8 @@
+import os
 import random
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from airflow import DAG
 from airflow.models import TaskInstance

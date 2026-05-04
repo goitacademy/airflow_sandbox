@@ -1,3 +1,8 @@
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from airflow import DAG
 from airflow.providers.mysql.operators.mysql import MySqlOperator
 

@@ -1,5 +1,9 @@
+import os
 import random
+import sys
 import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from airflow import DAG
 from airflow.models import DagRun, TaskInstance
