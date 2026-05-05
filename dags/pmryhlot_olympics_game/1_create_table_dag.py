@@ -16,12 +16,6 @@ with DAG(
     catchup=False,
     tags=[SCHEMA],
 ) as dag:
-    create_schema = MySqlOperator(
-        task_id="create_schema",
-        mysql_conn_id=CONNECTION_NAME,
-        sql=f"CREATE DATABASE IF NOT EXISTS {SCHEMA};",
-    )
-
     create_table = MySqlOperator(
         task_id="create_table",
         mysql_conn_id=CONNECTION_NAME,
@@ -38,5 +32,3 @@ with DAG(
             );
         """,
     )
-
-    create_schema >> create_table
