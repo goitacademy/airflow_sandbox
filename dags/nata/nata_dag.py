@@ -16,8 +16,8 @@ default_args = {
     'retry_delay': timedelta(seconds=10)
 }
 
-with DAG(
-    dag_id='ola_medal_count_pipeline',
+with DAG(git add .
+    dag_id='nata_hw_dag',
     default_args=default_args,
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
