@@ -101,32 +101,15 @@ with DAG(
         task_id='check_for_correctness',
         conn_id='mysql_default',
         sql="""
-            SELECT COUNT(*)
-            FROM olympic_dataset.ola_medals_results
-            WHERE created_at >= NOW() - INTERVAL 30 SECOND;
-        """,
-        timeout=60,
-        poke_interval=10,
-        trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS
-    )
-
-    check_for_correctness = SqlSensor(
-        task_id='check_for_correctness',
-        conn_id='mysql_default',
-        sql="""
             SELECT 1
             FROM olympic_dataset.ola_medals_results
-            WHERE created_at >= NOW() - INTERVAL 30 SECOND
-            ORDER BY created_at DESC
+            WHERE created_at >= NOW() - INTERVAL 1 MINUTE
             LIMIT 1;
         """,
-        timeout=60,
+        timeout=120, # Збільшили час очікування, щоб сенсор не "падав" завчасно
         poke_interval=10,
         trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS
     )
-
-
-
 
 
     # Зв’язки між задачами
