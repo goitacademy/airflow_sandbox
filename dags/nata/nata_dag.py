@@ -16,7 +16,7 @@ default_args = {
     'retry_delay': timedelta(seconds=10)
 }
 
-with DAG(git add .
+with DAG(
     dag_id='nata_hw_dag',
     default_args=default_args,
     start_date=datetime(2024, 1, 1),
