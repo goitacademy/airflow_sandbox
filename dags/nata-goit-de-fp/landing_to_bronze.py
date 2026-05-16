@@ -1,6 +1,10 @@
+import os
 import requests
 from pyspark.sql import SparkSession
-from pathlib import Path
+
+# Автоматичне визначення поточної папки
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BRONZE_DIR = os.path.join(BASE_DIR, "bronze")
 
 spark = SparkSession.builder.appName("LandingToBronzeLayer").getOrCreate()
 
@@ -11,7 +15,8 @@ def download_data(local_file_path):
     response = requests.get(downloading_url)
 
     if response.status_code == 200:
-        save_path = f"{local_file_path}.csv"
+        # Зберігаємо тимчасовий CSV файл у поточну папку
+        save_path = os.path.join(BASE_DIR, f"{local_file_path}.csv")
         with open(save_path, "wb") as file:
             file.write(response.content)
         print(f"Saved original CSV: {save_path}")
@@ -19,7 +24,8 @@ def download_data(local_file_path):
         print(f"Failed: {local_file_path} (Code: {response.status_code})")
 
 def main():
-    Path("bronze").mkdir(parents=True, exist_ok=True)
+    # Безпечно створюємо папку bronze
+    os.makedirs(BRONZE_DIR, exist_ok=True)
 
     files = ["athlete_bio", "athlete_event_results"]
     
@@ -27,14 +33,20 @@ def main():
         download_data(filename)
 
     for filename in files:
-        csv_path = f"{filename}.csv"
+        csv_path = os.path.join(BASE_DIR, f"{filename}.csv")
         df = spark.read.option("header", True).option("inferSchema", True).csv(csv_path)
         
         print(f"Preview {filename}:")
         df.show(3)
 
-        df.write.mode("overwrite").parquet(f"bronze/{filename}")
-        print(f"Parquet saved: bronze/{filename}")
+        # Запис у форматі Parquet в папку bronze
+        parquet_path = os.path.join(BRONZE_DIR, filename)
+        df.write.mode("overwrite").parquet(parquet_path)
+        print(f"Parquet saved: {parquet_path}")
+        
+        # Видаляємо тимчасовий CSV файл, щоб не забивати диск
+        if os.path.exists(csv_path):
+            os.remove(csv_path)
 
 if __name__ == "__main__":
     main()

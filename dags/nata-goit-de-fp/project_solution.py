@@ -1,7 +1,10 @@
 import os
 from datetime import datetime
 from airflow import DAG
-from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from airflow.operators.bash import BashOperator
+
+# Визначаємо поточну директорію, де лежить DAG та інші скрипти
+DAG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 default_args = {
     "owner": "airflow",
@@ -9,11 +12,6 @@ default_args = {
     "depends_on_past": False,
     "retries": 1,
 }
-
-# Динамічно визначаємо шлях до папки dags на сервері
-# Зазвичай це /opt/airflow/dags/назва_папки/скрипт.py
-airflow_home = os.environ.get("AIRFLOW_HOME", "/opt/airflow")
-base_path = os.path.join(airflow_home, "dags", "nata-goit-de-fp")
 
 with DAG(
     dag_id="nata-goit-de-hw-final-project",
@@ -23,25 +21,23 @@ with DAG(
     description="ETL pipeline from landing to gold using Spark and Airflow",
 ) as dag:
 
-    landing_to_bronze = SparkSubmitOperator(
+    # Крок 1: Landing to Bronze (використовуємо надійний BashOperator)
+    landing_to_bronze = BashOperator(
         task_id="nata_landing_to_bronze",
-        application=os.path.join(base_path, "landing_to_bronze.py"),
-        conn_id="spark-default",
-        verbose=True,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'landing_to_bronze.py')}",
     )
 
-    bronze_to_silver = SparkSubmitOperator(
+    # Крок 2: Bronze to Silver
+    bronze_to_silver = BashOperator(
         task_id="nata_bronze_to_silver",
-        application=os.path.join(base_path, "bronze_to_silver.py"),
-        conn_id="spark-default",
-        verbose=True,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'bronze_to_silver.py')}",
     )
 
-    silver_to_gold = SparkSubmitOperator(
+    # Крок 3: Silver to Gold
+    silver_to_gold = BashOperator(
         task_id="nata_silver_to_gold",
-        application=os.path.join(base_path, "silver_to_gold.py"),
-        conn_id="spark-default",
-        verbose=True,
+        bash_command=f"spark-submit {os.path.join(DAG_DIR, 'silver_to_gold.py')}",
     )
 
+    # Послідовність виконання
     landing_to_bronze >> bronze_to_silver >> silver_to_gold
