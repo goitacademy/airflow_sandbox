@@ -19,23 +19,21 @@ with DAG(
 
     landing_to_bronze = SparkSubmitOperator(
         task_id="nata_landing_to_bronze",
-        application="dags/nata-goit-de-fp/landing_to_bronze.py", 
-        conn_id="spark-default",
+        application="nata-goit-de-fp/landing_to_bronze.py",  
         verbose=True,
     )
 
     bronze_to_silver = SparkSubmitOperator(
         task_id="nata_bronze_to_silver",
-        application="dags/nata-goit-de-fp/bronze_to_silver.py",   
+        application="nata-goit-de-fp/bronze_to_silver.py",   
         conn_id="spark-default",
         verbose=True,
     )
 
     silver_to_gold = SparkSubmitOperator(
         task_id="nata_silver_to_gold",
-        application="dags/nata-goit-de-fp/silver_to_gold.py",     
+        application="nata-goit-de-fp/silver_to_gold.py",     
         conn_id="spark-default",
         verbose=True,
     )
-
     landing_to_bronze >> bronze_to_silver >> silver_to_gold
