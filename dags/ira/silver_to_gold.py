@@ -1,10 +1,8 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import avg, current_timestamp, col
 
-# ─────────────────────────────────────────
 # Stage 3. Silver → Gold
 # Join bio + results, aggregate avg height/weight
-# ─────────────────────────────────────────
 
 spark = SparkSession.builder \
     .appName("Silver to Gold") \

@@ -3,11 +3,8 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, udf, trim, regexp_replace
 from pyspark.sql.types import StringType
 
-# ─────────────────────────────────────────
 # Stage 2. Bronze → Silver
 # Clean text columns + deduplicate
-# ─────────────────────────────────────────
-
 spark = SparkSession.builder \
     .appName("Bronze to Silver") \
     .master("local[*]") \

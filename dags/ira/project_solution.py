@@ -4,10 +4,8 @@ from airflow.operators.python import PythonOperator
 import subprocess
 import sys
 
-# ─────────────────────────────────────────
 # Final Project Part 2 — Airflow DAG
 # Runs landing→bronze→silver→gold pipeline
-# ─────────────────────────────────────────
 
 default_args = {
     "owner": "ira",

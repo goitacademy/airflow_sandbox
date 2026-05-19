@@ -1,10 +1,8 @@
 import requests
 from pyspark.sql import SparkSession
 
-# ─────────────────────────────────────────
 # Stage 1. Landing → Bronze
 # Download CSV from FTP and save as Parquet
-# ─────────────────────────────────────────
 
 spark = SparkSession.builder \
     .appName("Landing to Bronze") \
