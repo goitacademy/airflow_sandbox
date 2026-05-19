@@ -1,54 +1,43 @@
 from datetime import datetime
 from airflow import DAG
-from airflow.operators.python import PythonOperator
-import subprocess
-import sys
-
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+ 
 # Final Project Part 2 — Airflow DAG
-# Runs landing→bronze→silver→gold pipeline
-
+# Runs landing→bronze→silver→gold pipeline using SparkSubmitOperator
+ 
 default_args = {
     "owner": "ira",
     "start_date": datetime(2024, 1, 1),
     "retries": 0,
 }
-
-def run_script(script_name):
-    """Run a Python script as a subprocess."""
-    result = subprocess.run(
-        [sys.executable, f"/opt/airflow/dags/fp/{script_name}"],
-        capture_output=True,
-        text=True,
-    )
-    print(result.stdout)
-    if result.returncode != 0:
-        print(result.stderr)
-        raise Exception(f"{script_name} failed with return code {result.returncode}")
-
+ 
 with DAG(
-    dag_id="fp_datalake_pipeline",
+    dag_id="fp_datalake_pipeline_ira",
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
     tags=["final_project", "part2"],
 ) as dag:
-
-    landing_to_bronze = PythonOperator(
+ 
+    landing_to_bronze = SparkSubmitOperator(
         task_id="landing_to_bronze",
-        python_callable=run_script,
-        op_args=["landing_to_bronze.py"],
+        application="dags/ira/landing_to_bronze.py",
+        conn_id="spark-default",
+        verbose=1,
     )
-
-    bronze_to_silver = PythonOperator(
+ 
+    bronze_to_silver = SparkSubmitOperator(
         task_id="bronze_to_silver",
-        python_callable=run_script,
-        op_args=["bronze_to_silver.py"],
+        application="dags/ira/bronze_to_silver.py",
+        conn_id="spark-default",
+        verbose=1,
     )
-
-    silver_to_gold = PythonOperator(
+ 
+    silver_to_gold = SparkSubmitOperator(
         task_id="silver_to_gold",
-        python_callable=run_script,
-        op_args=["silver_to_gold.py"],
+        application="dags/ira/silver_to_gold.py",
+        conn_id="spark-default",
+        verbose=1,
     )
-
+ 
     landing_to_bronze >> bronze_to_silver >> silver_to_gold
