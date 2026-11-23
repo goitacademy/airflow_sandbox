@@ -52,15 +52,15 @@ def final_function(ti):
 # Визначення DAG
 default_args = {
     'owner': 'airflow',
-    'start_date': datetime(2024, 8, 4, 0, 0),
+    'start_date': datetime(2026, 11, 23, 22, 55),
 }
 
 with DAG(
-        'even_or_odd_square_or_cube',
+        'even_or_odd_square_or_cube1',
         default_args=default_args,
         schedule_interval='*/10 * * * *',
         catchup=False,
-        tags=["oleksiy"]
+        tags=["vitaly_k"],
 ) as dag:
     generate_number_task = PythonOperator(
         task_id='generate_number',
